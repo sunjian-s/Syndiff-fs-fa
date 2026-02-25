@@ -2,3 +2,27 @@
 *pycache*
 saved_info/*
 saved_info
+# 忽略所有数据集和图片
+*.mat
+*.nii
+*.nii.gz
+*.png
+*.jpg
+*.jpeg
+*.h5
+*.npy
+*.npz
+data/
+dataset/
+SynDiff_sample_data/
+
+# 忽略模型权重和日志
+*.pth
+*.pt
+*.ckpt
+logs/
+runs/
+
+# 忽略 Python 缓存
+__pycache__/
+*.pyc
