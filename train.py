@@ -19,6 +19,112 @@ from skimage.metrics import peak_signal_noise_ratio as psnr
 from tqdm import tqdm
 from utils_train import get_logger, make_exp_dir, LossTracker
 
+import torch
+import torch.nn as nn
+import torchvision.models as models
+
+class VGG19PerceptualLoss(nn.Module):
+    """
+    更适合眼底/FA 生成的 VGG-19 感知损失
+
+    默认使用:
+    - relu1_2
+    - relu2_2
+    - relu3_4
+
+    可选再加 relu4_4，但建议权重较小。
+    """
+    def __init__(
+        self,
+        device,
+        use_layer4=False,
+        layer_weights=None,
+    ):
+        super().__init__()
+
+        vgg = models.vgg19(weights=models.VGG19_Weights.IMAGENET1K_V1).features
+
+        # VGG19 features 索引说明:
+        # 0 conv1_1, 1 relu1_1, 2 conv1_2, 3 relu1_2
+        # 4 pool1
+        # 5 conv2_1, 6 relu2_1, 7 conv2_2, 8 relu2_2
+        # 9 pool2
+        # 10 conv3_1, 11 relu3_1, 12 conv3_2, 13 relu3_2
+        # 14 conv3_3, 15 relu3_3, 16 conv3_4, 17 relu3_4
+        # 18 pool3
+        # 19 conv4_1, 20 relu4_1, 21 conv4_2, 22 relu4_2
+        # 23 conv4_3, 24 relu4_3, 25 conv4_4, 26 relu4_4
+
+        self.slice1 = nn.Sequential(*list(vgg.children())[:4])    # relu1_2
+        self.slice2 = nn.Sequential(*list(vgg.children())[4:9])   # relu2_2
+        self.slice3 = nn.Sequential(*list(vgg.children())[9:18])  # relu3_4
+        self.use_layer4 = use_layer4
+        if self.use_layer4:
+            self.slice4 = nn.Sequential(*list(vgg.children())[18:27])  # relu4_4
+
+        for param in self.parameters():
+            param.requires_grad = False
+
+        # 眼底任务更建议浅层/中层权重大一点
+        if layer_weights is None:
+            if self.use_layer4:
+                self.layer_weights = [1.0, 1.0, 0.5, 0.25]
+            else:
+                self.layer_weights = [1.0, 1.0, 0.5]
+
+        else:
+            self.layer_weights = layer_weights
+
+        self.register_buffer(
+            "mean",
+            torch.tensor([0.485, 0.456, 0.406]).view(1, 3, 1, 1)
+        )
+        self.register_buffer(
+            "std",
+            torch.tensor([0.229, 0.224, 0.225]).view(1, 3, 1, 1)
+        )
+
+        self.to(device)
+
+    def _preprocess(self, x):
+        # 假设输入范围 [-1, 1]
+        x = (x + 1.0) / 2.0
+        x = torch.clamp(x, 0.0, 1.0)
+
+        # 单通道复制成 3 通道
+        if x.size(1) == 1:
+            x = x.repeat(1, 3, 1, 1)
+        elif x.size(1) > 3:
+            x = x[:, :3, :, :]
+
+        x = (x - self.mean) / self.std
+        return x
+
+    def forward(self, gen_img, real_img):
+        x = self._preprocess(gen_img)
+        y = self._preprocess(real_img)
+
+        h_x1 = self.slice1(x)
+        h_y1 = self.slice1(y)
+
+        h_x2 = self.slice2(h_x1)
+        h_y2 = self.slice2(h_y1)
+
+        h_x3 = self.slice3(h_x2)
+        h_y3 = self.slice3(h_y2)
+
+        loss = (
+            self.layer_weights[0] * F.l1_loss(h_x1, h_y1) +
+            self.layer_weights[1] * F.l1_loss(h_x2, h_y2) +
+            self.layer_weights[2] * F.l1_loss(h_x3, h_y3)
+        )
+
+        if self.use_layer4:
+            h_x4 = self.slice4(h_x3)
+            h_y4 = self.slice4(h_y3)
+            loss = loss + self.layer_weights[3] * F.l1_loss(h_x4, h_y4)
+
+        return loss
 # ============================================
 # 【新增】1. 小波损失函数 (Wavelet Loss)
 # ============================================
@@ -418,8 +524,30 @@ def train_syndiff(rank, gpu, args):
     else:
         global_step, epoch, init_epoch = 0, 0, 0
         
+    # ==========================================================
+    # ✅ 【第二步：新增】初始化 VGG-19 感知损失提取器
+    # ==========================================================
+    # 因为你用了 DDP 多卡训练 (有 rank 变量)，为了防止报错，
+    # 最稳妥的获取当前显卡 device 的写法如下：
+    current_device = torch.device(f'cuda:{args.local_rank}' if hasattr(args, 'local_rank') else 'cuda')
+    vgg_perceptual = VGG19PerceptualLoss(
+        device=current_device,
+        use_layer4=False
+    )
+    # 实例化，后续可以可以加到第四层
+    # vgg_perceptual = VGG19PerceptualLoss(
+    #     device=current_device,
+    #     use_layer4=True,
+    #     layer_weights=[1.0, 1.0, 0.5, 0.25]
+    # )
+    # ==========================================================
+        
     for epoch in range(init_epoch, args.num_epoch+1):
         train_sampler.set_epoch(epoch)
+        
+        # 👇 【新增】用于记录当前 Epoch 累加值的字典
+        epoch_losses_raw = {"G_total": 0., "G_adv": 0., "G_cycle_adv": 0., "G_cycle": 0., "G_l1": 0., "G_innov": 0., "G_vgg": 0.}
+        epoch_losses_weighted = {"cycle_w": 0., "l1_w": 0.,"cycle_adv_w": 0., "innov_w": 0., "vgg_w": 0.}
         
         # ✅【新增】进度条封装 (仅在 Rank 0 显示)
         # 这样你就不会看到满屏滚动的 print，而是一个优雅的进度条
@@ -432,6 +560,7 @@ def train_syndiff(rank, gpu, args):
         epoch_g_loss = 0.0
         epoch_d_loss = 0.0
         epoch_inno_loss = 0.0
+        epoch_vgg_loss = 0.0
         
         for iteration, (x1, x2) in loader_iter:
             # 开启梯度
@@ -580,23 +709,87 @@ def train_syndiff(rank, gpu, args):
 
             # ✅【应用】创新 Loss
             
-            errG2_lumi = criterion_lumi(x2_0_predict_diff[:,0:C,:,:], real_data2)
-            errG1_wavelet = criterion_wavelet(x1_0_predict_diff[:,0:C,:,:], real_data1)
-            errG2_wavelet = criterion_wavelet(x2_0_predict_diff[:,0:C,:,:], real_data2)
-            errG_innovative = ( errG2_lumi) + (errG1_wavelet + errG2_wavelet)
-
+            # ✅【应用】创新 Loss
+            # Lumi 专注 FA图(Domain 2)的极亮病灶，Wavelet 双向约束高频边缘
+           # ==========================================
+            # 1. 基础的 Cycle Loss (骨架，绝对不能少！)
+            # ==========================================
             errG1_cycle = F.l1_loss(x1_0_predict_cycle, real_data1)
             errG2_cycle = F.l1_loss(x2_0_predict_cycle, real_data2)            
             errG_cycle = errG1_cycle + errG2_cycle      
             
-            lambda_innovative = 0.1      
+            # (注意：errG_adv, errG_cycle_adv, errG_L1 应该在更上面的代码已经算好了)
 
-            # 总生成器损失
-            errG = args.lambda_l1_loss*errG_cycle + errG_adv + errG_cycle_adv + args.lambda_l1_loss*errG_L1 + errG_innovative
+            # ==========================================
+            # 2. 只保留 FA 域 (Domain 2) 的创新约束
+            # ==========================================
+            # ==========================================
+            # 2. 【修正】双向 Wavelet (保边缘) + 单向 Lumi (保FA高亮病灶)
+            # ==========================================
+            # Wavelet 必须双向，否则高频信息在循环时会变成隐写噪声！
+            errG1_wavelet = criterion_wavelet(x1_0_predict_diff[:,0:C,:,:], real_data1)
+            errG2_wavelet = criterion_wavelet(x2_0_predict_diff[:,0:C,:,:], real_data2)
+            # Lumi 保持单向，绝不让 FS 彩照过度曝光
+            errG2_lumi = criterion_lumi(x2_0_predict_diff[:,0:C,:,:], real_data2)
             
-            # 反向传播和更新
-            # torch.autograd.set_detect_anomaly(True) # 调试时可开启
+            errG_innovative = errG2_lumi + errG1_wavelet + errG2_wavelet
+
+            # ==========================================
+            # 3. 【修正】双向 VGG 感知损失 (防循环隐写伪影)
+            # ==========================================
+            errG1_vgg = vgg_perceptual(x1_0_predict_diff[:,0:C,:,:], real_data1)
+            errG2_vgg = vgg_perceptual(x2_0_predict_diff[:,0:C,:,:], real_data2)
+            errG_vgg = errG1_vgg + errG2_vgg
+
+            # 极其温和、安全的权重配置！
+            lambda_innovative = 0.02
+            lambda_vgg = 0.02
+            lambda_cycle_adv = 0.3
+
+            # ==========================================
+            # 4. 重新组合总损失 errG
+            # ==========================================
+            # errG = (args.lambda_l1_loss * 0.5) * errG_cycle + \
+            #        errG_adv + \
+            #        errG_cycle_adv + \
+            #        (args.lambda_l1_loss * 0.5) * errG_L1 + \
+            #        lambda_innovative * errG_innovative + \
+            #        lambda_vgg * errG_vgg
+            errG = (args.lambda_l1_loss * 0.5) * errG_cycle + \
+                    errG_adv + \
+                    lambda_cycle_adv * errG_cycle_adv + \
+                    (args.lambda_l1_loss * 0.5) * errG_L1 + \
+                    lambda_innovative * errG_innovative + \
+                    lambda_vgg * errG_vgg
+                   
+                   
             errG.backward()
+            
+            # 👇 【新增】累加裸值 (Raw)
+            epoch_losses_raw["G_total"] += errG.item()
+            epoch_losses_raw["G_adv"] += errG_adv.item()
+            epoch_losses_raw["G_cycle_adv"] += errG_cycle_adv.item()
+            epoch_losses_raw["G_cycle"] += errG_cycle.item()
+            epoch_losses_raw["G_l1"] += errG_L1.item()
+            epoch_losses_raw["G_innov"] += errG_innovative.item()
+            epoch_losses_raw["G_vgg"] += errG_vgg.item()
+
+            # 👇 【新增】累加加权值 (Weighted)
+            epoch_losses_weighted["cycle_w"] += (args.lambda_l1_loss * 0.5 * errG_cycle).item()
+            epoch_losses_weighted["l1_w"] += (args.lambda_l1_loss * 0.5 * errG_L1).item()
+            epoch_losses_weighted["cycle_adv_w"] += (lambda_cycle_adv * errG_cycle_adv).item()
+            epoch_losses_weighted["innov_w"] += (lambda_innovative * errG_innovative).item()
+            epoch_losses_weighted["vgg_w"] += (lambda_vgg * errG_vgg).item()
+            
+           
+
+            # # 总生成器损失
+            # #errG = args.lambda_l1_loss*errG_cycle + errG_adv + errG_cycle_adv + args.lambda_l1_loss*errG_L1 + errG_innovative
+            # errG = args.lambda_l1_loss*errG_cycle + errG_adv + errG_cycle_adv + args.lambda_l1_loss*errG_L1 + lambda_innovative * errG_innovative
+            
+            # # 反向传播和更新
+            # # torch.autograd.set_detect_anomaly(True) # 调试时可开启
+            # errG.backward()
 
             optimizer_gen_diffusive_1.step()
             optimizer_gen_diffusive_2.step()
@@ -610,16 +803,22 @@ def train_syndiff(rank, gpu, args):
             if rank == 0:
                 epoch_g_loss += errG.item()
                 epoch_d_loss += errD.item()
+                
                 # 记录乘了系数后的创新损失实际大小
                 current_inno_loss = (lambda_innovative * errG_innovative).item()
                 epoch_inno_loss += current_inno_loss
                 
-                # 在进度条右边显示，加上 Inno 这一项！
+                # 👇 【第三步：新增】记录 VGG 损失实际大小并累加
+                current_vgg_loss = (lambda_vgg * errG_vgg).item()
+                epoch_vgg_loss += current_vgg_loss
+                
+                # 在进度条右边显示，加上 Inno 和 VGG 这一项！
                 loader_iter.set_postfix({
                     "G": f"{errG.item():.3f}",
                     "D": f"{errD.item():.3f}",
                     "Cyc": f"{errG_cycle.item():.3f}",
-                    "Inno": f"{current_inno_loss:.3f}" # 👀 让你能实时盯着它！
+                    "Inno": f"{current_inno_loss:.3f}",
+                    "VGG": f"{current_vgg_loss:.3f}" # 👀 实时盯着 VGG 的发力情况！
                 })
                 
         # 学习率衰减
@@ -641,6 +840,21 @@ def train_syndiff(rank, gpu, args):
             
             # 日志记录
             logger.info(f"Epoch {epoch} Done. Avg G Loss: {avg_g_loss:.4f}")
+            
+        # 👇 【新增：第三步】计算并打印极其详尽的 Loss 拆解
+            num_batches = len(data_loader)
+                
+                # 遍历字典求平均值
+            for k in epoch_losses_raw:
+                epoch_losses_raw[k] /= num_batches
+            for k in epoch_losses_weighted:
+                epoch_losses_weighted[k] /= num_batches
+                
+                # 打印到终端和日志文件里
+            logger.info(f"--- Epoch {epoch} Loss Breakdown ---")
+            logger.info(f"Raw Losses: { {k: round(v, 4) for k, v in epoch_losses_raw.items()} }")
+            logger.info(f"Weighted Contributions: { {k: round(v, 4) for k, v in epoch_losses_weighted.items()} }")
+                # 👆 【新增结束】    
 
             def save_rgb(tensor, path):
                 if tensor.shape[1] > 3:

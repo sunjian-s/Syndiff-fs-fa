@@ -86,7 +86,6 @@ class MS_CBAMpp(nn.Module):
         multi_scale_feat = torch.cat(multi_scale_feat, dim=1)  # (B,3,H,W)
         multi_scale_feat = self.spatial_bn(multi_scale_feat)
         sa = torch.sigmoid(self.spatial_fuse(multi_scale_feat))  # (B,1,H,W)
-        self.current_spatial_map = sa.detach().cpu().float()
         h = h * sa
 
         # 残差连接（保持和原模块一致）
@@ -207,25 +206,11 @@ class NCSNpp(nn.Module):
         local_attn_type = (local_attn_type or 'none').lower()
 
         # 修改后的代码（第124-130行）
-        self.local_attn_type = local_attn_type
-
         if local_attn_type == 'cbam':
-            LocalAttnBlock = functools.partial(
-                MS_CBAMpp,
-                skip_rescale=skip_rescale,
-                spatial_scales=[3, 5, 7]
-            )
+            # 替换：把layerspp.CBAMpp换成MS_CBAMpp，新增spatial_scales参数
+            LocalAttnBlock = functools.partial(MS_CBAMpp, skip_rescale=skip_rescale, spatial_scales=[3,5,7])
         elif local_attn_type == 'scsa':
-            LocalAttnBlock = functools.partial(
-                layerspp.SCSALitepp,
-                skip_rescale=skip_rescale
-            )
-        elif local_attn_type in ['coord', 'mcoord', 'maskedcoord', 'masked_coord']:
-            LocalAttnBlock = functools.partial(
-                MaskedCoordAtt,
-                skip_rescale=skip_rescale,
-                reduction=getattr(config, 'coord_reduction', 16)
-            )
+            LocalAttnBlock = functools.partial(layerspp.SCSALitepp, skip_rescale=skip_rescale)
         elif local_attn_type in ['none', '']:
             LocalAttnBlock = None
         else:
@@ -391,7 +376,7 @@ class NCSNpp(nn.Module):
             mapping_layers.append(self.act)
         self.z_transform = nn.Sequential(*mapping_layers)
 
-    def forward(self, x, time_cond, z, fov_mask=None):
+    def forward(self, x, time_cond, z):
         zemb = self.z_transform(z)
 
         modules = self.all_modules
@@ -430,11 +415,7 @@ class NCSNpp(nn.Module):
 
                 # ✅ local attn
                 if (len(self.local_attn_resolutions) > 0) and (h.shape[-1] in self.local_attn_resolutions):
-                    if self.local_attn_type in ['coord', 'mcoord', 'maskedcoord', 'masked_coord']:
-                        h = modules[m_idx](h, fov_mask)
-                    else:
-                        h = modules[m_idx](h)
-                    m_idx += 1
+                    h = modules[m_idx](h); m_idx += 1
 
                 # global attn
                 if h.shape[-1] in self.attn_resolutions:
@@ -476,11 +457,7 @@ class NCSNpp(nn.Module):
 
             # ✅ local attn
             if (len(self.local_attn_resolutions) > 0) and (h.shape[-1] in self.local_attn_resolutions):
-                if self.local_attn_type in ['coord', 'mcoord', 'maskedcoord', 'masked_coord']:
-                    h = modules[m_idx](h, fov_mask)
-                else:
-                    h = modules[m_idx](h)
-                m_idx += 1
+                h = modules[m_idx](h); m_idx += 1
 
             # global attn
             if h.shape[-1] in self.attn_resolutions:

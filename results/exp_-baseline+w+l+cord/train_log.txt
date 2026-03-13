@@ -1,9 +1,0 @@
-2026-03-09 19:22:06,856 - Start Training on Rank 0
-2026-03-09 19:22:38,624 - train data size:356
-2026-03-09 19:22:38,624 - val data size:30
-2026-03-09 19:29:20,687 - Epoch 0 Done. Avg G Loss: 9.3953
-2026-03-09 19:36:37,581 - Epoch 1 Done. Avg G Loss: 7.7199
-2026-03-09 19:43:54,673 - Epoch 2 Done. Avg G Loss: 7.9735
-2026-03-09 19:51:11,963 - Epoch 3 Done. Avg G Loss: 8.1979
-2026-03-09 19:58:28,808 - Epoch 4 Done. Avg G Loss: 8.4239
-2026-03-09 20:05:46,385 - Epoch 5 Done. Avg G Loss: 8.2044
