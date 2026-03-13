@@ -829,7 +829,7 @@ if __name__ == '__main__':
     parser.add_argument('--attn_resolutions', nargs='+', type=int, default=[16],
                         help='resolution list for global attention, e.g. --attn_resolutions 16 8')
     # ✅ 局部注意力（用于高分辨率 256/128/64），做消融用
-    parser.add_argument('--local_attn_type', type=str, default='none', choices=['none', 'cbam', 'scsa'],
+    parser.add_argument('--local_attn_type', type=str, default='cbam', choices=['none', 'cbam', 'scsa'],
                         help='local attention type for ablation')
     parser.add_argument('--local_attn_resolutions', nargs='+', type=int, default=[256, 128, 64],
                         help='resolution list for local attention, e.g. --local_attn_resolutions 256 128 64')

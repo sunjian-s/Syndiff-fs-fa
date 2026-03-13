@@ -27,6 +27,81 @@ get_act = layers.get_act
 default_initializer = layers.default_init
 dense = dense_layer.dense
 
+
+# 先补全必要的导入（如果没有的话）
+import torch
+import torch.nn as nn
+import torch.nn.functional as F
+import numpy as np
+
+# ========== 粘贴MS_CBAMpp代码 ==========
+class MS_CBAMpp(nn.Module):
+    """多尺度CBAMpp：适配眼底细粒度特征（血管/小病灶）"""
+    def __init__(self, channels, reduction=16, spatial_scales=[3,5,7], skip_rescale=False):
+        super().__init__()
+        hidden = max(channels // reduction, 4)
+        
+        # 1. 优化通道注意力：加入批归一化+SiLU，增强稳定性
+        self.mlp = nn.Sequential(
+            nn.Conv2d(channels, hidden, 1, bias=False),
+            nn.BatchNorm2d(hidden),  # 新增：稳定训练
+            nn.SiLU(),
+            nn.Conv2d(hidden, channels, 1, bias=False),
+        )
+        # 通道注意力初始化：让初始输出接近0，避免过度抑制
+        nn.init.constant_(self.mlp[-1].weight, 0.)
+        if self.mlp[-1].bias is not None:
+            nn.init.constant_(self.mlp[-1].bias, 0.)
+
+        # 2. 优化空间注意力：多尺度卷积（适配不同粗细的血管/病灶）
+        self.spatial_convs = nn.ModuleList([
+            nn.Conv2d(2, 1, kernel_size=k, padding=k//2, bias=False) 
+            for k in spatial_scales
+        ])
+        self.spatial_bn = nn.BatchNorm2d(len(spatial_scales))  # 多尺度特征融合
+        self.spatial_fuse = nn.Conv2d(len(spatial_scales), 1, kernel_size=1, bias=False)
+        # 空间注意力初始化
+        for conv in self.spatial_convs:
+            nn.init.constant_(conv.weight, 0.)
+        nn.init.constant_(self.spatial_fuse.weight, 1./len(spatial_scales))  # 初始均等融合
+
+        self.skip_rescale = skip_rescale
+
+    def forward(self, x):
+        B, C, H, W = x.shape
+        
+        # 通道注意力：保留avg+max，加入BN增强稳定性
+        avg = torch.mean(x, dim=(2, 3), keepdim=True)
+        mx = torch.amax(x, dim=(2, 3), keepdim=True)
+        ca = torch.sigmoid(self.mlp(avg) + self.mlp(mx))  # 通道权重
+        h = x * ca
+
+        # 空间注意力：多尺度卷积融合（适配不同尺度的血管/病灶）
+        avg_c = torch.mean(h, dim=1, keepdim=True)
+        mx_c = torch.amax(h, dim=1, keepdim=True)
+        spatial_feat = torch.cat([avg_c, mx_c], dim=1)  # (B,2,H,W)
+        
+        # 多尺度卷积提取不同尺度空间特征
+        multi_scale_feat = [conv(spatial_feat) for conv in self.spatial_convs]
+        multi_scale_feat = torch.cat(multi_scale_feat, dim=1)  # (B,3,H,W)
+        multi_scale_feat = self.spatial_bn(multi_scale_feat)
+        sa = torch.sigmoid(self.spatial_fuse(multi_scale_feat))  # (B,1,H,W)
+        self.current_spatial_map = sa.detach().cpu().float()
+        h = h * sa
+
+        # 残差连接（保持和原模块一致）
+        return (x + h) / np.sqrt(2.) if self.skip_rescale else (x + h)
+# ========== MS_CBAMpp代码结束 ==========
+
+# 原文件的PixelNorm类（接着你的代码）
+class PixelNorm(nn.Module):
+    """StyleGAN pixel norm"""
+    def __init__(self):
+        super().__init__()
+
+    def forward(self, input):
+        return input / torch.sqrt(torch.mean(input ** 2, dim=1, keepdim=True) + 1e-8)
+    
 class PixelNorm(nn.Module):
     """StyleGAN pixel norm"""
     def __init__(self):
@@ -131,15 +206,30 @@ class NCSNpp(nn.Module):
         local_attn_type = getattr(config, 'local_attn_type', 'none')
         local_attn_type = (local_attn_type or 'none').lower()
 
+        # 修改后的代码（第124-130行）
+        self.local_attn_type = local_attn_type
+
         if local_attn_type == 'cbam':
-            LocalAttnBlock = functools.partial(layerspp.CBAMpp, skip_rescale=skip_rescale)
+            LocalAttnBlock = functools.partial(
+                MS_CBAMpp,
+                skip_rescale=skip_rescale,
+                spatial_scales=[3, 5, 7]
+            )
         elif local_attn_type == 'scsa':
-            LocalAttnBlock = functools.partial(layerspp.SCSALitepp, skip_rescale=skip_rescale)
+            LocalAttnBlock = functools.partial(
+                layerspp.SCSALitepp,
+                skip_rescale=skip_rescale
+            )
+        elif local_attn_type in ['coord', 'mcoord', 'maskedcoord', 'masked_coord']:
+            LocalAttnBlock = functools.partial(
+                MaskedCoordAtt,
+                skip_rescale=skip_rescale,
+                reduction=getattr(config, 'coord_reduction', 16)
+            )
         elif local_attn_type in ['none', '']:
             LocalAttnBlock = None
         else:
             raise ValueError(f'local_attn_type {local_attn_type} not supported')
-
         Upsample = functools.partial(layerspp.Upsample,
                                      with_conv=resamp_with_conv, fir=fir, fir_kernel=fir_kernel)
 
@@ -301,7 +391,7 @@ class NCSNpp(nn.Module):
             mapping_layers.append(self.act)
         self.z_transform = nn.Sequential(*mapping_layers)
 
-    def forward(self, x, time_cond, z):
+    def forward(self, x, time_cond, z, fov_mask=None):
         zemb = self.z_transform(z)
 
         modules = self.all_modules
@@ -340,7 +430,11 @@ class NCSNpp(nn.Module):
 
                 # ✅ local attn
                 if (len(self.local_attn_resolutions) > 0) and (h.shape[-1] in self.local_attn_resolutions):
-                    h = modules[m_idx](h); m_idx += 1
+                    if self.local_attn_type in ['coord', 'mcoord', 'maskedcoord', 'masked_coord']:
+                        h = modules[m_idx](h, fov_mask)
+                    else:
+                        h = modules[m_idx](h)
+                    m_idx += 1
 
                 # global attn
                 if h.shape[-1] in self.attn_resolutions:
@@ -382,7 +476,11 @@ class NCSNpp(nn.Module):
 
             # ✅ local attn
             if (len(self.local_attn_resolutions) > 0) and (h.shape[-1] in self.local_attn_resolutions):
-                h = modules[m_idx](h); m_idx += 1
+                if self.local_attn_type in ['coord', 'mcoord', 'maskedcoord', 'masked_coord']:
+                    h = modules[m_idx](h, fov_mask)
+                else:
+                    h = modules[m_idx](h)
+                m_idx += 1
 
             # global attn
             if h.shape[-1] in self.attn_resolutions:

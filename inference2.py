@@ -1,11 +1,13 @@
 import argparse
 import torch
 import torch.nn as nn
+import torch.nn.functional as F
 import numpy as np
 import cv2
 import os
 import math
 import lpips  # <--- 引入 LPIPS
+import matplotlib.pyplot as plt
 from skimage.metrics import peak_signal_noise_ratio as psnr
 from skimage.metrics import structural_similarity as ssim
 
@@ -104,6 +106,53 @@ def sample_from_model(coefficients, generator, n_time, x_init, args):
             x = x_new.detach()
     return x
 
+def visualize_attention_map(original_image_tensor, model_attention_module, save_path="heatmap.png"):
+    """
+    original_image_tensor: 原始输入的 CFP 图像，形状通常为 (1, 3, H, W)
+    model_attention_module: 你实例化后的 MS_CBAMpp 模块，例如 model.unet.downblocks[0].attn
+    """
+    # 1. 获取刚刚存下来的注意力图 (1, 1, h, w)
+    attn_map = model_attention_module.current_spatial_map
+    
+    # 2. 将注意力图放大到和原图一样的尺寸 (H, W)
+    _, _, H, W = original_image_tensor.shape
+    attn_map = F.interpolate(attn_map, size=(H, W), mode='bilinear', align_corners=False)
+    
+    # 3. 压缩维度并归一化到 0~255
+    attn_map = attn_map.squeeze().numpy() # 变成二维矩阵 (H, W)
+    attn_map = (attn_map - attn_map.min()) / (attn_map.max() - attn_map.min() + 1e-8)
+    attn_map_cv = np.uint8(255 * attn_map)
+    
+    # 4. 应用伪彩色 (JET色表：红色代表注意力高，蓝色代表注意力低)
+    heatmap = cv2.applyColorMap(attn_map_cv, cv2.COLORMAP_JET)
+    
+    # 5. 处理原图用于叠加 (假设原图被归一化到了 -1~1 或 0~1)
+    orig_img = original_image_tensor.squeeze().cpu().numpy().transpose(1, 2, 0)
+    if orig_img.min() < 0:
+        orig_img = (orig_img + 1.0) / 2.0  # 如果是 -1~1，转到 0~1
+    orig_img = np.uint8(255 * orig_img)
+    orig_img = cv2.cvtColor(orig_img, cv2.COLOR_RGB2BGR) # OpenCV 默认 BGR
+    
+    # 6. 将热力图与原图按比例融合 (0.4的底图，0.6的热力图)
+    superimposed_img = cv2.addWeighted(orig_img, 0.4, heatmap, 0.6, 0)
+    
+    # 7. 画图并保存
+    plt.figure(figsize=(10, 5))
+    plt.subplot(1, 2, 1)
+    plt.title("Original CFP")
+    plt.imshow(cv2.cvtColor(orig_img, cv2.COLOR_BGR2RGB))
+    plt.axis('off')
+    
+    plt.subplot(1, 2, 2)
+    plt.title("Attention Heatmap")
+    plt.imshow(cv2.cvtColor(superimposed_img, cv2.COLOR_BGR2RGB))
+    plt.axis('off')
+    
+    plt.tight_layout()
+    plt.savefig(save_path, dpi=300)
+    plt.show()
+    print(f"热力图已保存至: {save_path}")
+
 # ==========================================
 # 2. 图像处理与拼接逻辑
 # ==========================================
@@ -181,6 +230,32 @@ def predict_and_stitch(netG, fundus_path, ffa_path, args, device):
             x_init = torch.cat((noise_patch, source_patch), axis=1)
             
             predicted_patch = sample_from_model(pos_coeff, netG, args.num_timesteps, x_init, args)
+            
+            # 🌟 新增：在这里截获并画出热力图！
+            # ========================================================
+            # 🌟 新增：截获并画出热力图！
+            # 去掉了 if processed == ... 的限制，现在它会保存所有 20 个 Patch 的热力图
+            
+            local_attn_modules = [m for m in netG.all_modules if m.__class__.__name__ == 'MS_CBAMpp']
+            
+            if len(local_attn_modules) == 0:
+                print("\n⚠️ 警告：在模型中没有找到 MS_CBAMpp 模块！")
+            else:
+                target_attn_module = local_attn_modules[-1]
+                # ➕➕➕ 加在这里！打印当前模块保存的注意力图的形状 ➕➕➕
+                if hasattr(target_attn_module, 'current_spatial_map'):
+                    print(f"\n👉 [Debug] 当前热力图的形状是: {target_attn_module.current_spatial_map.shape}")
+                # ➕➕➕➕➕➕➕➕➕➕➕➕➕➕➕➕➕➕➕➕➕➕➕➕➕➕
+                
+                # ⚠️ 关键修改：在文件名里加上 patch 序号和 X/Y 坐标，防止图片被互相覆盖
+                base_name = os.path.basename(fundus_path)
+                heat_save_path = os.path.join(args.output_path, f"HEATMAP_P{processed}_X{x}_Y{y}_{base_name}")
+                
+                try:
+                    visualize_attention_map(source_patch, target_attn_module, save_path=heat_save_path)
+                except Exception as e:
+                    print(f"\n⚠️ 热力图生成失败。报错: {e}")
+            # ========================================================
             
             output_canvas[:, :, y:y+patch_size, x:x+patch_size] += predicted_patch * weight_mask
             count_map[:, :, y:y+patch_size, x:x+patch_size] += weight_mask
@@ -279,7 +354,7 @@ def main():
     
     # --- 关键修复：补全缺失的 Attention 参数 ---
     parser.add_argument('--attn_resolutions', nargs='+', type=int, default=[16, 8])
-    parser.add_argument('--local_attn_type', type=str, default='scsa')
+    parser.add_argument('--local_attn_type', type=str, default='cbam')
     parser.add_argument('--local_attn_resolutions', nargs='+', type=int, default=[256, 128, 64])
     # ------------------------------------------
 

@@ -128,6 +128,76 @@ class Combine(nn.Module):
 # =========================================================================
 # (NCSNpp 风格) 全局自注意力块
 # =========================================================================
+import math
+import torch
+import torch.nn as nn
+import torch.nn.functional as F
+
+
+class h_sigmoid(nn.Module):
+    def __init__(self, inplace=True):
+        super().__init__()
+        self.relu = nn.ReLU6(inplace=inplace)
+
+    def forward(self, x):
+        return self.relu(x + 3) / 6
+
+
+class h_swish(nn.Module):
+    def __init__(self, inplace=True):
+        super().__init__()
+        self.sigmoid = h_sigmoid(inplace=inplace)
+
+    def forward(self, x):
+        return x * self.sigmoid(x)
+
+
+class CoordAtt(nn.Module):
+    """
+    纯净版 CoordAtt (坐标注意力)，带残差连接。
+    接口与 MS_CBAMpp 完全一致，即插即用，绝对不会引发维度报错。
+    """
+    def __init__(self, channels, reduction=16, skip_rescale=False):
+        super().__init__()
+        mip = max(8, channels // reduction)
+
+        self.conv1 = nn.Conv2d(channels, mip, kernel_size=1, stride=1, padding=0, bias=False)
+        self.bn1 = nn.BatchNorm2d(mip)
+        self.act = h_swish()
+
+        self.conv_h = nn.Conv2d(mip, channels, kernel_size=1, stride=1, padding=0, bias=False)
+        self.conv_w = nn.Conv2d(mip, channels, kernel_size=1, stride=1, padding=0, bias=False)
+
+        self.skip_rescale = skip_rescale
+
+    def forward(self, x):
+        identity = x
+        n, c, h, w = x.size()
+
+        # 沿着水平和垂直方向进行 1D 全局平均池化
+        x_h = F.adaptive_avg_pool2d(x, (h, 1))   # [B,C,H,1]
+        x_w = F.adaptive_avg_pool2d(x, (1, w))   # [B,C,1,W]
+
+        x_w_perm = x_w.permute(0, 1, 3, 2)       # [B,C,W,1]
+        y = torch.cat([x_h, x_w_perm], dim=2)    # [B,C,H+W,1]
+
+        y = self.conv1(y)
+        y = self.bn1(y)
+        y = self.act(y)
+
+        x_h_out, x_w_out = torch.split(y, [h, w], dim=2)
+        x_w_out = x_w_out.permute(0, 1, 3, 2)    # [B,C,1,W]
+
+        a_h = torch.sigmoid(self.conv_h(x_h_out))   # [B,C,H,1]
+        a_w = torch.sigmoid(self.conv_w(x_w_out))   # [B,C,1,W]
+
+        out = identity * a_h * a_w
+
+        # 加入残差连接，保证初期训练极其稳定
+        if self.skip_rescale:
+            return (identity + out) / np.sqrt(2.0)
+        else:
+            return identity + out
 class AttnBlockpp(nn.Module):
     """(NCSNpp 风格的) 自注意力块"""
     def __init__(self, channels, skip_rescale=False, init_scale=0.):
@@ -163,35 +233,66 @@ class AttnBlockpp(nn.Module):
 # ✅ 新增：局部注意力（用于高分辨率 256/128/64）
 # =========================================================================
 
-class CBAMpp(nn.Module):
-    """CBAM (Channel + Spatial) with diffusion-friendly residual add."""
-    def __init__(self, channels, reduction=16, spatial_kernel=7, skip_rescale=False):
+import torch
+import torch.nn as nn
+import torch.nn.functional as F
+import numpy as np
+
+class MS_CBAMpp(nn.Module):
+    """多尺度CBAMpp：适配眼底细粒度特征（血管/小病灶）"""
+    def __init__(self, channels, reduction=16, spatial_scales=[3,5,7], skip_rescale=False):
         super().__init__()
         hidden = max(channels // reduction, 4)
+        
+        # 1. 优化通道注意力：加入批归一化+SiLU，增强稳定性
         self.mlp = nn.Sequential(
-            nn.Conv2d(channels, hidden, 1, bias=True),
+            nn.Conv2d(channels, hidden, 1, bias=False),
+            nn.BatchNorm2d(hidden),  # 新增：稳定训练
             nn.SiLU(),
-            nn.Conv2d(hidden, channels, 1, bias=True),
+            nn.Conv2d(hidden, channels, 1, bias=False),
         )
-        self.spatial = nn.Conv2d(2, 1, kernel_size=spatial_kernel,
-                                 padding=spatial_kernel // 2, bias=True)
+        # 通道注意力初始化：让初始输出接近0，避免过度抑制
+        nn.init.constant_(self.mlp[-1].weight, 0.)
+        nn.init.constant_(self.mlp[-1].bias, 0.) if self.mlp[-1].bias is not None else None
+
+        # 2. 优化空间注意力：多尺度卷积（适配不同粗细的血管/病灶）
+        self.spatial_convs = nn.ModuleList([
+            nn.Conv2d(2, 1, kernel_size=k, padding=k//2, bias=False) 
+            for k in spatial_scales
+        ])
+        self.spatial_bn = nn.BatchNorm2d(len(spatial_scales))  # 多尺度特征融合
+        self.spatial_fuse = nn.Conv2d(len(spatial_scales), 1, kernel_size=1, bias=False)
+        # 空间注意力初始化
+        for conv in self.spatial_convs:
+            nn.init.constant_(conv.weight, 0.)
+        nn.init.constant_(self.spatial_fuse.weight, 1./len(spatial_scales))  # 初始均等融合
+
         self.skip_rescale = skip_rescale
 
     def forward(self, x):
-        # Channel attention
+        B, C, H, W = x.shape
+        
+        # 通道注意力：保留avg+max，加入BN增强稳定性
         avg = torch.mean(x, dim=(2, 3), keepdim=True)
-        mx  = torch.amax(x, dim=(2, 3), keepdim=True)
-        ca = torch.sigmoid(self.mlp(avg) + self.mlp(mx))
+        mx = torch.amax(x, dim=(2, 3), keepdim=True)
+        ca = torch.sigmoid(self.mlp(avg) + self.mlp(mx))  # 通道权重
         h = x * ca
 
-        # Spatial attention
+        # 空间注意力：多尺度卷积融合（适配不同尺度的血管/病灶）
         avg_c = torch.mean(h, dim=1, keepdim=True)
-        mx_c  = torch.amax(h, dim=1, keepdim=True)
-        sa = torch.sigmoid(self.spatial(torch.cat([avg_c, mx_c], dim=1)))
+        mx_c = torch.amax(h, dim=1, keepdim=True)
+        spatial_feat = torch.cat([avg_c, mx_c], dim=1)  # (B,2,H,W)
+        
+        # 多尺度卷积提取不同尺度空间特征
+        multi_scale_feat = [conv(spatial_feat) for conv in self.spatial_convs]
+        multi_scale_feat = torch.cat(multi_scale_feat, dim=1)  # (B,3,H,W)
+        multi_scale_feat = self.spatial_bn(multi_scale_feat)
+        sa = torch.sigmoid(self.spatial_fuse(multi_scale_feat))  # (B,1,H,W)
+        
         h = h * sa
 
+        # 残差连接（保持和原模块一致）
         return (x + h) / np.sqrt(2.) if self.skip_rescale else (x + h)
-
 class SCSALitepp(nn.Module):
     """
     SCSA-Lite: 轻量版“空间(高宽) + 通道”协同注意力

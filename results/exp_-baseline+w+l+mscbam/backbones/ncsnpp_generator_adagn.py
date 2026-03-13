@@ -16,7 +16,6 @@ import torch.nn as nn
 import functools
 import torch
 import numpy as np
-import torch.nn.functional as F
 
 ResnetBlockDDPM = layerspp.ResnetBlockDDPMpp_Adagn
 ResnetBlockBigGAN = layerspp.ResnetBlockBigGANpp_Adagn
@@ -28,71 +27,14 @@ get_act = layers.get_act
 default_initializer = layers.default_init
 dense = dense_layer.dense
 
-class h_sigmoid(nn.Module):
-    def __init__(self, inplace=True):
-        super().__init__()
-        self.relu = nn.ReLU6(inplace=inplace)
 
-    def forward(self, x):
-        return self.relu(x + 3) / 6
+# 先补全必要的导入（如果没有的话）
+import torch
+import torch.nn as nn
+import torch.nn.functional as F
+import numpy as np
 
-
-class h_swish(nn.Module):
-    def __init__(self, inplace=True):
-        super().__init__()
-        self.sigmoid = h_sigmoid(inplace=inplace)
-
-    def forward(self, x):
-        return x * self.sigmoid(x)
-
-
-class CoordAtt(nn.Module):
-    """
-    纯净版 CoordAtt (坐标注意力)，带残差连接。
-    接口与 MS_CBAMpp 完全一致，即插即用，绝对不会引发维度报错。
-    """
-    def __init__(self, channels, reduction=16, skip_rescale=False):
-        super().__init__()
-        mip = max(8, channels // reduction)
-
-        self.conv1 = nn.Conv2d(channels, mip, kernel_size=1, stride=1, padding=0, bias=False)
-        self.bn1 = nn.BatchNorm2d(mip)
-        self.act = h_swish()
-
-        self.conv_h = nn.Conv2d(mip, channels, kernel_size=1, stride=1, padding=0, bias=False)
-        self.conv_w = nn.Conv2d(mip, channels, kernel_size=1, stride=1, padding=0, bias=False)
-
-        self.skip_rescale = skip_rescale
-
-    def forward(self, x):
-        identity = x
-        n, c, h, w = x.size()
-
-        # 沿着水平和垂直方向进行 1D 全局平均池化
-        x_h = F.adaptive_avg_pool2d(x, (h, 1))   # [B,C,H,1]
-        x_w = F.adaptive_avg_pool2d(x, (1, w))   # [B,C,1,W]
-
-        x_w_perm = x_w.permute(0, 1, 3, 2)       # [B,C,W,1]
-        y = torch.cat([x_h, x_w_perm], dim=2)    # [B,C,H+W,1]
-
-        y = self.conv1(y)
-        y = self.bn1(y)
-        y = self.act(y)
-
-        x_h_out, x_w_out = torch.split(y, [h, w], dim=2)
-        x_w_out = x_w_out.permute(0, 1, 3, 2)    # [B,C,1,W]
-
-        a_h = torch.sigmoid(self.conv_h(x_h_out))   # [B,C,H,1]
-        a_w = torch.sigmoid(self.conv_w(x_w_out))   # [B,C,1,W]
-
-        out = identity * a_h * a_w
-
-        # 加入残差连接，保证初期训练极其稳定
-        if self.skip_rescale:
-            return (identity + out) / np.sqrt(2.0)
-        else:
-            return identity + out
-# ========== MS_CBAMpp代码 ==========
+# ========== 粘贴MS_CBAMpp代码 ==========
 class MS_CBAMpp(nn.Module):
     """多尺度CBAMpp：适配眼底细粒度特征（血管/小病灶）"""
     def __init__(self, channels, reduction=16, spatial_scales=[3,5,7], skip_rescale=False):
@@ -144,14 +86,13 @@ class MS_CBAMpp(nn.Module):
         multi_scale_feat = torch.cat(multi_scale_feat, dim=1)  # (B,3,H,W)
         multi_scale_feat = self.spatial_bn(multi_scale_feat)
         sa = torch.sigmoid(self.spatial_fuse(multi_scale_feat))  # (B,1,H,W)
-        self.current_spatial_map = sa.detach().cpu().float()
         h = h * sa
 
-        # 残差连接
+        # 残差连接（保持和原模块一致）
         return (x + h) / np.sqrt(2.) if self.skip_rescale else (x + h)
 # ========== MS_CBAMpp代码结束 ==========
 
-
+# 原文件的PixelNorm类（接着你的代码）
 class PixelNorm(nn.Module):
     """StyleGAN pixel norm"""
     def __init__(self):
@@ -159,7 +100,14 @@ class PixelNorm(nn.Module):
 
     def forward(self, input):
         return input / torch.sqrt(torch.mean(input ** 2, dim=1, keepdim=True) + 1e-8)
+    
+class PixelNorm(nn.Module):
+    """StyleGAN pixel norm"""
+    def __init__(self):
+        super().__init__()
 
+    def forward(self, input):
+        return input / torch.sqrt(torch.mean(input ** 2, dim=1, keepdim=True) + 1e-8)
 
 def _to_int_set(x):
     """
@@ -184,10 +132,10 @@ def _to_int_set(x):
         s = x.replace('(', '').replace(')', '').replace('[', '').replace(']', '')
         parts = [p.strip() for p in s.split(',') if p.strip() != '']
         if len(parts) == 0:
+            # maybe space separated
             parts = [p.strip() for p in s.split(' ') if p.strip() != '']
         return set(int(p) for p in parts)
     return {int(x)}
-
 
 @utils.register_model(name='ncsnpp')
 class NCSNpp(nn.Module):
@@ -204,6 +152,7 @@ class NCSNpp(nn.Module):
         ch_mult = config.ch_mult
         self.num_res_blocks = num_res_blocks = config.num_res_blocks
 
+        # ✅ robust parsing
         self.attn_resolutions = _to_int_set(getattr(config, 'attn_resolutions', []))
         dropout = config.dropout
         resamp_with_conv = config.resamp_with_conv
@@ -251,36 +200,21 @@ class NCSNpp(nn.Module):
                                       init_scale=init_scale,
                                       skip_rescale=skip_rescale)
 
-        # local attention config
+        # ✅ local attention config (for ablation)
         self.local_attn_resolutions = _to_int_set(getattr(config, 'local_attn_resolutions', []))
         local_attn_type = getattr(config, 'local_attn_type', 'none')
         local_attn_type = (local_attn_type or 'none').lower()
-        self.local_attn_type = local_attn_type
 
-        # 退回最干净的分支，只保留 CBAM 和 SCSA
+        # 修改后的代码（第124-130行）
         if local_attn_type == 'cbam':
-            LocalAttnBlock = functools.partial(
-                MS_CBAMpp,
-                skip_rescale=skip_rescale,
-                spatial_scales=[3, 5, 7]
-            )
+            # 替换：把layerspp.CBAMpp换成MS_CBAMpp，新增spatial_scales参数
+            LocalAttnBlock = functools.partial(MS_CBAMpp, skip_rescale=skip_rescale, spatial_scales=[3,5,7])
         elif local_attn_type == 'scsa':
-            LocalAttnBlock = functools.partial(
-                layerspp.SCSALitepp,
-                skip_rescale=skip_rescale
-            )
-        # ✅ 新增 coord 分支
-        elif local_attn_type == 'coord':
-            LocalAttnBlock = functools.partial(
-                CoordAtt,
-                skip_rescale=skip_rescale,
-                reduction=getattr(config, 'coord_reduction', 16) # 默认用 16 倍压缩
-            )
+            LocalAttnBlock = functools.partial(layerspp.SCSALitepp, skip_rescale=skip_rescale)
         elif local_attn_type in ['none', '']:
             LocalAttnBlock = None
         else:
             raise ValueError(f'local_attn_type {local_attn_type} not supported')
-
         Upsample = functools.partial(layerspp.Upsample,
                                      with_conv=resamp_with_conv, fir=fir, fir_kernel=fir_kernel)
 
@@ -340,7 +274,7 @@ class NCSNpp(nn.Module):
                 modules.append(ResnetBlock(in_ch=in_ch, out_ch=out_ch))
                 in_ch = out_ch
 
-                # local attention (high-res)
+                # ✅ local attention (high-res)
                 if (LocalAttnBlock is not None) and (all_resolutions[i_level] in self.local_attn_resolutions):
                     modules.append(LocalAttnBlock(channels=in_ch))
 
@@ -381,7 +315,7 @@ class NCSNpp(nn.Module):
                 modules.append(ResnetBlock(in_ch=in_ch + hs_c.pop(), out_ch=out_ch))
                 in_ch = out_ch
 
-            # local attention (same resolution as this level)
+            # ✅ local attention (same resolution as this level)
             if (LocalAttnBlock is not None) and (all_resolutions[i_level] in self.local_attn_resolutions):
                 modules.append(LocalAttnBlock(channels=in_ch))
 
@@ -442,7 +376,6 @@ class NCSNpp(nn.Module):
             mapping_layers.append(self.act)
         self.z_transform = nn.Sequential(*mapping_layers)
 
-    # 干净的 forward，不要任何 fov_mask 的痕迹
     def forward(self, x, time_cond, z):
         zemb = self.z_transform(z)
 
@@ -480,10 +413,9 @@ class NCSNpp(nn.Module):
             for i_block in range(self.num_res_blocks):
                 h = modules[m_idx](hs[-1], temb, zemb); m_idx += 1
 
-                # local attn
+                # ✅ local attn
                 if (len(self.local_attn_resolutions) > 0) and (h.shape[-1] in self.local_attn_resolutions):
-                    h = modules[m_idx](h)
-                    m_idx += 1
+                    h = modules[m_idx](h); m_idx += 1
 
                 # global attn
                 if h.shape[-1] in self.attn_resolutions:
@@ -523,10 +455,9 @@ class NCSNpp(nn.Module):
             for i_block in range(self.num_res_blocks + 1):
                 h = modules[m_idx](torch.cat([h, hs.pop()], dim=1), temb, zemb); m_idx += 1
 
-            # local attn
+            # ✅ local attn
             if (len(self.local_attn_resolutions) > 0) and (h.shape[-1] in self.local_attn_resolutions):
-                h = modules[m_idx](h)
-                m_idx += 1
+                h = modules[m_idx](h); m_idx += 1
 
             # global attn
             if h.shape[-1] in self.attn_resolutions:

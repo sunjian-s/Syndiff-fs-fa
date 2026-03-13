@@ -431,6 +431,7 @@ def train_syndiff(rank, gpu, args):
         # 用于记录 epoch 平均 loss
         epoch_g_loss = 0.0
         epoch_d_loss = 0.0
+        epoch_inno_loss = 0.0
         
         for iteration, (x1, x2) in loader_iter:
             # 开启梯度
@@ -578,15 +579,17 @@ def train_syndiff(rank, gpu, args):
             errG_L1 = errG1_L1 + errG2_L1 
 
             # ✅【应用】创新 Loss
-            errG1_lumi = criterion_lumi(x1_0_predict_diff[:,0:C,:,:], real_data1)
+            
             errG2_lumi = criterion_lumi(x2_0_predict_diff[:,0:C,:,:], real_data2)
             errG1_wavelet = criterion_wavelet(x1_0_predict_diff[:,0:C,:,:], real_data1)
             errG2_wavelet = criterion_wavelet(x2_0_predict_diff[:,0:C,:,:], real_data2)
-            errG_innovative = (errG1_lumi + errG2_lumi) + (errG1_wavelet + errG2_wavelet)
+            errG_innovative = ( errG2_lumi) + (errG1_wavelet + errG2_wavelet)
 
             errG1_cycle = F.l1_loss(x1_0_predict_cycle, real_data1)
             errG2_cycle = F.l1_loss(x2_0_predict_cycle, real_data2)            
-            errG_cycle = errG1_cycle + errG2_cycle            
+            errG_cycle = errG1_cycle + errG2_cycle      
+            
+            lambda_innovative = 0.1      
 
             # 总生成器损失
             errG = args.lambda_l1_loss*errG_cycle + errG_adv + errG_cycle_adv + args.lambda_l1_loss*errG_L1 + errG_innovative
@@ -603,16 +606,22 @@ def train_syndiff(rank, gpu, args):
             global_step += 1
             
             # ✅【新增】更新进度条后缀 (实时查看 Loss)
+            # ✅【新增】更新进度条后缀 (实时查看 Loss)
             if rank == 0:
                 epoch_g_loss += errG.item()
                 epoch_d_loss += errD.item()
-                # 在进度条右边显示当前的 G Loss 和 D Loss
+                # 记录乘了系数后的创新损失实际大小
+                current_inno_loss = (lambda_innovative * errG_innovative).item()
+                epoch_inno_loss += current_inno_loss
+                
+                # 在进度条右边显示，加上 Inno 这一项！
                 loader_iter.set_postfix({
                     "G": f"{errG.item():.3f}",
                     "D": f"{errD.item():.3f}",
-                    "Cyc": f"{errG_cycle.item():.3f}"
+                    "Cyc": f"{errG_cycle.item():.3f}",
+                    "Inno": f"{current_inno_loss:.3f}" # 👀 让你能实时盯着它！
                 })
-        
+                
         # 学习率衰减
         if not args.no_lr_decay:
             scheduler_gen_diffusive_1.step()
@@ -829,10 +838,10 @@ if __name__ == '__main__':
     parser.add_argument('--attn_resolutions', nargs='+', type=int, default=[16],
                         help='resolution list for global attention, e.g. --attn_resolutions 16 8')
     # ✅ 局部注意力（用于高分辨率 256/128/64），做消融用
-    parser.add_argument('--local_attn_type', type=str, default='none', choices=['none', 'cbam', 'scsa'],
-                        help='local attention type for ablation')
-    parser.add_argument('--local_attn_resolutions', nargs='+', type=int, default=[256, 128, 64],
-                        help='resolution list for local attention, e.g. --local_attn_resolutions 256 128 64')
+    parser.add_argument('--local_attn_type', type=str, default='coord', choices=['none', 'cbam', 'scsa', 'coord'],
+                    help='local attention type for ablation')
+    parser.add_argument('--local_attn_resolutions', nargs='+', type=int, default=[128, 64, 32],
+                    help='resolution list for local attention')
 
 
     parser.add_argument('--dropout', type=float, default=0., help='drop-out rate')
