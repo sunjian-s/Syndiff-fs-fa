@@ -229,8 +229,9 @@ class MS_CBAMpp(nn.Module):
         # gamma 初始为 0，无论前置激活值如何，此时 h 严格被截断为 0
         h = self.gamma * h 
 
-       # 【核心修正】彻底移除 sqrt(2) 缩放，保证严格的恒等映射
-        return x + h
+        # 残差连接：初始态 (x + 0) = x，完美保持方差。
+        # 训练展开后，gamma 被反向传播更新，网络自主决定注入多少注意力特征。
+        return (x + h) / np.sqrt(2.) if self.skip_rescale else (x + h)
 # class SCSALitepp(nn.Module):
 #     """
 #     SCSA-Lite: 轻量版“空间(高宽) + 通道”协同注意力

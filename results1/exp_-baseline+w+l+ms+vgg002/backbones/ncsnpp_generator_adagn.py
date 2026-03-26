@@ -27,6 +27,154 @@ get_act = layers.get_act
 default_initializer = layers.default_init
 dense = dense_layer.dense
 
+
+# 先补全必要的导入（如果没有的话）
+import torch
+import torch.nn as nn
+import torch.nn.functional as F
+import numpy as np
+
+class MS_CBAMpp(nn.Module):
+    """多尺度CBAMpp：底层逻辑重构版（严格消除方差漂移与BN崩溃风险）"""
+    def __init__(self, channels, reduction=16, spatial_scales=[3, 5, 7], skip_rescale=False):
+        super().__init__()
+        hidden = max(channels // reduction, 4)
+        self.skip_rescale = skip_rescale
+
+        # 1. 通道注意力分支
+        # 【修正】彻底剔除 BatchNorm2d，避免 1x1 空间维度在极小 Batch Size 下的统计崩溃
+        self.mlp = nn.Sequential(
+            nn.Conv2d(channels, hidden, 1, bias=False),
+            nn.SiLU(),
+            nn.Conv2d(hidden, channels, 1, bias=False),
+        )
+
+        # 2. 空间注意力分支（多尺度提取）
+        self.spatial_convs = nn.ModuleList([
+            nn.Conv2d(2, 1, kernel_size=k, padding=k//2, bias=False) 
+            for k in spatial_scales
+        ])
+        
+        # 【修正】使用 GroupNorm 替代 BatchNorm2d，彻底解除对 Batch Size 的依赖
+        self.spatial_gn = nn.GroupNorm(1, len(spatial_scales)) 
+        self.spatial_fuse = nn.Conv2d(len(spatial_scales), 1, kernel_size=1, bias=False)
+
+        # 3. 稳态初始化控制阀（核心修复）
+        # 【新增】引入可学习的零常数门控，强制初始状态为严格的恒等映射 (Identity Mapping)
+        self.gamma = nn.Parameter(torch.zeros(1))
+
+    def forward(self, x):
+        # ---------------- 底层特征推演 ----------------
+        
+        # 【阶段一：通道特征加权】
+        avg_out = torch.mean(x, dim=(2, 3), keepdim=True)
+        max_out = torch.amax(x, dim=(2, 3), keepdim=True)
+        # Sigmoid 初始态由于权重随机/较小，输出约为 0.5
+        ca = torch.sigmoid(self.mlp(avg_out) + self.mlp(max_out)) 
+        h = x * ca  
+
+        # 【阶段二：多尺度空间特征加权】
+        avg_c = torch.mean(h, dim=1, keepdim=True)
+        max_c = torch.amax(h, dim=1, keepdim=True)
+        spatial_feat = torch.cat([avg_c, max_c], dim=1)  # (B, 2, H, W)
+        
+        # 并行计算多尺度感受野
+        multi_scale_feat = [conv(spatial_feat) for conv in self.spatial_convs]
+        multi_scale_feat = torch.cat(multi_scale_feat, dim=1)  # (B, len(spatial_scales), H, W)
+        
+        # 归一化后融合成单通道空间权重
+        multi_scale_feat = self.spatial_gn(multi_scale_feat)
+        sa = torch.sigmoid(self.spatial_fuse(multi_scale_feat))  # (B, 1, H, W)
+        h = h * sa  
+
+        # 【阶段三：零初始化残差保护】
+        # gamma 初始为 0，无论前置激活值如何，此时 h 严格被截断为 0
+        h = self.gamma * h 
+
+        # 残差连接：初始态 (x + 0) = x，完美保持方差。
+        # 训练展开后，gamma 被反向传播更新，网络自主决定注入多少注意力特征。
+        return (x + h) / np.sqrt(2.) if self.skip_rescale else (x + h)
+# # ========== MS_CBAMpp代码结束 ==========
+# import torch
+# import torch.nn as nn
+# import numpy as np
+
+# class MS_CBAMpp(nn.Module):
+#     """多尺度CBAMpp：适配眼底细粒度特征（已剔除 BatchNorm 致命硬伤）"""
+#     def __init__(self, channels, reduction=16, spatial_scales=[3,5,7], skip_rescale=False):
+#         super().__init__()
+#         hidden = max(channels // reduction, 4)
+        
+#         # 1. 通道注意力重构：使用 GroupNorm 替代 BatchNorm
+#         # 底层逻辑：当 num_groups=1 时，GroupNorm 在数学上等价于 LayerNorm。
+#         # 它在单个样本的通道维度内计算均值和方差，完全免疫 Batch Size 极小导致的梯度噪声。
+#         self.mlp = nn.Sequential(
+#             nn.Conv2d(channels, hidden, 1, bias=False),
+#             nn.GroupNorm(1, hidden),  # 【关键修正】彻底脱离 Batch 维度
+#             nn.SiLU(),
+#             nn.Conv2d(hidden, channels, 1, bias=False),
+#         )
+        
+#         # 通道注意力初始化：保持初始状态为恒等映射
+#         nn.init.constant_(self.mlp[-1].weight, 0.)
+#         if self.mlp[-1].bias is not None:
+#             nn.init.constant_(self.mlp[-1].bias, 0.)
+
+#         # 2. 空间注意力重构：多尺度卷积融合
+#         self.spatial_convs = nn.ModuleList([
+#             nn.Conv2d(2, 1, kernel_size=k, padding=k//2, bias=False) 
+#             for k in spatial_scales
+#         ])
+        
+#         # 【关键修正】使用 InstanceNorm2d 替代 BatchNorm2d
+#         # 因果关系：多尺度特征融合后产生 len(spatial_scales) 个独立通道。
+#         # InstanceNorm2d 独立归一化单张图像的每一个空间特征图，防止不同尺度的极值互相干扰。
+#         self.spatial_norm = nn.InstanceNorm2d(len(spatial_scales), affine=True) 
+#         self.spatial_fuse = nn.Conv2d(len(spatial_scales), 1, kernel_size=1, bias=False)
+        
+#         # 空间注意力初始化
+#         for conv in self.spatial_convs:
+#             nn.init.constant_(conv.weight, 0.)
+#         nn.init.constant_(self.spatial_fuse.weight, 1./len(spatial_scales)) 
+
+#         self.skip_rescale = skip_rescale
+
+#     def forward(self, x):
+#         B, C, H, W = x.shape
+        
+#         # --- 通道注意力 ---
+#         # 提取全局空间信息
+#         avg = torch.mean(x, dim=(2, 3), keepdim=True)
+#         mx = torch.amax(x, dim=(2, 3), keepdim=True)
+#         ca = torch.sigmoid(self.mlp(avg) + self.mlp(mx)) 
+#         h = x * ca
+
+#         # --- 空间注意力 ---
+#         # 提取局部通道信息
+#         avg_c = torch.mean(h, dim=1, keepdim=True)
+#         mx_c = torch.amax(h, dim=1, keepdim=True)
+#         spatial_feat = torch.cat([avg_c, mx_c], dim=1)  # (B, 2, H, W)
+        
+#         # 多尺度特征提取与融合
+#         multi_scale_feat = [conv(spatial_feat) for conv in self.spatial_convs]
+#         multi_scale_feat = torch.cat(multi_scale_feat, dim=1)  # (B, len(spatial_scales), H, W)
+        
+#         multi_scale_feat = self.spatial_norm(multi_scale_feat) # 应用独立实例归一化
+#         sa = torch.sigmoid(self.spatial_fuse(multi_scale_feat))  # (B, 1, H, W)
+#         h = h * sa
+
+#         # --- 残差连接 ---
+#         return (x + h) / np.sqrt(2.) if self.skip_rescale else (x + h)
+
+# 原文件的PixelNorm类（接着你的代码）
+class PixelNorm(nn.Module):
+    """StyleGAN pixel norm"""
+    def __init__(self):
+        super().__init__()
+
+    def forward(self, input):
+        return input / torch.sqrt(torch.mean(input ** 2, dim=1, keepdim=True) + 1e-8)
+    
 class PixelNorm(nn.Module):
     """StyleGAN pixel norm"""
     def __init__(self):
@@ -131,15 +279,16 @@ class NCSNpp(nn.Module):
         local_attn_type = getattr(config, 'local_attn_type', 'none')
         local_attn_type = (local_attn_type or 'none').lower()
 
+        # 修改后的代码（第124-130行）
         if local_attn_type == 'cbam':
-            LocalAttnBlock = functools.partial(layerspp.CBAMpp, skip_rescale=skip_rescale)
+            # 替换：把layerspp.CBAMpp换成MS_CBAMpp，新增spatial_scales参数
+            LocalAttnBlock = functools.partial(MS_CBAMpp, skip_rescale=skip_rescale, spatial_scales=[3,5,7])
         elif local_attn_type == 'scsa':
             LocalAttnBlock = functools.partial(layerspp.SCSALitepp, skip_rescale=skip_rescale)
         elif local_attn_type in ['none', '']:
             LocalAttnBlock = None
         else:
             raise ValueError(f'local_attn_type {local_attn_type} not supported')
-
         Upsample = functools.partial(layerspp.Upsample,
                                      with_conv=resamp_with_conv, fir=fir, fir_kernel=fir_kernel)
 

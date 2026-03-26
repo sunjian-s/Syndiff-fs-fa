@@ -1,0 +1,27 @@
+2026-03-22 17:47:43,109 - Start Training on Rank 0
+2026-03-22 17:47:50,248 - train data size:356
+2026-03-22 17:47:50,248 - val data size:30
+2026-03-22 17:54:48,394 - Epoch 0 Done. Avg G Loss: 6.6530
+2026-03-22 17:54:48,394 - --- Epoch 0 Loss Breakdown ---
+2026-03-22 17:54:48,394 - Raw Losses: {'G_total': 6.653, 'G_adv': 4.2294, 'G_cycle_adv': 3.3802, 'G_cycle': 0.3756, 'G_l1_fs': 0.1656, 'G_lumi': 0.2894, 'G_wavelet': 0.4221, 'G_vgg': 1.5091}
+2026-03-22 17:54:48,395 - Weighted Contributions: {'cycle_w': 0.3756, 'cycle_adv_w': 0.338, 'l1_fs_w': 0.1656, 'lumi_w': 0.5788, 'wavelet_w': 0.2111, 'vgg_w': 0.7546}
+2026-03-22 18:02:07,393 - Epoch 1 Done. Avg G Loss: 3.8926
+2026-03-22 18:02:07,393 - --- Epoch 1 Loss Breakdown ---
+2026-03-22 18:02:07,393 - Raw Losses: {'G_total': 3.8926, 'G_adv': 1.6416, 'G_cycle_adv': 4.5126, 'G_cycle': 0.3698, 'G_l1_fs': 0.135, 'G_lumi': 0.2311, 'G_wavelet': 0.3611, 'G_vgg': 1.3045}
+2026-03-22 18:02:07,393 - Weighted Contributions: {'cycle_w': 0.3698, 'cycle_adv_w': 0.4513, 'l1_fs_w': 0.135, 'lumi_w': 0.4621, 'wavelet_w': 0.1806, 'vgg_w': 0.6522}
+2026-03-22 18:09:24,289 - Epoch 2 Done. Avg G Loss: 3.6959
+2026-03-22 18:09:24,290 - --- Epoch 2 Loss Breakdown ---
+2026-03-22 18:09:24,290 - Raw Losses: {'G_total': 3.6959, 'G_adv': 1.5326, 'G_cycle_adv': 4.7478, 'G_cycle': 0.3737, 'G_l1_fs': 0.1223, 'G_lumi': 0.2132, 'G_wavelet': 0.3292, 'G_vgg': 1.203}
+2026-03-22 18:09:24,291 - Weighted Contributions: {'cycle_w': 0.3737, 'cycle_adv_w': 0.4748, 'l1_fs_w': 0.1223, 'lumi_w': 0.4263, 'wavelet_w': 0.1646, 'vgg_w': 0.6015}
+2026-03-22 18:16:45,037 - Epoch 3 Done. Avg G Loss: 3.6331
+2026-03-22 18:16:45,037 - --- Epoch 3 Loss Breakdown ---
+2026-03-22 18:16:45,037 - Raw Losses: {'G_total': 3.6331, 'G_adv': 1.5303, 'G_cycle_adv': 5.0355, 'G_cycle': 0.3732, 'G_l1_fs': 0.1163, 'G_lumi': 0.1964, 'G_wavelet': 0.3057, 'G_vgg': 1.1282}
+2026-03-22 18:16:45,037 - Weighted Contributions: {'cycle_w': 0.3732, 'cycle_adv_w': 0.5035, 'l1_fs_w': 0.1163, 'lumi_w': 0.3928, 'wavelet_w': 0.1529, 'vgg_w': 0.5641}
+2026-03-22 18:24:05,771 - Epoch 4 Done. Avg G Loss: 3.4872
+2026-03-22 18:24:05,771 - --- Epoch 4 Loss Breakdown ---
+2026-03-22 18:24:05,771 - Raw Losses: {'G_total': 3.4872, 'G_adv': 1.4789, 'G_cycle_adv': 5.0366, 'G_cycle': 0.3638, 'G_l1_fs': 0.1062, 'G_lumi': 0.1797, 'G_wavelet': 0.285, 'G_vgg': 1.0655}
+2026-03-22 18:24:05,771 - Weighted Contributions: {'cycle_w': 0.3638, 'cycle_adv_w': 0.5037, 'l1_fs_w': 0.1062, 'lumi_w': 0.3594, 'wavelet_w': 0.1425, 'vgg_w': 0.5328}
+2026-03-22 18:31:25,893 - Epoch 5 Done. Avg G Loss: 3.4258
+2026-03-22 18:31:25,894 - --- Epoch 5 Loss Breakdown ---
+2026-03-22 18:31:25,894 - Raw Losses: {'G_total': 3.4258, 'G_adv': 1.4748, 'G_cycle_adv': 5.0715, 'G_cycle': 0.3612, 'G_l1_fs': 0.1002, 'G_lumi': 0.1676, 'G_wavelet': 0.2714, 'G_vgg': 1.0231}
+2026-03-22 18:31:25,894 - Weighted Contributions: {'cycle_w': 0.3612, 'cycle_adv_w': 0.5072, 'l1_fs_w': 0.1002, 'lumi_w': 0.3351, 'wavelet_w': 0.1357, 'vgg_w': 0.5115}

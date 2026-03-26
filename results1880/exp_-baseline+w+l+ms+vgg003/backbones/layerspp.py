@@ -163,75 +163,114 @@ class AttnBlockpp(nn.Module):
 # ✅ 新增：局部注意力（用于高分辨率 256/128/64）
 # =========================================================================
 
-class CBAMpp(nn.Module):
-    """CBAM (Channel + Spatial) with diffusion-friendly residual add."""
-    def __init__(self, channels, reduction=16, spatial_kernel=7, skip_rescale=False):
+import torch
+import torch.nn as nn
+import torch.nn.functional as F
+import numpy as np
+
+import torch
+import torch.nn as nn
+import numpy as np
+
+class MS_CBAMpp(nn.Module):
+    """多尺度CBAMpp：底层逻辑重构版（严格消除方差漂移与BN崩溃风险）"""
+    def __init__(self, channels, reduction=16, spatial_scales=[3, 5, 7], skip_rescale=False):
         super().__init__()
         hidden = max(channels // reduction, 4)
+        self.skip_rescale = skip_rescale
+
+        # 1. 通道注意力分支
+        # 【修正】彻底剔除 BatchNorm2d，避免 1x1 空间维度在极小 Batch Size 下的统计崩溃
         self.mlp = nn.Sequential(
-            nn.Conv2d(channels, hidden, 1, bias=True),
+            nn.Conv2d(channels, hidden, 1, bias=False),
             nn.SiLU(),
-            nn.Conv2d(hidden, channels, 1, bias=True),
+            nn.Conv2d(hidden, channels, 1, bias=False),
         )
-        self.spatial = nn.Conv2d(2, 1, kernel_size=spatial_kernel,
-                                 padding=spatial_kernel // 2, bias=True)
-        self.skip_rescale = skip_rescale
+
+        # 2. 空间注意力分支（多尺度提取）
+        self.spatial_convs = nn.ModuleList([
+            nn.Conv2d(2, 1, kernel_size=k, padding=k//2, bias=False) 
+            for k in spatial_scales
+        ])
+        
+        # 【修正】使用 GroupNorm 替代 BatchNorm2d，彻底解除对 Batch Size 的依赖
+        self.spatial_gn = nn.GroupNorm(1, len(spatial_scales)) 
+        self.spatial_fuse = nn.Conv2d(len(spatial_scales), 1, kernel_size=1, bias=False)
+
+        # 3. 稳态初始化控制阀（核心修复）
+        # 【新增】引入可学习的零常数门控，强制初始状态为严格的恒等映射 (Identity Mapping)
+        self.gamma = nn.Parameter(torch.zeros(1))
 
     def forward(self, x):
-        # Channel attention
-        avg = torch.mean(x, dim=(2, 3), keepdim=True)
-        mx  = torch.amax(x, dim=(2, 3), keepdim=True)
-        ca = torch.sigmoid(self.mlp(avg) + self.mlp(mx))
-        h = x * ca
+        # ---------------- 底层特征推演 ----------------
+        
+        # 【阶段一：通道特征加权】
+        avg_out = torch.mean(x, dim=(2, 3), keepdim=True)
+        max_out = torch.amax(x, dim=(2, 3), keepdim=True)
+        # Sigmoid 初始态由于权重随机/较小，输出约为 0.5
+        ca = torch.sigmoid(self.mlp(avg_out) + self.mlp(max_out)) 
+        h = x * ca  
 
-        # Spatial attention
+        # 【阶段二：多尺度空间特征加权】
         avg_c = torch.mean(h, dim=1, keepdim=True)
-        mx_c  = torch.amax(h, dim=1, keepdim=True)
-        sa = torch.sigmoid(self.spatial(torch.cat([avg_c, mx_c], dim=1)))
-        h = h * sa
+        max_c = torch.amax(h, dim=1, keepdim=True)
+        spatial_feat = torch.cat([avg_c, max_c], dim=1)  # (B, 2, H, W)
+        
+        # 并行计算多尺度感受野
+        multi_scale_feat = [conv(spatial_feat) for conv in self.spatial_convs]
+        multi_scale_feat = torch.cat(multi_scale_feat, dim=1)  # (B, len(spatial_scales), H, W)
+        
+        # 归一化后融合成单通道空间权重
+        multi_scale_feat = self.spatial_gn(multi_scale_feat)
+        sa = torch.sigmoid(self.spatial_fuse(multi_scale_feat))  # (B, 1, H, W)
+        h = h * sa  
 
-        return (x + h) / np.sqrt(2.) if self.skip_rescale else (x + h)
+        # 【阶段三：零初始化残差保护】
+        # gamma 初始为 0，无论前置激活值如何，此时 h 严格被截断为 0
+        h = self.gamma * h 
 
-class SCSALitepp(nn.Module):
-    """
-    SCSA-Lite: 轻量版“空间(高宽) + 通道”协同注意力
-    更偏细节/结构（血管、小病灶）增强，计算量低，适合插在高分辨率。
-    """
-    def __init__(self, channels, ks=(3, 7), reduction=16, skip_rescale=False):
-        super().__init__()
-        self.dw_h = nn.ModuleList([
-            nn.Conv1d(channels, channels, k, padding=k // 2, groups=channels, bias=True) for k in ks
-        ])
-        self.dw_w = nn.ModuleList([
-            nn.Conv1d(channels, channels, k, padding=k // 2, groups=channels, bias=True) for k in ks
-        ])
-        hidden = max(channels // reduction, 4)
-        self.fc1 = nn.Conv2d(channels, hidden, 1, bias=True)
-        self.act = nn.SiLU()
-        self.fc2 = nn.Conv2d(hidden, channels, 1, bias=True)
-        self.skip_rescale = skip_rescale
+       # 【核心修正】彻底移除 sqrt(2) 缩放，保证严格的恒等映射
+        return x + h
+# class SCSALitepp(nn.Module):
+#     """
+#     SCSA-Lite: 轻量版“空间(高宽) + 通道”协同注意力
+#     更偏细节/结构（血管、小病灶）增强，计算量低，适合插在高分辨率。
+#     """
+#     def __init__(self, channels, ks=(3, 7), reduction=16, skip_rescale=False):
+#         super().__init__()
+#         self.dw_h = nn.ModuleList([
+#             nn.Conv1d(channels, channels, k, padding=k // 2, groups=channels, bias=True) for k in ks
+#         ])
+#         self.dw_w = nn.ModuleList([
+#             nn.Conv1d(channels, channels, k, padding=k // 2, groups=channels, bias=True) for k in ks
+#         ])
+#         hidden = max(channels // reduction, 4)
+#         self.fc1 = nn.Conv2d(channels, hidden, 1, bias=True)
+#         self.act = nn.SiLU()
+#         self.fc2 = nn.Conv2d(hidden, channels, 1, bias=True)
+#         self.skip_rescale = skip_rescale
 
-    def forward(self, x):
-        B, C, H, W = x.shape
-        x_h = x.mean(dim=3)  # (B,C,H)
-        x_w = x.mean(dim=2)  # (B,C,W)
+#     def forward(self, x):
+#         B, C, H, W = x.shape
+#         x_h = x.mean(dim=3)  # (B,C,H)
+#         x_w = x.mean(dim=2)  # (B,C,W)
 
-        h_sum = 0
-        w_sum = 0
-        for conv in self.dw_h:
-            h_sum = h_sum + conv(x_h)
-        for conv in self.dw_w:
-            w_sum = w_sum + conv(x_w)
+#         h_sum = 0
+#         w_sum = 0
+#         for conv in self.dw_h:
+#             h_sum = h_sum + conv(x_h)
+#         for conv in self.dw_w:
+#             w_sum = w_sum + conv(x_w)
 
-        a_h = h_sum.unsqueeze(-1)  # (B,C,H,1)
-        a_w = w_sum.unsqueeze(-2)  # (B,C,1,W)
-        spatial = torch.sigmoid(a_h + a_w)  # (B,C,H,W)
+#         a_h = h_sum.unsqueeze(-1)  # (B,C,H,1)
+#         a_w = w_sum.unsqueeze(-2)  # (B,C,1,W)
+#         spatial = torch.sigmoid(a_h + a_w)  # (B,C,H,W)
 
-        y = (x * spatial).mean(dim=(2, 3), keepdim=True)  # (B,C,1,1)
-        ch = torch.sigmoid(self.fc2(self.act(self.fc1(y))))
+#         y = (x * spatial).mean(dim=(2, 3), keepdim=True)  # (B,C,1,1)
+#         ch = torch.sigmoid(self.fc2(self.act(self.fc1(y))))
 
-        h = x * spatial * ch
-        return (x + h) / np.sqrt(2.) if self.skip_rescale else (x + h)
+#         h = x * spatial * ch
+#         return (x + h) / np.sqrt(2.) if self.skip_rescale else (x + h)
 
 # =========================================================================
 # Upsample / Downsample

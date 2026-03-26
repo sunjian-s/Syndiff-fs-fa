@@ -1,0 +1,905 @@
+2026-03-17 21:29:53,732 - Start Training on Rank 0
+2026-03-17 21:29:57,796 - train data size:356
+2026-03-17 21:29:57,797 - val data size:30
+2026-03-17 21:30:23,777 - Start Training on Rank 0
+2026-03-17 21:30:27,720 - train data size:356
+2026-03-17 21:30:27,720 - val data size:30
+2026-03-18 12:26:17,607 - Epoch 0 Done. Avg G Loss: 6.3673
+2026-03-18 12:26:17,607 - --- Epoch 0 Loss Breakdown ---
+2026-03-18 12:26:17,607 - Raw Losses: {'G_total': 6.3673, 'G_adv': 3.9237, 'G_cycle_adv': 3.1432, 'G_cycle': 0.3757, 'G_l1_fs': 0.1731, 'G_lumi': 0.2911, 'G_wavelet': 0.4353, 'G_vgg': 1.5614}
+2026-03-18 12:26:17,607 - Weighted Contributions: {'cycle_w': 0.3757, 'cycle_adv_w': 0.3143, 'l1_fs_w': 0.1731, 'lumi_w': 0.5821, 'wavelet_w': 0.2176, 'vgg_w': 0.7807}
+2026-03-18 12:33:15,018 - Epoch 1 Done. Avg G Loss: 3.8361
+2026-03-18 12:33:15,018 - --- Epoch 1 Loss Breakdown ---
+2026-03-18 12:33:15,018 - Raw Losses: {'G_total': 3.8361, 'G_adv': 1.5528, 'G_cycle_adv': 4.497, 'G_cycle': 0.3685, 'G_l1_fs': 0.1328, 'G_lumi': 0.2315, 'G_wavelet': 0.3734, 'G_vgg': 1.3652}
+2026-03-18 12:33:15,018 - Weighted Contributions: {'cycle_w': 0.3685, 'cycle_adv_w': 0.4497, 'l1_fs_w': 0.1328, 'lumi_w': 0.463, 'wavelet_w': 0.1867, 'vgg_w': 0.6826}
+2026-03-18 12:49:54,874 - Start Training on Rank 0
+2026-03-18 12:49:58,868 - train data size:356
+2026-03-18 12:49:58,868 - val data size:30
+2026-03-18 13:01:27,054 - Epoch 0 Done. Avg G Loss: 6.3679
+2026-03-18 13:01:27,055 - --- Epoch 0 Loss Breakdown ---
+2026-03-18 13:01:27,055 - Raw Losses: {'G_total': 6.3679, 'G_adv': 3.9196, 'G_cycle_adv': 3.204, 'G_cycle': 0.3768, 'G_l1_fs': 0.1728, 'G_lumi': 0.2912, 'G_wavelet': 0.4339, 'G_vgg': 1.558}
+2026-03-18 13:01:27,055 - Weighted Contributions: {'cycle_w': 0.3768, 'cycle_adv_w': 0.3204, 'l1_fs_w': 0.1728, 'lumi_w': 0.5824, 'wavelet_w': 0.2169, 'vgg_w': 0.779}
+2026-03-18 13:08:32,928 - Epoch 1 Done. Avg G Loss: 3.9153
+2026-03-18 13:08:32,928 - --- Epoch 1 Loss Breakdown ---
+2026-03-18 13:08:32,928 - Raw Losses: {'G_total': 3.9153, 'G_adv': 1.6325, 'G_cycle_adv': 4.5194, 'G_cycle': 0.3586, 'G_l1_fs': 0.1351, 'G_lumi': 0.2311, 'G_wavelet': 0.3759, 'G_vgg': 1.3741}
+2026-03-18 13:08:32,928 - Weighted Contributions: {'cycle_w': 0.3586, 'cycle_adv_w': 0.4519, 'l1_fs_w': 0.1351, 'lumi_w': 0.4622, 'wavelet_w': 0.1879, 'vgg_w': 0.6871}
+2026-03-18 13:15:37,225 - Epoch 2 Done. Avg G Loss: 3.6811
+2026-03-18 13:15:37,226 - --- Epoch 2 Loss Breakdown ---
+2026-03-18 13:15:37,226 - Raw Losses: {'G_total': 3.6811, 'G_adv': 1.4573, 'G_cycle_adv': 4.8503, 'G_cycle': 0.368, 'G_l1_fs': 0.1206, 'G_lumi': 0.2175, 'G_wavelet': 0.3462, 'G_vgg': 1.2843}
+2026-03-18 13:15:37,226 - Weighted Contributions: {'cycle_w': 0.368, 'cycle_adv_w': 0.485, 'l1_fs_w': 0.1206, 'lumi_w': 0.4349, 'wavelet_w': 0.1731, 'vgg_w': 0.6421}
+2026-03-18 13:22:41,164 - Epoch 3 Done. Avg G Loss: 3.6158
+2026-03-18 13:22:41,165 - --- Epoch 3 Loss Breakdown ---
+2026-03-18 13:22:41,165 - Raw Losses: {'G_total': 3.6158, 'G_adv': 1.4685, 'G_cycle_adv': 4.9535, 'G_cycle': 0.3647, 'G_l1_fs': 0.1137, 'G_lumi': 0.2011, 'G_wavelet': 0.3249, 'G_vgg': 1.2179}
+2026-03-18 13:22:41,165 - Weighted Contributions: {'cycle_w': 0.3647, 'cycle_adv_w': 0.4954, 'l1_fs_w': 0.1137, 'lumi_w': 0.4022, 'wavelet_w': 0.1625, 'vgg_w': 0.6089}
+2026-03-18 13:29:45,856 - Epoch 4 Done. Avg G Loss: 3.5783
+2026-03-18 13:29:45,856 - --- Epoch 4 Loss Breakdown ---
+2026-03-18 13:29:45,857 - Raw Losses: {'G_total': 3.5783, 'G_adv': 1.4562, 'G_cycle_adv': 5.3044, 'G_cycle': 0.3659, 'G_l1_fs': 0.1075, 'G_lumi': 0.1899, 'G_wavelet': 0.3081, 'G_vgg': 1.169}
+2026-03-18 13:29:45,857 - Weighted Contributions: {'cycle_w': 0.3659, 'cycle_adv_w': 0.5304, 'l1_fs_w': 0.1075, 'lumi_w': 0.3798, 'wavelet_w': 0.1541, 'vgg_w': 0.5845}
+2026-03-18 13:36:51,928 - Epoch 5 Done. Avg G Loss: 3.4605
+2026-03-18 13:36:51,929 - --- Epoch 5 Loss Breakdown ---
+2026-03-18 13:36:51,929 - Raw Losses: {'G_total': 3.4605, 'G_adv': 1.45, 'G_cycle_adv': 5.0366, 'G_cycle': 0.3602, 'G_l1_fs': 0.101, 'G_lumi': 0.1739, 'G_wavelet': 0.2889, 'G_vgg': 1.1069}
+2026-03-18 13:36:51,929 - Weighted Contributions: {'cycle_w': 0.3602, 'cycle_adv_w': 0.5037, 'l1_fs_w': 0.101, 'lumi_w': 0.3478, 'wavelet_w': 0.1444, 'vgg_w': 0.5534}
+2026-03-18 13:43:57,644 - Epoch 6 Done. Avg G Loss: 3.4527
+2026-03-18 13:43:57,644 - --- Epoch 6 Loss Breakdown ---
+2026-03-18 13:43:57,644 - Raw Losses: {'G_total': 3.4527, 'G_adv': 1.4439, 'G_cycle_adv': 5.2021, 'G_cycle': 0.3545, 'G_l1_fs': 0.1017, 'G_lumi': 0.1719, 'G_wavelet': 0.2844, 'G_vgg': 1.093}
+2026-03-18 13:43:57,644 - Weighted Contributions: {'cycle_w': 0.3545, 'cycle_adv_w': 0.5202, 'l1_fs_w': 0.1017, 'lumi_w': 0.3437, 'wavelet_w': 0.1422, 'vgg_w': 0.5465}
+2026-03-18 13:51:02,808 - Epoch 7 Done. Avg G Loss: 3.4105
+2026-03-18 13:51:02,808 - --- Epoch 7 Loss Breakdown ---
+2026-03-18 13:51:02,808 - Raw Losses: {'G_total': 3.4105, 'G_adv': 1.4601, 'G_cycle_adv': 5.1326, 'G_cycle': 0.3533, 'G_l1_fs': 0.0988, 'G_lumi': 0.1603, 'G_wavelet': 0.2713, 'G_vgg': 1.0575}
+2026-03-18 13:51:02,808 - Weighted Contributions: {'cycle_w': 0.3533, 'cycle_adv_w': 0.5133, 'l1_fs_w': 0.0988, 'lumi_w': 0.3206, 'wavelet_w': 0.1357, 'vgg_w': 0.5288}
+2026-03-18 13:58:09,320 - Epoch 8 Done. Avg G Loss: 3.3858
+2026-03-18 13:58:09,320 - --- Epoch 8 Loss Breakdown ---
+2026-03-18 13:58:09,320 - Raw Losses: {'G_total': 3.3858, 'G_adv': 1.469, 'G_cycle_adv': 5.1121, 'G_cycle': 0.3524, 'G_l1_fs': 0.095, 'G_lumi': 0.1551, 'G_wavelet': 0.2629, 'G_vgg': 1.033}
+2026-03-18 13:58:09,320 - Weighted Contributions: {'cycle_w': 0.3524, 'cycle_adv_w': 0.5112, 'l1_fs_w': 0.095, 'lumi_w': 0.3102, 'wavelet_w': 0.1315, 'vgg_w': 0.5165}
+2026-03-18 14:05:18,805 - Epoch 9 Done. Avg G Loss: 3.3557
+2026-03-18 14:05:18,805 - --- Epoch 9 Loss Breakdown ---
+2026-03-18 14:05:18,805 - Raw Losses: {'G_total': 3.3557, 'G_adv': 1.4451, 'G_cycle_adv': 5.186, 'G_cycle': 0.3547, 'G_l1_fs': 0.0925, 'G_lumi': 0.1543, 'G_wavelet': 0.2584, 'G_vgg': 1.0143}
+2026-03-18 14:05:18,805 - Weighted Contributions: {'cycle_w': 0.3547, 'cycle_adv_w': 0.5186, 'l1_fs_w': 0.0925, 'lumi_w': 0.3085, 'wavelet_w': 0.1292, 'vgg_w': 0.5071}
+2026-03-18 14:12:29,160 - Epoch 10 Done. Avg G Loss: 3.3856
+2026-03-18 14:12:29,160 - --- Epoch 10 Loss Breakdown ---
+2026-03-18 14:12:29,160 - Raw Losses: {'G_total': 3.3856, 'G_adv': 1.4847, 'G_cycle_adv': 5.0083, 'G_cycle': 0.3508, 'G_l1_fs': 0.0941, 'G_lumi': 0.1591, 'G_wavelet': 0.2575, 'G_vgg': 1.0163}
+2026-03-18 14:12:29,161 - Weighted Contributions: {'cycle_w': 0.3508, 'cycle_adv_w': 0.5008, 'l1_fs_w': 0.0941, 'lumi_w': 0.3183, 'wavelet_w': 0.1287, 'vgg_w': 0.5082}
+2026-03-18 14:19:39,673 - Epoch 11 Done. Avg G Loss: 3.2931
+2026-03-18 14:19:39,673 - --- Epoch 11 Loss Breakdown ---
+2026-03-18 14:19:39,673 - Raw Losses: {'G_total': 3.2931, 'G_adv': 1.4685, 'G_cycle_adv': 4.9902, 'G_cycle': 0.3393, 'G_l1_fs': 0.0915, 'G_lumi': 0.138, 'G_wavelet': 0.2462, 'G_vgg': 0.9914}
+2026-03-18 14:19:39,673 - Weighted Contributions: {'cycle_w': 0.3393, 'cycle_adv_w': 0.499, 'l1_fs_w': 0.0915, 'lumi_w': 0.276, 'wavelet_w': 0.1231, 'vgg_w': 0.4957}
+2026-03-18 14:26:49,266 - Epoch 12 Done. Avg G Loss: 3.2984
+2026-03-18 14:26:49,266 - --- Epoch 12 Loss Breakdown ---
+2026-03-18 14:26:49,266 - Raw Losses: {'G_total': 3.2984, 'G_adv': 1.5008, 'G_cycle_adv': 4.6971, 'G_cycle': 0.3393, 'G_l1_fs': 0.0908, 'G_lumi': 0.1427, 'G_wavelet': 0.2437, 'G_vgg': 0.9812}
+2026-03-18 14:26:49,266 - Weighted Contributions: {'cycle_w': 0.3393, 'cycle_adv_w': 0.4697, 'l1_fs_w': 0.0908, 'lumi_w': 0.2855, 'wavelet_w': 0.1218, 'vgg_w': 0.4906}
+2026-03-18 14:33:59,618 - Epoch 13 Done. Avg G Loss: 3.2040
+2026-03-18 14:33:59,618 - --- Epoch 13 Loss Breakdown ---
+2026-03-18 14:33:59,619 - Raw Losses: {'G_total': 3.204, 'G_adv': 1.4642, 'G_cycle_adv': 4.5029, 'G_cycle': 0.3273, 'G_l1_fs': 0.0893, 'G_lumi': 0.1344, 'G_wavelet': 0.2393, 'G_vgg': 0.9688}
+2026-03-18 14:33:59,619 - Weighted Contributions: {'cycle_w': 0.3273, 'cycle_adv_w': 0.4503, 'l1_fs_w': 0.0893, 'lumi_w': 0.2688, 'wavelet_w': 0.1197, 'vgg_w': 0.4844}
+2026-03-18 14:41:08,983 - Epoch 14 Done. Avg G Loss: 3.1758
+2026-03-18 14:41:08,983 - --- Epoch 14 Loss Breakdown ---
+2026-03-18 14:41:08,983 - Raw Losses: {'G_total': 3.1758, 'G_adv': 1.456, 'G_cycle_adv': 4.4756, 'G_cycle': 0.3252, 'G_l1_fs': 0.0878, 'G_lumi': 0.1303, 'G_wavelet': 0.2348, 'G_vgg': 0.9624}
+2026-03-18 14:41:08,983 - Weighted Contributions: {'cycle_w': 0.3252, 'cycle_adv_w': 0.4476, 'l1_fs_w': 0.0878, 'lumi_w': 0.2606, 'wavelet_w': 0.1174, 'vgg_w': 0.4812}
+2026-03-18 14:48:19,992 - Epoch 15 Done. Avg G Loss: 3.1989
+2026-03-18 14:48:19,992 - --- Epoch 15 Loss Breakdown ---
+2026-03-18 14:48:19,992 - Raw Losses: {'G_total': 3.1989, 'G_adv': 1.4932, 'G_cycle_adv': 4.3533, 'G_cycle': 0.3183, 'G_l1_fs': 0.0891, 'G_lumi': 0.1328, 'G_wavelet': 0.2341, 'G_vgg': 0.9604}
+2026-03-18 14:48:19,992 - Weighted Contributions: {'cycle_w': 0.3183, 'cycle_adv_w': 0.4353, 'l1_fs_w': 0.0891, 'lumi_w': 0.2657, 'wavelet_w': 0.1171, 'vgg_w': 0.4802}
+2026-03-18 14:55:30,906 - Epoch 16 Done. Avg G Loss: 3.0896
+2026-03-18 14:55:30,906 - --- Epoch 16 Loss Breakdown ---
+2026-03-18 14:55:30,906 - Raw Losses: {'G_total': 3.0896, 'G_adv': 1.4533, 'G_cycle_adv': 4.1332, 'G_cycle': 0.3081, 'G_l1_fs': 0.088, 'G_lumi': 0.1206, 'G_wavelet': 0.2279, 'G_vgg': 0.9434}
+2026-03-18 14:55:30,906 - Weighted Contributions: {'cycle_w': 0.3081, 'cycle_adv_w': 0.4133, 'l1_fs_w': 0.088, 'lumi_w': 0.2412, 'wavelet_w': 0.114, 'vgg_w': 0.4717}
+2026-03-18 15:02:41,329 - Epoch 17 Done. Avg G Loss: 3.0552
+2026-03-18 15:02:41,329 - --- Epoch 17 Loss Breakdown ---
+2026-03-18 15:02:41,329 - Raw Losses: {'G_total': 3.0552, 'G_adv': 1.4683, 'G_cycle_adv': 3.7401, 'G_cycle': 0.2942, 'G_l1_fs': 0.0874, 'G_lumi': 0.1251, 'G_wavelet': 0.2274, 'G_vgg': 0.9348}
+2026-03-18 15:02:41,329 - Weighted Contributions: {'cycle_w': 0.2942, 'cycle_adv_w': 0.374, 'l1_fs_w': 0.0874, 'lumi_w': 0.2502, 'wavelet_w': 0.1137, 'vgg_w': 0.4674}
+2026-03-18 15:09:52,776 - Epoch 18 Done. Avg G Loss: 2.9988
+2026-03-18 15:09:52,776 - --- Epoch 18 Loss Breakdown ---
+2026-03-18 15:09:52,776 - Raw Losses: {'G_total': 2.9988, 'G_adv': 1.4552, 'G_cycle_adv': 3.4498, 'G_cycle': 0.2834, 'G_l1_fs': 0.0841, 'G_lumi': 0.1287, 'G_wavelet': 0.2235, 'G_vgg': 0.924}
+2026-03-18 15:09:52,776 - Weighted Contributions: {'cycle_w': 0.2834, 'cycle_adv_w': 0.345, 'l1_fs_w': 0.0841, 'lumi_w': 0.2574, 'wavelet_w': 0.1118, 'vgg_w': 0.462}
+2026-03-18 15:17:03,376 - Epoch 19 Done. Avg G Loss: 2.9377
+2026-03-18 15:17:03,376 - --- Epoch 19 Loss Breakdown ---
+2026-03-18 15:17:03,377 - Raw Losses: {'G_total': 2.9377, 'G_adv': 1.4335, 'G_cycle_adv': 3.3026, 'G_cycle': 0.2775, 'G_l1_fs': 0.0783, 'G_lumi': 0.1259, 'G_wavelet': 0.2205, 'G_vgg': 0.9121}
+2026-03-18 15:17:03,377 - Weighted Contributions: {'cycle_w': 0.2775, 'cycle_adv_w': 0.3303, 'l1_fs_w': 0.0783, 'lumi_w': 0.2518, 'wavelet_w': 0.1102, 'vgg_w': 0.456}
+2026-03-18 15:24:13,746 - Epoch 20 Done. Avg G Loss: 2.9215
+2026-03-18 15:24:13,746 - --- Epoch 20 Loss Breakdown ---
+2026-03-18 15:24:13,746 - Raw Losses: {'G_total': 2.9215, 'G_adv': 1.4186, 'G_cycle_adv': 3.4216, 'G_cycle': 0.2727, 'G_l1_fs': 0.0778, 'G_lumi': 0.1241, 'G_wavelet': 0.2188, 'G_vgg': 0.905}
+2026-03-18 15:24:13,746 - Weighted Contributions: {'cycle_w': 0.2727, 'cycle_adv_w': 0.3422, 'l1_fs_w': 0.0778, 'lumi_w': 0.2482, 'wavelet_w': 0.1094, 'vgg_w': 0.4525}
+2026-03-18 15:31:24,918 - Epoch 21 Done. Avg G Loss: 2.9492
+2026-03-18 15:31:24,918 - --- Epoch 21 Loss Breakdown ---
+2026-03-18 15:31:24,918 - Raw Losses: {'G_total': 2.9492, 'G_adv': 1.4195, 'G_cycle_adv': 3.8908, 'G_cycle': 0.2597, 'G_l1_fs': 0.0725, 'G_lumi': 0.1254, 'G_wavelet': 0.2175, 'G_vgg': 0.8979}
+2026-03-18 15:31:24,918 - Weighted Contributions: {'cycle_w': 0.2597, 'cycle_adv_w': 0.3891, 'l1_fs_w': 0.0725, 'lumi_w': 0.2507, 'wavelet_w': 0.1088, 'vgg_w': 0.449}
+2026-03-18 15:38:35,288 - Epoch 22 Done. Avg G Loss: 2.9301
+2026-03-18 15:38:35,289 - --- Epoch 22 Loss Breakdown ---
+2026-03-18 15:38:35,289 - Raw Losses: {'G_total': 2.9301, 'G_adv': 1.4085, 'G_cycle_adv': 4.2353, 'G_cycle': 0.2551, 'G_l1_fs': 0.0701, 'G_lumi': 0.1115, 'G_wavelet': 0.2112, 'G_vgg': 0.8889}
+2026-03-18 15:38:35,289 - Weighted Contributions: {'cycle_w': 0.2551, 'cycle_adv_w': 0.4235, 'l1_fs_w': 0.0701, 'lumi_w': 0.2229, 'wavelet_w': 0.1056, 'vgg_w': 0.4444}
+2026-03-18 15:45:46,515 - Epoch 23 Done. Avg G Loss: 2.9460
+2026-03-18 15:45:46,515 - --- Epoch 23 Loss Breakdown ---
+2026-03-18 15:45:46,515 - Raw Losses: {'G_total': 2.946, 'G_adv': 1.398, 'G_cycle_adv': 4.4121, 'G_cycle': 0.2508, 'G_l1_fs': 0.0708, 'G_lumi': 0.1203, 'G_wavelet': 0.2112, 'G_vgg': 0.8776}
+2026-03-18 15:45:46,515 - Weighted Contributions: {'cycle_w': 0.2508, 'cycle_adv_w': 0.4412, 'l1_fs_w': 0.0708, 'lumi_w': 0.2407, 'wavelet_w': 0.1056, 'vgg_w': 0.4388}
+2026-03-18 15:52:59,187 - Epoch 24 Done. Avg G Loss: 2.9267
+2026-03-18 15:52:59,187 - --- Epoch 24 Loss Breakdown ---
+2026-03-18 15:52:59,187 - Raw Losses: {'G_total': 2.9267, 'G_adv': 1.3982, 'G_cycle_adv': 4.6568, 'G_cycle': 0.2398, 'G_l1_fs': 0.0671, 'G_lumi': 0.11, 'G_wavelet': 0.2064, 'G_vgg': 0.8653}
+2026-03-18 15:52:59,187 - Weighted Contributions: {'cycle_w': 0.2398, 'cycle_adv_w': 0.4657, 'l1_fs_w': 0.0671, 'lumi_w': 0.22, 'wavelet_w': 0.1032, 'vgg_w': 0.4327}
+2026-03-18 16:00:12,236 - Epoch 25 Done. Avg G Loss: 2.9718
+2026-03-18 16:00:12,236 - --- Epoch 25 Loss Breakdown ---
+2026-03-18 16:00:12,236 - Raw Losses: {'G_total': 2.9718, 'G_adv': 1.4048, 'G_cycle_adv': 4.9944, 'G_cycle': 0.2374, 'G_l1_fs': 0.0662, 'G_lumi': 0.1143, 'G_wavelet': 0.2055, 'G_vgg': 0.8653}
+2026-03-18 16:00:12,236 - Weighted Contributions: {'cycle_w': 0.2374, 'cycle_adv_w': 0.4994, 'l1_fs_w': 0.0662, 'lumi_w': 0.2286, 'wavelet_w': 0.1027, 'vgg_w': 0.4327}
+2026-03-18 16:07:22,965 - Epoch 26 Done. Avg G Loss: 2.9830
+2026-03-18 16:07:22,965 - --- Epoch 26 Loss Breakdown ---
+2026-03-18 16:07:22,965 - Raw Losses: {'G_total': 2.983, 'G_adv': 1.4021, 'G_cycle_adv': 5.3535, 'G_cycle': 0.2313, 'G_l1_fs': 0.0655, 'G_lumi': 0.109, 'G_wavelet': 0.2037, 'G_vgg': 0.8577}
+2026-03-18 16:07:22,965 - Weighted Contributions: {'cycle_w': 0.2313, 'cycle_adv_w': 0.5354, 'l1_fs_w': 0.0655, 'lumi_w': 0.218, 'wavelet_w': 0.1018, 'vgg_w': 0.4289}
+2026-03-18 16:14:32,896 - Epoch 27 Done. Avg G Loss: 3.0494
+2026-03-18 16:14:32,896 - --- Epoch 27 Loss Breakdown ---
+2026-03-18 16:14:32,896 - Raw Losses: {'G_total': 3.0494, 'G_adv': 1.4028, 'G_cycle_adv': 6.1775, 'G_cycle': 0.2308, 'G_l1_fs': 0.0635, 'G_lumi': 0.1046, 'G_wavelet': 0.2016, 'G_vgg': 0.849}
+2026-03-18 16:14:32,896 - Weighted Contributions: {'cycle_w': 0.2308, 'cycle_adv_w': 0.6178, 'l1_fs_w': 0.0635, 'lumi_w': 0.2092, 'wavelet_w': 0.1008, 'vgg_w': 0.4245}
+2026-03-18 16:21:43,903 - Epoch 28 Done. Avg G Loss: 3.0400
+2026-03-18 16:21:43,904 - --- Epoch 28 Loss Breakdown ---
+2026-03-18 16:21:43,904 - Raw Losses: {'G_total': 3.04, 'G_adv': 1.4017, 'G_cycle_adv': 6.2177, 'G_cycle': 0.225, 'G_l1_fs': 0.0623, 'G_lumi': 0.1039, 'G_wavelet': 0.199, 'G_vgg': 0.8439}
+2026-03-18 16:21:43,904 - Weighted Contributions: {'cycle_w': 0.225, 'cycle_adv_w': 0.6218, 'l1_fs_w': 0.0623, 'lumi_w': 0.2077, 'wavelet_w': 0.0995, 'vgg_w': 0.422}
+2026-03-18 16:28:55,975 - Epoch 29 Done. Avg G Loss: 3.0267
+2026-03-18 16:28:55,975 - --- Epoch 29 Loss Breakdown ---
+2026-03-18 16:28:55,975 - Raw Losses: {'G_total': 3.0267, 'G_adv': 1.4021, 'G_cycle_adv': 6.0707, 'G_cycle': 0.2221, 'G_l1_fs': 0.0613, 'G_lumi': 0.1069, 'G_wavelet': 0.1989, 'G_vgg': 0.8419}
+2026-03-18 16:28:55,975 - Weighted Contributions: {'cycle_w': 0.2221, 'cycle_adv_w': 0.6071, 'l1_fs_w': 0.0613, 'lumi_w': 0.2137, 'wavelet_w': 0.0995, 'vgg_w': 0.4209}
+2026-03-18 16:36:06,576 - Epoch 30 Done. Avg G Loss: 2.9856
+2026-03-18 16:36:06,576 - --- Epoch 30 Loss Breakdown ---
+2026-03-18 16:36:06,576 - Raw Losses: {'G_total': 2.9856, 'G_adv': 1.3979, 'G_cycle_adv': 5.9886, 'G_cycle': 0.2206, 'G_l1_fs': 0.0586, 'G_lumi': 0.0984, 'G_wavelet': 0.1934, 'G_vgg': 0.8321}
+2026-03-18 16:36:06,576 - Weighted Contributions: {'cycle_w': 0.2206, 'cycle_adv_w': 0.5989, 'l1_fs_w': 0.0586, 'lumi_w': 0.1968, 'wavelet_w': 0.0967, 'vgg_w': 0.4161}
+2026-03-18 16:43:17,584 - Epoch 31 Done. Avg G Loss: 2.9449
+2026-03-18 16:43:17,584 - --- Epoch 31 Loss Breakdown ---
+2026-03-18 16:43:17,584 - Raw Losses: {'G_total': 2.9449, 'G_adv': 1.4016, 'G_cycle_adv': 5.7136, 'G_cycle': 0.2169, 'G_l1_fs': 0.059, 'G_lumi': 0.0944, 'G_wavelet': 0.1914, 'G_vgg': 0.8234}
+2026-03-18 16:43:17,584 - Weighted Contributions: {'cycle_w': 0.2169, 'cycle_adv_w': 0.5714, 'l1_fs_w': 0.059, 'lumi_w': 0.1887, 'wavelet_w': 0.0957, 'vgg_w': 0.4117}
+2026-03-18 16:50:28,607 - Epoch 32 Done. Avg G Loss: 2.9767
+2026-03-18 16:50:28,607 - --- Epoch 32 Loss Breakdown ---
+2026-03-18 16:50:28,607 - Raw Losses: {'G_total': 2.9767, 'G_adv': 1.3985, 'G_cycle_adv': 6.0919, 'G_cycle': 0.214, 'G_l1_fs': 0.0589, 'G_lumi': 0.096, 'G_wavelet': 0.1903, 'G_vgg': 0.818}
+2026-03-18 16:50:28,607 - Weighted Contributions: {'cycle_w': 0.214, 'cycle_adv_w': 0.6092, 'l1_fs_w': 0.0589, 'lumi_w': 0.192, 'wavelet_w': 0.0951, 'vgg_w': 0.409}
+2026-03-18 16:57:40,969 - Epoch 33 Done. Avg G Loss: 2.9678
+2026-03-18 16:57:40,969 - --- Epoch 33 Loss Breakdown ---
+2026-03-18 16:57:40,969 - Raw Losses: {'G_total': 2.9678, 'G_adv': 1.3987, 'G_cycle_adv': 6.0986, 'G_cycle': 0.2079, 'G_l1_fs': 0.0564, 'G_lumi': 0.0983, 'G_wavelet': 0.1875, 'G_vgg': 0.8091}
+2026-03-18 16:57:40,969 - Weighted Contributions: {'cycle_w': 0.2079, 'cycle_adv_w': 0.6099, 'l1_fs_w': 0.0564, 'lumi_w': 0.1966, 'wavelet_w': 0.0938, 'vgg_w': 0.4046}
+2026-03-18 17:04:51,435 - Epoch 34 Done. Avg G Loss: 2.9583
+2026-03-18 17:04:51,435 - --- Epoch 34 Loss Breakdown ---
+2026-03-18 17:04:51,435 - Raw Losses: {'G_total': 2.9583, 'G_adv': 1.3956, 'G_cycle_adv': 6.2083, 'G_cycle': 0.2067, 'G_l1_fs': 0.0567, 'G_lumi': 0.0915, 'G_wavelet': 0.1863, 'G_vgg': 0.8044}
+2026-03-18 17:04:51,435 - Weighted Contributions: {'cycle_w': 0.2067, 'cycle_adv_w': 0.6208, 'l1_fs_w': 0.0567, 'lumi_w': 0.183, 'wavelet_w': 0.0932, 'vgg_w': 0.4022}
+2026-03-18 17:12:02,267 - Epoch 35 Done. Avg G Loss: 2.9521
+2026-03-18 17:12:02,267 - --- Epoch 35 Loss Breakdown ---
+2026-03-18 17:12:02,267 - Raw Losses: {'G_total': 2.9521, 'G_adv': 1.396, 'G_cycle_adv': 6.2387, 'G_cycle': 0.2045, 'G_l1_fs': 0.0551, 'G_lumi': 0.0906, 'G_wavelet': 0.1846, 'G_vgg': 0.7983}
+2026-03-18 17:12:02,267 - Weighted Contributions: {'cycle_w': 0.2045, 'cycle_adv_w': 0.6239, 'l1_fs_w': 0.0551, 'lumi_w': 0.1812, 'wavelet_w': 0.0923, 'vgg_w': 0.3992}
+2026-03-18 17:19:13,604 - Epoch 36 Done. Avg G Loss: 2.9792
+2026-03-18 17:19:13,604 - --- Epoch 36 Loss Breakdown ---
+2026-03-18 17:19:13,604 - Raw Losses: {'G_total': 2.9792, 'G_adv': 1.3979, 'G_cycle_adv': 6.5179, 'G_cycle': 0.2015, 'G_l1_fs': 0.0543, 'G_lumi': 0.0917, 'G_wavelet': 0.1843, 'G_vgg': 0.7965}
+2026-03-18 17:19:13,604 - Weighted Contributions: {'cycle_w': 0.2015, 'cycle_adv_w': 0.6518, 'l1_fs_w': 0.0543, 'lumi_w': 0.1835, 'wavelet_w': 0.0921, 'vgg_w': 0.3982}
+2026-03-18 17:26:24,240 - Epoch 37 Done. Avg G Loss: 2.9745
+2026-03-18 17:26:24,241 - --- Epoch 37 Loss Breakdown ---
+2026-03-18 17:26:24,241 - Raw Losses: {'G_total': 2.9745, 'G_adv': 1.3958, 'G_cycle_adv': 6.4681, 'G_cycle': 0.2013, 'G_l1_fs': 0.0539, 'G_lumi': 0.0944, 'G_wavelet': 0.1835, 'G_vgg': 0.7919}
+2026-03-18 17:26:24,241 - Weighted Contributions: {'cycle_w': 0.2013, 'cycle_adv_w': 0.6468, 'l1_fs_w': 0.0539, 'lumi_w': 0.1889, 'wavelet_w': 0.0917, 'vgg_w': 0.3959}
+2026-03-18 17:33:34,930 - Epoch 38 Done. Avg G Loss: 2.9386
+2026-03-18 17:33:34,930 - --- Epoch 38 Loss Breakdown ---
+2026-03-18 17:33:34,930 - Raw Losses: {'G_total': 2.9386, 'G_adv': 1.3945, 'G_cycle_adv': 6.3084, 'G_cycle': 0.1945, 'G_l1_fs': 0.0515, 'G_lumi': 0.0921, 'G_wavelet': 0.181, 'G_vgg': 0.7852}
+2026-03-18 17:33:34,930 - Weighted Contributions: {'cycle_w': 0.1945, 'cycle_adv_w': 0.6308, 'l1_fs_w': 0.0515, 'lumi_w': 0.1842, 'wavelet_w': 0.0905, 'vgg_w': 0.3926}
+2026-03-18 17:40:44,832 - Epoch 39 Done. Avg G Loss: 2.9231
+2026-03-18 17:40:44,832 - --- Epoch 39 Loss Breakdown ---
+2026-03-18 17:40:44,832 - Raw Losses: {'G_total': 2.9231, 'G_adv': 1.3895, 'G_cycle_adv': 6.2365, 'G_cycle': 0.1921, 'G_l1_fs': 0.0514, 'G_lumi': 0.093, 'G_wavelet': 0.18, 'G_vgg': 0.7808}
+2026-03-18 17:40:44,832 - Weighted Contributions: {'cycle_w': 0.1921, 'cycle_adv_w': 0.6237, 'l1_fs_w': 0.0514, 'lumi_w': 0.1861, 'wavelet_w': 0.09, 'vgg_w': 0.3904}
+2026-03-18 17:47:55,142 - Epoch 40 Done. Avg G Loss: 2.8957
+2026-03-18 17:47:55,142 - --- Epoch 40 Loss Breakdown ---
+2026-03-18 17:47:55,143 - Raw Losses: {'G_total': 2.8957, 'G_adv': 1.3933, 'G_cycle_adv': 6.1859, 'G_cycle': 0.1894, 'G_l1_fs': 0.0518, 'G_lumi': 0.0833, 'G_wavelet': 0.177, 'G_vgg': 0.7751}
+2026-03-18 17:47:55,143 - Weighted Contributions: {'cycle_w': 0.1894, 'cycle_adv_w': 0.6186, 'l1_fs_w': 0.0518, 'lumi_w': 0.1666, 'wavelet_w': 0.0885, 'vgg_w': 0.3876}
+2026-03-18 17:55:05,399 - Epoch 41 Done. Avg G Loss: 2.9333
+2026-03-18 17:55:05,399 - --- Epoch 41 Loss Breakdown ---
+2026-03-18 17:55:05,399 - Raw Losses: {'G_total': 2.9333, 'G_adv': 1.4031, 'G_cycle_adv': 6.3519, 'G_cycle': 0.1876, 'G_l1_fs': 0.0525, 'G_lumi': 0.0893, 'G_wavelet': 0.1787, 'G_vgg': 0.7742}
+2026-03-18 17:55:05,399 - Weighted Contributions: {'cycle_w': 0.1876, 'cycle_adv_w': 0.6352, 'l1_fs_w': 0.0525, 'lumi_w': 0.1785, 'wavelet_w': 0.0893, 'vgg_w': 0.3871}
+2026-03-18 18:02:17,166 - Epoch 42 Done. Avg G Loss: 2.8793
+2026-03-18 18:02:17,166 - --- Epoch 42 Loss Breakdown ---
+2026-03-18 18:02:17,167 - Raw Losses: {'G_total': 2.8793, 'G_adv': 1.3931, 'G_cycle_adv': 6.0848, 'G_cycle': 0.1846, 'G_l1_fs': 0.0509, 'G_lumi': 0.0849, 'G_wavelet': 0.1762, 'G_vgg': 0.7688}
+2026-03-18 18:02:17,167 - Weighted Contributions: {'cycle_w': 0.1846, 'cycle_adv_w': 0.6085, 'l1_fs_w': 0.0509, 'lumi_w': 0.1698, 'wavelet_w': 0.0881, 'vgg_w': 0.3844}
+2026-03-18 18:09:26,990 - Epoch 43 Done. Avg G Loss: 2.9158
+2026-03-18 18:09:26,990 - --- Epoch 43 Loss Breakdown ---
+2026-03-18 18:09:26,990 - Raw Losses: {'G_total': 2.9158, 'G_adv': 1.3993, 'G_cycle_adv': 6.4109, 'G_cycle': 0.1798, 'G_l1_fs': 0.0497, 'G_lumi': 0.0876, 'G_wavelet': 0.1746, 'G_vgg': 0.7665}
+2026-03-18 18:09:26,990 - Weighted Contributions: {'cycle_w': 0.1798, 'cycle_adv_w': 0.6411, 'l1_fs_w': 0.0497, 'lumi_w': 0.1753, 'wavelet_w': 0.0873, 'vgg_w': 0.3833}
+2026-03-18 18:16:34,700 - Epoch 44 Done. Avg G Loss: 2.9009
+2026-03-18 18:16:34,700 - --- Epoch 44 Loss Breakdown ---
+2026-03-18 18:16:34,700 - Raw Losses: {'G_total': 2.9009, 'G_adv': 1.3958, 'G_cycle_adv': 6.4086, 'G_cycle': 0.181, 'G_l1_fs': 0.0499, 'G_lumi': 0.0817, 'G_wavelet': 0.1738, 'G_vgg': 0.7663}
+2026-03-18 18:16:34,700 - Weighted Contributions: {'cycle_w': 0.181, 'cycle_adv_w': 0.6409, 'l1_fs_w': 0.0499, 'lumi_w': 0.1633, 'wavelet_w': 0.0869, 'vgg_w': 0.3831}
+2026-03-18 18:23:42,861 - Epoch 45 Done. Avg G Loss: 2.8810
+2026-03-18 18:23:42,861 - --- Epoch 45 Loss Breakdown ---
+2026-03-18 18:23:42,861 - Raw Losses: {'G_total': 2.881, 'G_adv': 1.3953, 'G_cycle_adv': 6.2397, 'G_cycle': 0.1751, 'G_l1_fs': 0.0496, 'G_lumi': 0.0844, 'G_wavelet': 0.1735, 'G_vgg': 0.7629}
+2026-03-18 18:23:42,861 - Weighted Contributions: {'cycle_w': 0.1751, 'cycle_adv_w': 0.624, 'l1_fs_w': 0.0496, 'lumi_w': 0.1689, 'wavelet_w': 0.0868, 'vgg_w': 0.3814}
+2026-03-18 18:30:51,539 - Epoch 46 Done. Avg G Loss: 2.9022
+2026-03-18 18:30:51,539 - --- Epoch 46 Loss Breakdown ---
+2026-03-18 18:30:51,540 - Raw Losses: {'G_total': 2.9022, 'G_adv': 1.3948, 'G_cycle_adv': 6.5425, 'G_cycle': 0.1754, 'G_l1_fs': 0.0485, 'G_lumi': 0.0823, 'G_wavelet': 0.1709, 'G_vgg': 0.7588}
+2026-03-18 18:30:51,540 - Weighted Contributions: {'cycle_w': 0.1754, 'cycle_adv_w': 0.6542, 'l1_fs_w': 0.0485, 'lumi_w': 0.1646, 'wavelet_w': 0.0854, 'vgg_w': 0.3794}
+2026-03-18 18:37:59,934 - Epoch 47 Done. Avg G Loss: 2.8882
+2026-03-18 18:37:59,934 - --- Epoch 47 Loss Breakdown ---
+2026-03-18 18:37:59,934 - Raw Losses: {'G_total': 2.8882, 'G_adv': 1.3914, 'G_cycle_adv': 6.5572, 'G_cycle': 0.1721, 'G_l1_fs': 0.0479, 'G_lumi': 0.0796, 'G_wavelet': 0.1695, 'G_vgg': 0.7542}
+2026-03-18 18:37:59,934 - Weighted Contributions: {'cycle_w': 0.1721, 'cycle_adv_w': 0.6557, 'l1_fs_w': 0.0479, 'lumi_w': 0.1593, 'wavelet_w': 0.0847, 'vgg_w': 0.3771}
+2026-03-18 18:45:09,069 - Epoch 48 Done. Avg G Loss: 2.9150
+2026-03-18 18:45:09,069 - --- Epoch 48 Loss Breakdown ---
+2026-03-18 18:45:09,070 - Raw Losses: {'G_total': 2.915, 'G_adv': 1.393, 'G_cycle_adv': 6.7863, 'G_cycle': 0.1711, 'G_l1_fs': 0.0481, 'G_lumi': 0.0811, 'G_wavelet': 0.17, 'G_vgg': 0.754}
+2026-03-18 18:45:09,070 - Weighted Contributions: {'cycle_w': 0.1711, 'cycle_adv_w': 0.6786, 'l1_fs_w': 0.0481, 'lumi_w': 0.1621, 'wavelet_w': 0.085, 'vgg_w': 0.377}
+2026-03-18 18:52:17,661 - Epoch 49 Done. Avg G Loss: 2.9056
+2026-03-18 18:52:17,661 - --- Epoch 49 Loss Breakdown ---
+2026-03-18 18:52:17,661 - Raw Losses: {'G_total': 2.9056, 'G_adv': 1.3935, 'G_cycle_adv': 6.7015, 'G_cycle': 0.1706, 'G_l1_fs': 0.0482, 'G_lumi': 0.0816, 'G_wavelet': 0.1694, 'G_vgg': 0.7505}
+2026-03-18 18:52:17,661 - Weighted Contributions: {'cycle_w': 0.1706, 'cycle_adv_w': 0.6701, 'l1_fs_w': 0.0482, 'lumi_w': 0.1632, 'wavelet_w': 0.0847, 'vgg_w': 0.3752}
+2026-03-18 18:59:26,367 - Epoch 50 Done. Avg G Loss: 2.8374
+2026-03-18 18:59:26,368 - --- Epoch 50 Loss Breakdown ---
+2026-03-18 18:59:26,368 - Raw Losses: {'G_total': 2.8374, 'G_adv': 1.3872, 'G_cycle_adv': 6.2458, 'G_cycle': 0.1698, 'G_l1_fs': 0.0462, 'G_lumi': 0.0776, 'G_wavelet': 0.1658, 'G_vgg': 0.7429}
+2026-03-18 18:59:26,368 - Weighted Contributions: {'cycle_w': 0.1698, 'cycle_adv_w': 0.6246, 'l1_fs_w': 0.0462, 'lumi_w': 0.1552, 'wavelet_w': 0.0829, 'vgg_w': 0.3715}
+2026-03-18 19:06:35,302 - Epoch 51 Done. Avg G Loss: 2.8626
+2026-03-18 19:06:35,302 - --- Epoch 51 Loss Breakdown ---
+2026-03-18 19:06:35,302 - Raw Losses: {'G_total': 2.8626, 'G_adv': 1.3901, 'G_cycle_adv': 6.4681, 'G_cycle': 0.1682, 'G_l1_fs': 0.0465, 'G_lumi': 0.0789, 'G_wavelet': 0.1659, 'G_vgg': 0.7404}
+2026-03-18 19:06:35,303 - Weighted Contributions: {'cycle_w': 0.1682, 'cycle_adv_w': 0.6468, 'l1_fs_w': 0.0465, 'lumi_w': 0.1579, 'wavelet_w': 0.083, 'vgg_w': 0.3702}
+2026-03-18 19:13:43,499 - Epoch 52 Done. Avg G Loss: 2.8851
+2026-03-18 19:13:43,499 - --- Epoch 52 Loss Breakdown ---
+2026-03-18 19:13:43,499 - Raw Losses: {'G_total': 2.8851, 'G_adv': 1.3927, 'G_cycle_adv': 6.7312, 'G_cycle': 0.1655, 'G_l1_fs': 0.0478, 'G_lumi': 0.0751, 'G_wavelet': 0.1664, 'G_vgg': 0.7451}
+2026-03-18 19:13:43,499 - Weighted Contributions: {'cycle_w': 0.1655, 'cycle_adv_w': 0.6731, 'l1_fs_w': 0.0478, 'lumi_w': 0.1502, 'wavelet_w': 0.0832, 'vgg_w': 0.3725}
+2026-03-18 19:20:51,845 - Epoch 53 Done. Avg G Loss: 2.8478
+2026-03-18 19:20:51,845 - --- Epoch 53 Loss Breakdown ---
+2026-03-18 19:20:51,845 - Raw Losses: {'G_total': 2.8478, 'G_adv': 1.3925, 'G_cycle_adv': 6.3992, 'G_cycle': 0.1661, 'G_l1_fs': 0.0457, 'G_lumi': 0.0767, 'G_wavelet': 0.1643, 'G_vgg': 0.7362}
+2026-03-18 19:20:51,845 - Weighted Contributions: {'cycle_w': 0.1661, 'cycle_adv_w': 0.6399, 'l1_fs_w': 0.0457, 'lumi_w': 0.1534, 'wavelet_w': 0.0821, 'vgg_w': 0.3681}
+2026-03-18 19:27:59,967 - Epoch 54 Done. Avg G Loss: 2.8263
+2026-03-18 19:27:59,967 - --- Epoch 54 Loss Breakdown ---
+2026-03-18 19:27:59,967 - Raw Losses: {'G_total': 2.8263, 'G_adv': 1.3898, 'G_cycle_adv': 6.319, 'G_cycle': 0.1621, 'G_l1_fs': 0.0451, 'G_lumi': 0.0745, 'G_wavelet': 0.1627, 'G_vgg': 0.7339}
+2026-03-18 19:27:59,967 - Weighted Contributions: {'cycle_w': 0.1621, 'cycle_adv_w': 0.6319, 'l1_fs_w': 0.0451, 'lumi_w': 0.1491, 'wavelet_w': 0.0813, 'vgg_w': 0.3669}
+2026-03-18 19:35:07,733 - Epoch 55 Done. Avg G Loss: 2.8123
+2026-03-18 19:35:07,733 - --- Epoch 55 Loss Breakdown ---
+2026-03-18 19:35:07,734 - Raw Losses: {'G_total': 2.8123, 'G_adv': 1.3964, 'G_cycle_adv': 6.1672, 'G_cycle': 0.1589, 'G_l1_fs': 0.0451, 'G_lumi': 0.0744, 'G_wavelet': 0.1626, 'G_vgg': 0.7305}
+2026-03-18 19:35:07,734 - Weighted Contributions: {'cycle_w': 0.1589, 'cycle_adv_w': 0.6167, 'l1_fs_w': 0.0451, 'lumi_w': 0.1487, 'wavelet_w': 0.0813, 'vgg_w': 0.3652}
+2026-03-18 19:42:15,769 - Epoch 56 Done. Avg G Loss: 2.7900
+2026-03-18 19:42:15,769 - --- Epoch 56 Loss Breakdown ---
+2026-03-18 19:42:15,769 - Raw Losses: {'G_total': 2.79, 'G_adv': 1.3891, 'G_cycle_adv': 6.0844, 'G_cycle': 0.1563, 'G_l1_fs': 0.0438, 'G_lumi': 0.0747, 'G_wavelet': 0.1604, 'G_vgg': 0.7252}
+2026-03-18 19:42:15,769 - Weighted Contributions: {'cycle_w': 0.1563, 'cycle_adv_w': 0.6084, 'l1_fs_w': 0.0438, 'lumi_w': 0.1495, 'wavelet_w': 0.0802, 'vgg_w': 0.3626}
+2026-03-18 19:49:28,070 - Epoch 57 Done. Avg G Loss: 2.7770
+2026-03-18 19:49:28,070 - --- Epoch 57 Loss Breakdown ---
+2026-03-18 19:49:28,070 - Raw Losses: {'G_total': 2.777, 'G_adv': 1.3899, 'G_cycle_adv': 5.9136, 'G_cycle': 0.1587, 'G_l1_fs': 0.0443, 'G_lumi': 0.0746, 'G_wavelet': 0.1612, 'G_vgg': 0.7257}
+2026-03-18 19:49:28,070 - Weighted Contributions: {'cycle_w': 0.1587, 'cycle_adv_w': 0.5914, 'l1_fs_w': 0.0443, 'lumi_w': 0.1493, 'wavelet_w': 0.0806, 'vgg_w': 0.3629}
+2026-03-18 19:56:41,069 - Epoch 58 Done. Avg G Loss: 2.8023
+2026-03-18 19:56:41,069 - --- Epoch 58 Loss Breakdown ---
+2026-03-18 19:56:41,069 - Raw Losses: {'G_total': 2.8023, 'G_adv': 1.3899, 'G_cycle_adv': 6.2246, 'G_cycle': 0.1574, 'G_l1_fs': 0.0436, 'G_lumi': 0.0743, 'G_wavelet': 0.1593, 'G_vgg': 0.7214}
+2026-03-18 19:56:41,069 - Weighted Contributions: {'cycle_w': 0.1574, 'cycle_adv_w': 0.6225, 'l1_fs_w': 0.0436, 'lumi_w': 0.1486, 'wavelet_w': 0.0797, 'vgg_w': 0.3607}
+2026-03-18 20:03:49,691 - Epoch 59 Done. Avg G Loss: 2.7992
+2026-03-18 20:03:49,691 - --- Epoch 59 Loss Breakdown ---
+2026-03-18 20:03:49,691 - Raw Losses: {'G_total': 2.7992, 'G_adv': 1.3929, 'G_cycle_adv': 6.1838, 'G_cycle': 0.156, 'G_l1_fs': 0.0438, 'G_lumi': 0.0742, 'G_wavelet': 0.1587, 'G_vgg': 0.7209}
+2026-03-18 20:03:49,691 - Weighted Contributions: {'cycle_w': 0.156, 'cycle_adv_w': 0.6184, 'l1_fs_w': 0.0438, 'lumi_w': 0.1483, 'wavelet_w': 0.0794, 'vgg_w': 0.3604}
+2026-03-18 20:10:59,801 - Epoch 60 Done. Avg G Loss: 2.7943
+2026-03-18 20:10:59,801 - --- Epoch 60 Loss Breakdown ---
+2026-03-18 20:10:59,801 - Raw Losses: {'G_total': 2.7943, 'G_adv': 1.4052, 'G_cycle_adv': 6.1367, 'G_cycle': 0.1531, 'G_l1_fs': 0.0424, 'G_lumi': 0.0711, 'G_wavelet': 0.1581, 'G_vgg': 0.7175}
+2026-03-18 20:10:59,801 - Weighted Contributions: {'cycle_w': 0.1531, 'cycle_adv_w': 0.6137, 'l1_fs_w': 0.0424, 'lumi_w': 0.1421, 'wavelet_w': 0.0791, 'vgg_w': 0.3587}
+2026-03-18 20:18:10,258 - Epoch 61 Done. Avg G Loss: 2.7793
+2026-03-18 20:18:10,258 - --- Epoch 61 Loss Breakdown ---
+2026-03-18 20:18:10,258 - Raw Losses: {'G_total': 2.7793, 'G_adv': 1.3888, 'G_cycle_adv': 6.1995, 'G_cycle': 0.1519, 'G_l1_fs': 0.0417, 'G_lumi': 0.0711, 'G_wavelet': 0.1561, 'G_vgg': 0.7134}
+2026-03-18 20:18:10,258 - Weighted Contributions: {'cycle_w': 0.1519, 'cycle_adv_w': 0.6199, 'l1_fs_w': 0.0417, 'lumi_w': 0.1422, 'wavelet_w': 0.0781, 'vgg_w': 0.3567}
+2026-03-18 20:25:18,827 - Epoch 62 Done. Avg G Loss: 2.7828
+2026-03-18 20:25:18,828 - --- Epoch 62 Loss Breakdown ---
+2026-03-18 20:25:18,828 - Raw Losses: {'G_total': 2.7828, 'G_adv': 1.392, 'G_cycle_adv': 6.1811, 'G_cycle': 0.1527, 'G_l1_fs': 0.0423, 'G_lumi': 0.0716, 'G_wavelet': 0.1566, 'G_vgg': 0.7124}
+2026-03-18 20:25:18,828 - Weighted Contributions: {'cycle_w': 0.1527, 'cycle_adv_w': 0.6181, 'l1_fs_w': 0.0423, 'lumi_w': 0.1431, 'wavelet_w': 0.0783, 'vgg_w': 0.3562}
+2026-03-18 20:32:28,914 - Epoch 63 Done. Avg G Loss: 2.7527
+2026-03-18 20:32:28,914 - --- Epoch 63 Loss Breakdown ---
+2026-03-18 20:32:28,914 - Raw Losses: {'G_total': 2.7527, 'G_adv': 1.3894, 'G_cycle_adv': 6.0036, 'G_cycle': 0.1486, 'G_l1_fs': 0.0426, 'G_lumi': 0.0695, 'G_wavelet': 0.1555, 'G_vgg': 0.71}
+2026-03-18 20:32:28,914 - Weighted Contributions: {'cycle_w': 0.1486, 'cycle_adv_w': 0.6004, 'l1_fs_w': 0.0426, 'lumi_w': 0.1391, 'wavelet_w': 0.0778, 'vgg_w': 0.355}
+2026-03-18 20:39:38,627 - Epoch 64 Done. Avg G Loss: 2.7513
+2026-03-18 20:39:38,627 - --- Epoch 64 Loss Breakdown ---
+2026-03-18 20:39:38,627 - Raw Losses: {'G_total': 2.7513, 'G_adv': 1.3902, 'G_cycle_adv': 6.0457, 'G_cycle': 0.1448, 'G_l1_fs': 0.0418, 'G_lumi': 0.0697, 'G_wavelet': 0.1541, 'G_vgg': 0.7069}
+2026-03-18 20:39:38,627 - Weighted Contributions: {'cycle_w': 0.1448, 'cycle_adv_w': 0.6046, 'l1_fs_w': 0.0418, 'lumi_w': 0.1395, 'wavelet_w': 0.077, 'vgg_w': 0.3535}
+2026-03-18 20:46:46,474 - Epoch 65 Done. Avg G Loss: 2.7634
+2026-03-18 20:46:46,474 - --- Epoch 65 Loss Breakdown ---
+2026-03-18 20:46:46,474 - Raw Losses: {'G_total': 2.7634, 'G_adv': 1.3901, 'G_cycle_adv': 6.3405, 'G_cycle': 0.1447, 'G_l1_fs': 0.0401, 'G_lumi': 0.0634, 'G_wavelet': 0.1515, 'G_vgg': 0.7039}
+2026-03-18 20:46:46,474 - Weighted Contributions: {'cycle_w': 0.1447, 'cycle_adv_w': 0.6341, 'l1_fs_w': 0.0401, 'lumi_w': 0.1268, 'wavelet_w': 0.0757, 'vgg_w': 0.3519}
+2026-03-18 20:53:54,120 - Epoch 66 Done. Avg G Loss: 2.7777
+2026-03-18 20:53:54,120 - --- Epoch 66 Loss Breakdown ---
+2026-03-18 20:53:54,120 - Raw Losses: {'G_total': 2.7777, 'G_adv': 1.3924, 'G_cycle_adv': 6.2667, 'G_cycle': 0.1495, 'G_l1_fs': 0.0401, 'G_lumi': 0.0699, 'G_wavelet': 0.1533, 'G_vgg': 0.7051}
+2026-03-18 20:53:54,120 - Weighted Contributions: {'cycle_w': 0.1495, 'cycle_adv_w': 0.6267, 'l1_fs_w': 0.0401, 'lumi_w': 0.1398, 'wavelet_w': 0.0766, 'vgg_w': 0.3525}
+2026-03-18 21:01:02,031 - Epoch 67 Done. Avg G Loss: 2.8063
+2026-03-18 21:01:02,032 - --- Epoch 67 Loss Breakdown ---
+2026-03-18 21:01:02,032 - Raw Losses: {'G_total': 2.8063, 'G_adv': 1.3913, 'G_cycle_adv': 6.6082, 'G_cycle': 0.1485, 'G_l1_fs': 0.0407, 'G_lumi': 0.0683, 'G_wavelet': 0.1528, 'G_vgg': 0.7041}
+2026-03-18 21:01:02,032 - Weighted Contributions: {'cycle_w': 0.1485, 'cycle_adv_w': 0.6608, 'l1_fs_w': 0.0407, 'lumi_w': 0.1366, 'wavelet_w': 0.0764, 'vgg_w': 0.352}
+2026-03-18 21:08:10,262 - Epoch 68 Done. Avg G Loss: 2.7898
+2026-03-18 21:08:10,262 - --- Epoch 68 Loss Breakdown ---
+2026-03-18 21:08:10,262 - Raw Losses: {'G_total': 2.7898, 'G_adv': 1.3898, 'G_cycle_adv': 6.5201, 'G_cycle': 0.1441, 'G_l1_fs': 0.04, 'G_lumi': 0.0682, 'G_wavelet': 0.1519, 'G_vgg': 0.7032}
+2026-03-18 21:08:10,262 - Weighted Contributions: {'cycle_w': 0.1441, 'cycle_adv_w': 0.652, 'l1_fs_w': 0.04, 'lumi_w': 0.1363, 'wavelet_w': 0.0759, 'vgg_w': 0.3516}
+2026-03-18 21:15:17,816 - Epoch 69 Done. Avg G Loss: 2.7615
+2026-03-18 21:15:17,816 - --- Epoch 69 Loss Breakdown ---
+2026-03-18 21:15:17,816 - Raw Losses: {'G_total': 2.7615, 'G_adv': 1.3901, 'G_cycle_adv': 6.3111, 'G_cycle': 0.1412, 'G_l1_fs': 0.04, 'G_lumi': 0.0666, 'G_wavelet': 0.1514, 'G_vgg': 0.7003}
+2026-03-18 21:15:17,816 - Weighted Contributions: {'cycle_w': 0.1412, 'cycle_adv_w': 0.6311, 'l1_fs_w': 0.04, 'lumi_w': 0.1333, 'wavelet_w': 0.0757, 'vgg_w': 0.3501}
+2026-03-18 21:22:26,013 - Epoch 70 Done. Avg G Loss: 2.7451
+2026-03-18 21:22:26,013 - --- Epoch 70 Loss Breakdown ---
+2026-03-18 21:22:26,013 - Raw Losses: {'G_total': 2.7451, 'G_adv': 1.3896, 'G_cycle_adv': 6.2084, 'G_cycle': 0.1429, 'G_l1_fs': 0.0389, 'G_lumi': 0.0644, 'G_wavelet': 0.1502, 'G_vgg': 0.698}
+2026-03-18 21:22:26,013 - Weighted Contributions: {'cycle_w': 0.1429, 'cycle_adv_w': 0.6208, 'l1_fs_w': 0.0389, 'lumi_w': 0.1287, 'wavelet_w': 0.0751, 'vgg_w': 0.349}
+2026-03-18 21:29:34,562 - Epoch 71 Done. Avg G Loss: 2.7527
+2026-03-18 21:29:34,562 - --- Epoch 71 Loss Breakdown ---
+2026-03-18 21:29:34,563 - Raw Losses: {'G_total': 2.7527, 'G_adv': 1.3888, 'G_cycle_adv': 6.2811, 'G_cycle': 0.1448, 'G_l1_fs': 0.0384, 'G_lumi': 0.0648, 'G_wavelet': 0.1488, 'G_vgg': 0.6974}
+2026-03-18 21:29:34,563 - Weighted Contributions: {'cycle_w': 0.1448, 'cycle_adv_w': 0.6281, 'l1_fs_w': 0.0384, 'lumi_w': 0.1295, 'wavelet_w': 0.0744, 'vgg_w': 0.3487}
+2026-03-18 21:36:42,075 - Epoch 72 Done. Avg G Loss: 2.7439
+2026-03-18 21:36:42,075 - --- Epoch 72 Loss Breakdown ---
+2026-03-18 21:36:42,075 - Raw Losses: {'G_total': 2.7439, 'G_adv': 1.3881, 'G_cycle_adv': 6.1892, 'G_cycle': 0.1422, 'G_l1_fs': 0.0392, 'G_lumi': 0.0661, 'G_wavelet': 0.15, 'G_vgg': 0.6964}
+2026-03-18 21:36:42,075 - Weighted Contributions: {'cycle_w': 0.1422, 'cycle_adv_w': 0.6189, 'l1_fs_w': 0.0392, 'lumi_w': 0.1322, 'wavelet_w': 0.075, 'vgg_w': 0.3482}
+2026-03-18 21:43:49,833 - Epoch 73 Done. Avg G Loss: 2.7367
+2026-03-18 21:43:49,834 - --- Epoch 73 Loss Breakdown ---
+2026-03-18 21:43:49,834 - Raw Losses: {'G_total': 2.7367, 'G_adv': 1.3888, 'G_cycle_adv': 6.1992, 'G_cycle': 0.1396, 'G_l1_fs': 0.0383, 'G_lumi': 0.064, 'G_wavelet': 0.1488, 'G_vgg': 0.6952}
+2026-03-18 21:43:49,834 - Weighted Contributions: {'cycle_w': 0.1396, 'cycle_adv_w': 0.6199, 'l1_fs_w': 0.0383, 'lumi_w': 0.1281, 'wavelet_w': 0.0744, 'vgg_w': 0.3476}
+2026-03-18 21:50:57,001 - Epoch 74 Done. Avg G Loss: 2.7268
+2026-03-18 21:50:57,001 - --- Epoch 74 Loss Breakdown ---
+2026-03-18 21:50:57,001 - Raw Losses: {'G_total': 2.7268, 'G_adv': 1.3875, 'G_cycle_adv': 6.2603, 'G_cycle': 0.1372, 'G_l1_fs': 0.038, 'G_lumi': 0.0602, 'G_wavelet': 0.1462, 'G_vgg': 0.6895}
+2026-03-18 21:50:57,001 - Weighted Contributions: {'cycle_w': 0.1372, 'cycle_adv_w': 0.626, 'l1_fs_w': 0.038, 'lumi_w': 0.1203, 'wavelet_w': 0.0731, 'vgg_w': 0.3447}
+2026-03-18 21:58:05,135 - Epoch 75 Done. Avg G Loss: 2.7116
+2026-03-18 21:58:05,135 - --- Epoch 75 Loss Breakdown ---
+2026-03-18 21:58:05,135 - Raw Losses: {'G_total': 2.7116, 'G_adv': 1.3877, 'G_cycle_adv': 6.0441, 'G_cycle': 0.1391, 'G_l1_fs': 0.0382, 'G_lumi': 0.0614, 'G_wavelet': 0.1473, 'G_vgg': 0.6914}
+2026-03-18 21:58:05,135 - Weighted Contributions: {'cycle_w': 0.1391, 'cycle_adv_w': 0.6044, 'l1_fs_w': 0.0382, 'lumi_w': 0.1229, 'wavelet_w': 0.0736, 'vgg_w': 0.3457}
+2026-03-18 22:05:13,359 - Epoch 76 Done. Avg G Loss: 2.7261
+2026-03-18 22:05:13,359 - --- Epoch 76 Loss Breakdown ---
+2026-03-18 22:05:13,359 - Raw Losses: {'G_total': 2.7261, 'G_adv': 1.3878, 'G_cycle_adv': 6.1791, 'G_cycle': 0.1363, 'G_l1_fs': 0.0382, 'G_lumi': 0.0634, 'G_wavelet': 0.1473, 'G_vgg': 0.6909}
+2026-03-18 22:05:13,359 - Weighted Contributions: {'cycle_w': 0.1363, 'cycle_adv_w': 0.6179, 'l1_fs_w': 0.0382, 'lumi_w': 0.1268, 'wavelet_w': 0.0736, 'vgg_w': 0.3454}
+2026-03-18 22:12:21,387 - Epoch 77 Done. Avg G Loss: 2.7040
+2026-03-18 22:12:21,387 - --- Epoch 77 Loss Breakdown ---
+2026-03-18 22:12:21,387 - Raw Losses: {'G_total': 2.704, 'G_adv': 1.3862, 'G_cycle_adv': 5.9951, 'G_cycle': 0.1371, 'G_l1_fs': 0.0371, 'G_lumi': 0.064, 'G_wavelet': 0.1462, 'G_vgg': 0.6861}
+2026-03-18 22:12:21,387 - Weighted Contributions: {'cycle_w': 0.1371, 'cycle_adv_w': 0.5995, 'l1_fs_w': 0.0371, 'lumi_w': 0.128, 'wavelet_w': 0.0731, 'vgg_w': 0.343}
+2026-03-18 22:19:30,376 - Epoch 78 Done. Avg G Loss: 2.7113
+2026-03-18 22:19:30,377 - --- Epoch 78 Loss Breakdown ---
+2026-03-18 22:19:30,377 - Raw Losses: {'G_total': 2.7113, 'G_adv': 1.3899, 'G_cycle_adv': 6.0938, 'G_cycle': 0.1376, 'G_l1_fs': 0.037, 'G_lumi': 0.0612, 'G_wavelet': 0.1456, 'G_vgg': 0.6842}
+2026-03-18 22:19:30,377 - Weighted Contributions: {'cycle_w': 0.1376, 'cycle_adv_w': 0.6094, 'l1_fs_w': 0.037, 'lumi_w': 0.1225, 'wavelet_w': 0.0728, 'vgg_w': 0.3421}
+2026-03-18 22:26:37,528 - Epoch 79 Done. Avg G Loss: 2.6970
+2026-03-18 22:26:37,528 - --- Epoch 79 Loss Breakdown ---
+2026-03-18 22:26:37,528 - Raw Losses: {'G_total': 2.697, 'G_adv': 1.3884, 'G_cycle_adv': 5.9679, 'G_cycle': 0.1345, 'G_l1_fs': 0.037, 'G_lumi': 0.0632, 'G_wavelet': 0.1451, 'G_vgg': 0.6826}
+2026-03-18 22:26:37,528 - Weighted Contributions: {'cycle_w': 0.1345, 'cycle_adv_w': 0.5968, 'l1_fs_w': 0.037, 'lumi_w': 0.1264, 'wavelet_w': 0.0725, 'vgg_w': 0.3413}
+2026-03-18 22:33:45,566 - Epoch 80 Done. Avg G Loss: 2.6773
+2026-03-18 22:33:45,567 - --- Epoch 80 Loss Breakdown ---
+2026-03-18 22:33:45,567 - Raw Losses: {'G_total': 2.6773, 'G_adv': 1.3901, 'G_cycle_adv': 5.8372, 'G_cycle': 0.1358, 'G_l1_fs': 0.0361, 'G_lumi': 0.0602, 'G_wavelet': 0.1435, 'G_vgg': 0.6789}
+2026-03-18 22:33:45,567 - Weighted Contributions: {'cycle_w': 0.1358, 'cycle_adv_w': 0.5837, 'l1_fs_w': 0.0361, 'lumi_w': 0.1204, 'wavelet_w': 0.0717, 'vgg_w': 0.3395}
+2026-03-18 22:40:54,965 - Epoch 81 Done. Avg G Loss: 2.6883
+2026-03-18 22:40:54,965 - --- Epoch 81 Loss Breakdown ---
+2026-03-18 22:40:54,965 - Raw Losses: {'G_total': 2.6883, 'G_adv': 1.3871, 'G_cycle_adv': 5.9955, 'G_cycle': 0.1338, 'G_l1_fs': 0.0355, 'G_lumi': 0.061, 'G_wavelet': 0.1426, 'G_vgg': 0.678}
+2026-03-18 22:40:54,965 - Weighted Contributions: {'cycle_w': 0.1338, 'cycle_adv_w': 0.5995, 'l1_fs_w': 0.0355, 'lumi_w': 0.122, 'wavelet_w': 0.0713, 'vgg_w': 0.339}
+2026-03-18 22:48:02,948 - Epoch 82 Done. Avg G Loss: 2.6915
+2026-03-18 22:48:02,949 - --- Epoch 82 Loss Breakdown ---
+2026-03-18 22:48:02,949 - Raw Losses: {'G_total': 2.6915, 'G_adv': 1.3921, 'G_cycle_adv': 5.9981, 'G_cycle': 0.1313, 'G_l1_fs': 0.0356, 'G_lumi': 0.0615, 'G_wavelet': 0.1428, 'G_vgg': 0.6767}
+2026-03-18 22:48:02,949 - Weighted Contributions: {'cycle_w': 0.1313, 'cycle_adv_w': 0.5998, 'l1_fs_w': 0.0356, 'lumi_w': 0.123, 'wavelet_w': 0.0714, 'vgg_w': 0.3384}
+2026-03-18 22:55:10,863 - Epoch 83 Done. Avg G Loss: 2.6859
+2026-03-18 22:55:10,863 - --- Epoch 83 Loss Breakdown ---
+2026-03-18 22:55:10,863 - Raw Losses: {'G_total': 2.6859, 'G_adv': 1.3897, 'G_cycle_adv': 6.0368, 'G_cycle': 0.131, 'G_l1_fs': 0.0356, 'G_lumi': 0.0593, 'G_wavelet': 0.1426, 'G_vgg': 0.6721}
+2026-03-18 22:55:10,863 - Weighted Contributions: {'cycle_w': 0.131, 'cycle_adv_w': 0.6037, 'l1_fs_w': 0.0356, 'lumi_w': 0.1186, 'wavelet_w': 0.0713, 'vgg_w': 0.336}
+2026-03-18 23:02:18,718 - Epoch 84 Done. Avg G Loss: 2.6726
+2026-03-18 23:02:18,718 - --- Epoch 84 Loss Breakdown ---
+2026-03-18 23:02:18,719 - Raw Losses: {'G_total': 2.6726, 'G_adv': 1.3886, 'G_cycle_adv': 6.0195, 'G_cycle': 0.1299, 'G_l1_fs': 0.0345, 'G_lumi': 0.0569, 'G_wavelet': 0.1402, 'G_vgg': 0.6673}
+2026-03-18 23:02:18,719 - Weighted Contributions: {'cycle_w': 0.1299, 'cycle_adv_w': 0.602, 'l1_fs_w': 0.0345, 'lumi_w': 0.1138, 'wavelet_w': 0.0701, 'vgg_w': 0.3337}
+2026-03-18 23:09:26,175 - Epoch 85 Done. Avg G Loss: 2.6889
+2026-03-18 23:09:26,176 - --- Epoch 85 Loss Breakdown ---
+2026-03-18 23:09:26,176 - Raw Losses: {'G_total': 2.6889, 'G_adv': 1.3898, 'G_cycle_adv': 6.1787, 'G_cycle': 0.1298, 'G_l1_fs': 0.0342, 'G_lumi': 0.0577, 'G_wavelet': 0.1398, 'G_vgg': 0.664}
+2026-03-18 23:09:26,176 - Weighted Contributions: {'cycle_w': 0.1298, 'cycle_adv_w': 0.6179, 'l1_fs_w': 0.0342, 'lumi_w': 0.1154, 'wavelet_w': 0.0699, 'vgg_w': 0.332}
+2026-03-18 23:16:36,334 - Epoch 86 Done. Avg G Loss: 2.6822
+2026-03-18 23:16:36,334 - --- Epoch 86 Loss Breakdown ---
+2026-03-18 23:16:36,334 - Raw Losses: {'G_total': 2.6822, 'G_adv': 1.3891, 'G_cycle_adv': 6.1531, 'G_cycle': 0.1281, 'G_l1_fs': 0.0344, 'G_lumi': 0.0566, 'G_wavelet': 0.1398, 'G_vgg': 0.6643}
+2026-03-18 23:16:36,334 - Weighted Contributions: {'cycle_w': 0.1281, 'cycle_adv_w': 0.6153, 'l1_fs_w': 0.0344, 'lumi_w': 0.1131, 'wavelet_w': 0.0699, 'vgg_w': 0.3322}
+2026-03-18 23:23:44,751 - Epoch 87 Done. Avg G Loss: 2.6607
+2026-03-18 23:23:44,751 - --- Epoch 87 Loss Breakdown ---
+2026-03-18 23:23:44,751 - Raw Losses: {'G_total': 2.6607, 'G_adv': 1.3889, 'G_cycle_adv': 5.9705, 'G_cycle': 0.1265, 'G_l1_fs': 0.0334, 'G_lumi': 0.0574, 'G_wavelet': 0.1386, 'G_vgg': 0.6616}
+2026-03-18 23:23:44,751 - Weighted Contributions: {'cycle_w': 0.1265, 'cycle_adv_w': 0.597, 'l1_fs_w': 0.0334, 'lumi_w': 0.1149, 'wavelet_w': 0.0693, 'vgg_w': 0.3308}
+2026-03-18 23:30:52,965 - Epoch 88 Done. Avg G Loss: 2.6600
+2026-03-18 23:30:52,965 - --- Epoch 88 Loss Breakdown ---
+2026-03-18 23:30:52,965 - Raw Losses: {'G_total': 2.66, 'G_adv': 1.3868, 'G_cycle_adv': 6.0122, 'G_cycle': 0.1259, 'G_l1_fs': 0.0335, 'G_lumi': 0.0569, 'G_wavelet': 0.1385, 'G_vgg': 0.6594}
+2026-03-18 23:30:52,965 - Weighted Contributions: {'cycle_w': 0.1259, 'cycle_adv_w': 0.6012, 'l1_fs_w': 0.0335, 'lumi_w': 0.1137, 'wavelet_w': 0.0692, 'vgg_w': 0.3297}
+2026-03-18 23:38:00,405 - Epoch 89 Done. Avg G Loss: 2.6538
+2026-03-18 23:38:00,406 - --- Epoch 89 Loss Breakdown ---
+2026-03-18 23:38:00,406 - Raw Losses: {'G_total': 2.6538, 'G_adv': 1.3895, 'G_cycle_adv': 5.9402, 'G_cycle': 0.1241, 'G_l1_fs': 0.0333, 'G_lumi': 0.0583, 'G_wavelet': 0.1382, 'G_vgg': 0.6543}
+2026-03-18 23:38:00,406 - Weighted Contributions: {'cycle_w': 0.1241, 'cycle_adv_w': 0.594, 'l1_fs_w': 0.0333, 'lumi_w': 0.1165, 'wavelet_w': 0.0691, 'vgg_w': 0.3272}
+2026-03-18 23:45:08,776 - Epoch 90 Done. Avg G Loss: 2.6536
+2026-03-18 23:45:08,776 - --- Epoch 90 Loss Breakdown ---
+2026-03-18 23:45:08,776 - Raw Losses: {'G_total': 2.6536, 'G_adv': 1.3871, 'G_cycle_adv': 6.0403, 'G_cycle': 0.1242, 'G_l1_fs': 0.0336, 'G_lumi': 0.0553, 'G_wavelet': 0.1368, 'G_vgg': 0.6512}
+2026-03-18 23:45:08,776 - Weighted Contributions: {'cycle_w': 0.1242, 'cycle_adv_w': 0.604, 'l1_fs_w': 0.0336, 'lumi_w': 0.1107, 'wavelet_w': 0.0684, 'vgg_w': 0.3256}
+2026-03-18 23:52:17,378 - Epoch 91 Done. Avg G Loss: 2.6699
+2026-03-18 23:52:17,378 - --- Epoch 91 Loss Breakdown ---
+2026-03-18 23:52:17,378 - Raw Losses: {'G_total': 2.6699, 'G_adv': 1.3876, 'G_cycle_adv': 6.1725, 'G_cycle': 0.1249, 'G_l1_fs': 0.0326, 'G_lumi': 0.0572, 'G_wavelet': 0.1366, 'G_vgg': 0.6499}
+2026-03-18 23:52:17,378 - Weighted Contributions: {'cycle_w': 0.1249, 'cycle_adv_w': 0.6172, 'l1_fs_w': 0.0326, 'lumi_w': 0.1143, 'wavelet_w': 0.0683, 'vgg_w': 0.325}
+2026-03-18 23:59:25,197 - Epoch 92 Done. Avg G Loss: 2.6533
+2026-03-18 23:59:25,198 - --- Epoch 92 Loss Breakdown ---
+2026-03-18 23:59:25,198 - Raw Losses: {'G_total': 2.6533, 'G_adv': 1.388, 'G_cycle_adv': 6.0291, 'G_cycle': 0.1224, 'G_l1_fs': 0.0326, 'G_lumi': 0.0576, 'G_wavelet': 0.137, 'G_vgg': 0.6474}
+2026-03-18 23:59:25,198 - Weighted Contributions: {'cycle_w': 0.1224, 'cycle_adv_w': 0.6029, 'l1_fs_w': 0.0326, 'lumi_w': 0.1153, 'wavelet_w': 0.0685, 'vgg_w': 0.3237}
+2026-03-19 00:06:33,516 - Epoch 93 Done. Avg G Loss: 2.6539
+2026-03-19 00:06:33,517 - --- Epoch 93 Loss Breakdown ---
+2026-03-19 00:06:33,517 - Raw Losses: {'G_total': 2.6539, 'G_adv': 1.3874, 'G_cycle_adv': 6.0884, 'G_cycle': 0.1207, 'G_l1_fs': 0.0333, 'G_lumi': 0.0561, 'G_wavelet': 0.1367, 'G_vgg': 0.6463}
+2026-03-19 00:06:33,517 - Weighted Contributions: {'cycle_w': 0.1207, 'cycle_adv_w': 0.6088, 'l1_fs_w': 0.0333, 'lumi_w': 0.1122, 'wavelet_w': 0.0683, 'vgg_w': 0.3231}
+2026-03-19 00:13:41,568 - Epoch 94 Done. Avg G Loss: 2.6484
+2026-03-19 00:13:41,568 - --- Epoch 94 Loss Breakdown ---
+2026-03-19 00:13:41,568 - Raw Losses: {'G_total': 2.6484, 'G_adv': 1.3881, 'G_cycle_adv': 6.0536, 'G_cycle': 0.1221, 'G_l1_fs': 0.0323, 'G_lumi': 0.056, 'G_wavelet': 0.1348, 'G_vgg': 0.6423}
+2026-03-19 00:13:41,568 - Weighted Contributions: {'cycle_w': 0.1221, 'cycle_adv_w': 0.6054, 'l1_fs_w': 0.0323, 'lumi_w': 0.112, 'wavelet_w': 0.0674, 'vgg_w': 0.3212}
+2026-03-19 00:20:50,322 - Epoch 95 Done. Avg G Loss: 2.6325
+2026-03-19 00:20:50,323 - --- Epoch 95 Loss Breakdown ---
+2026-03-19 00:20:50,323 - Raw Losses: {'G_total': 2.6325, 'G_adv': 1.3871, 'G_cycle_adv': 5.9841, 'G_cycle': 0.1187, 'G_l1_fs': 0.0323, 'G_lumi': 0.0544, 'G_wavelet': 0.1344, 'G_vgg': 0.6399}
+2026-03-19 00:20:50,323 - Weighted Contributions: {'cycle_w': 0.1187, 'cycle_adv_w': 0.5984, 'l1_fs_w': 0.0323, 'lumi_w': 0.1088, 'wavelet_w': 0.0672, 'vgg_w': 0.3199}
+2026-03-19 00:27:58,814 - Epoch 96 Done. Avg G Loss: 2.6317
+2026-03-19 00:27:58,814 - --- Epoch 96 Loss Breakdown ---
+2026-03-19 00:27:58,814 - Raw Losses: {'G_total': 2.6317, 'G_adv': 1.3884, 'G_cycle_adv': 5.9844, 'G_cycle': 0.1192, 'G_l1_fs': 0.0311, 'G_lumi': 0.0549, 'G_wavelet': 0.1334, 'G_vgg': 0.636}
+2026-03-19 00:27:58,814 - Weighted Contributions: {'cycle_w': 0.1192, 'cycle_adv_w': 0.5984, 'l1_fs_w': 0.0311, 'lumi_w': 0.1098, 'wavelet_w': 0.0667, 'vgg_w': 0.318}
+2026-03-19 00:35:06,766 - Epoch 97 Done. Avg G Loss: 2.6406
+2026-03-19 00:35:06,767 - --- Epoch 97 Loss Breakdown ---
+2026-03-19 00:35:06,767 - Raw Losses: {'G_total': 2.6406, 'G_adv': 1.3875, 'G_cycle_adv': 6.0827, 'G_cycle': 0.1182, 'G_l1_fs': 0.0315, 'G_lumi': 0.055, 'G_wavelet': 0.1332, 'G_vgg': 0.637}
+2026-03-19 00:35:06,767 - Weighted Contributions: {'cycle_w': 0.1182, 'cycle_adv_w': 0.6083, 'l1_fs_w': 0.0315, 'lumi_w': 0.11, 'wavelet_w': 0.0666, 'vgg_w': 0.3185}
+2026-03-19 00:42:15,060 - Epoch 98 Done. Avg G Loss: 2.6404
+2026-03-19 00:42:15,061 - --- Epoch 98 Loss Breakdown ---
+2026-03-19 00:42:15,061 - Raw Losses: {'G_total': 2.6404, 'G_adv': 1.388, 'G_cycle_adv': 6.1319, 'G_cycle': 0.1159, 'G_l1_fs': 0.0316, 'G_lumi': 0.0541, 'G_wavelet': 0.1327, 'G_vgg': 0.6342}
+2026-03-19 00:42:15,061 - Weighted Contributions: {'cycle_w': 0.1159, 'cycle_adv_w': 0.6132, 'l1_fs_w': 0.0316, 'lumi_w': 0.1082, 'wavelet_w': 0.0664, 'vgg_w': 0.3171}
+2026-03-19 00:49:23,342 - Epoch 99 Done. Avg G Loss: 2.6109
+2026-03-19 00:49:23,342 - --- Epoch 99 Loss Breakdown ---
+2026-03-19 00:49:23,342 - Raw Losses: {'G_total': 2.6109, 'G_adv': 1.3873, 'G_cycle_adv': 5.9013, 'G_cycle': 0.1154, 'G_l1_fs': 0.031, 'G_lumi': 0.0529, 'G_wavelet': 0.1317, 'G_vgg': 0.6307}
+2026-03-19 00:49:23,342 - Weighted Contributions: {'cycle_w': 0.1154, 'cycle_adv_w': 0.5901, 'l1_fs_w': 0.031, 'lumi_w': 0.1059, 'wavelet_w': 0.0658, 'vgg_w': 0.3154}
+2026-03-19 00:56:33,413 - Epoch 100 Done. Avg G Loss: 2.6294
+2026-03-19 00:56:33,413 - --- Epoch 100 Loss Breakdown ---
+2026-03-19 00:56:33,414 - Raw Losses: {'G_total': 2.6294, 'G_adv': 1.3859, 'G_cycle_adv': 6.0572, 'G_cycle': 0.1168, 'G_l1_fs': 0.0312, 'G_lumi': 0.0542, 'G_wavelet': 0.132, 'G_vgg': 0.6307}
+2026-03-19 00:56:33,414 - Weighted Contributions: {'cycle_w': 0.1168, 'cycle_adv_w': 0.6057, 'l1_fs_w': 0.0312, 'lumi_w': 0.1085, 'wavelet_w': 0.066, 'vgg_w': 0.3153}
+2026-03-19 01:03:39,048 - Epoch 101 Done. Avg G Loss: 2.5993
+2026-03-19 01:03:39,049 - --- Epoch 101 Loss Breakdown ---
+2026-03-19 01:03:39,049 - Raw Losses: {'G_total': 2.5993, 'G_adv': 1.3885, 'G_cycle_adv': 5.8383, 'G_cycle': 0.113, 'G_l1_fs': 0.0305, 'G_lumi': 0.0524, 'G_wavelet': 0.1306, 'G_vgg': 0.6268}
+2026-03-19 01:03:39,049 - Weighted Contributions: {'cycle_w': 0.113, 'cycle_adv_w': 0.5838, 'l1_fs_w': 0.0305, 'lumi_w': 0.1048, 'wavelet_w': 0.0653, 'vgg_w': 0.3134}
+2026-03-19 01:10:41,655 - Epoch 102 Done. Avg G Loss: 2.6161
+2026-03-19 01:10:41,655 - --- Epoch 102 Loss Breakdown ---
+2026-03-19 01:10:41,655 - Raw Losses: {'G_total': 2.6161, 'G_adv': 1.3887, 'G_cycle_adv': 6.066, 'G_cycle': 0.1126, 'G_l1_fs': 0.0294, 'G_lumi': 0.0509, 'G_wavelet': 0.1288, 'G_vgg': 0.625}
+2026-03-19 01:10:41,655 - Weighted Contributions: {'cycle_w': 0.1126, 'cycle_adv_w': 0.6066, 'l1_fs_w': 0.0294, 'lumi_w': 0.1019, 'wavelet_w': 0.0644, 'vgg_w': 0.3125}
+2026-03-19 01:17:44,580 - Epoch 103 Done. Avg G Loss: 2.6143
+2026-03-19 01:17:44,581 - --- Epoch 103 Loss Breakdown ---
+2026-03-19 01:17:44,581 - Raw Losses: {'G_total': 2.6143, 'G_adv': 1.3881, 'G_cycle_adv': 6.055, 'G_cycle': 0.1117, 'G_l1_fs': 0.0299, 'G_lumi': 0.0519, 'G_wavelet': 0.1291, 'G_vgg': 0.6214}
+2026-03-19 01:17:44,581 - Weighted Contributions: {'cycle_w': 0.1117, 'cycle_adv_w': 0.6055, 'l1_fs_w': 0.0299, 'lumi_w': 0.1038, 'wavelet_w': 0.0646, 'vgg_w': 0.3107}
+2026-03-19 01:24:47,023 - Epoch 104 Done. Avg G Loss: 2.6293
+2026-03-19 01:24:47,023 - --- Epoch 104 Loss Breakdown ---
+2026-03-19 01:24:47,023 - Raw Losses: {'G_total': 2.6293, 'G_adv': 1.3883, 'G_cycle_adv': 6.1634, 'G_cycle': 0.1123, 'G_l1_fs': 0.0302, 'G_lumi': 0.0531, 'G_wavelet': 0.1298, 'G_vgg': 0.6216}
+2026-03-19 01:24:47,023 - Weighted Contributions: {'cycle_w': 0.1123, 'cycle_adv_w': 0.6163, 'l1_fs_w': 0.0302, 'lumi_w': 0.1063, 'wavelet_w': 0.0649, 'vgg_w': 0.3108}
+2026-03-19 01:31:49,743 - Epoch 105 Done. Avg G Loss: 2.6256
+2026-03-19 01:31:49,743 - --- Epoch 105 Loss Breakdown ---
+2026-03-19 01:31:49,743 - Raw Losses: {'G_total': 2.6256, 'G_adv': 1.3868, 'G_cycle_adv': 6.2307, 'G_cycle': 0.1113, 'G_l1_fs': 0.0297, 'G_lumi': 0.05, 'G_wavelet': 0.1287, 'G_vgg': 0.6205}
+2026-03-19 01:31:49,743 - Weighted Contributions: {'cycle_w': 0.1113, 'cycle_adv_w': 0.6231, 'l1_fs_w': 0.0297, 'lumi_w': 0.1001, 'wavelet_w': 0.0643, 'vgg_w': 0.3102}
+2026-03-19 01:38:53,029 - Epoch 106 Done. Avg G Loss: 2.6035
+2026-03-19 01:38:53,029 - --- Epoch 106 Loss Breakdown ---
+2026-03-19 01:38:53,029 - Raw Losses: {'G_total': 2.6035, 'G_adv': 1.3865, 'G_cycle_adv': 6.0617, 'G_cycle': 0.109, 'G_l1_fs': 0.0293, 'G_lumi': 0.0499, 'G_wavelet': 0.1275, 'G_vgg': 0.6179}
+2026-03-19 01:38:53,030 - Weighted Contributions: {'cycle_w': 0.109, 'cycle_adv_w': 0.6062, 'l1_fs_w': 0.0293, 'lumi_w': 0.0997, 'wavelet_w': 0.0638, 'vgg_w': 0.3089}
+2026-03-19 01:45:55,768 - Epoch 107 Done. Avg G Loss: 2.5907
+2026-03-19 01:45:55,768 - --- Epoch 107 Loss Breakdown ---
+2026-03-19 01:45:55,768 - Raw Losses: {'G_total': 2.5907, 'G_adv': 1.3897, 'G_cycle_adv': 5.8987, 'G_cycle': 0.11, 'G_l1_fs': 0.029, 'G_lumi': 0.0505, 'G_wavelet': 0.1272, 'G_vgg': 0.6151}
+2026-03-19 01:45:55,768 - Weighted Contributions: {'cycle_w': 0.11, 'cycle_adv_w': 0.5899, 'l1_fs_w': 0.029, 'lumi_w': 0.1009, 'wavelet_w': 0.0636, 'vgg_w': 0.3075}
+2026-03-19 01:52:58,189 - Epoch 108 Done. Avg G Loss: 2.6081
+2026-03-19 01:52:58,189 - --- Epoch 108 Loss Breakdown ---
+2026-03-19 01:52:58,190 - Raw Losses: {'G_total': 2.6081, 'G_adv': 1.3885, 'G_cycle_adv': 6.1114, 'G_cycle': 0.1077, 'G_l1_fs': 0.0293, 'G_lumi': 0.0502, 'G_wavelet': 0.1273, 'G_vgg': 0.6149}
+2026-03-19 01:52:58,190 - Weighted Contributions: {'cycle_w': 0.1077, 'cycle_adv_w': 0.6111, 'l1_fs_w': 0.0293, 'lumi_w': 0.1004, 'wavelet_w': 0.0637, 'vgg_w': 0.3074}
+2026-03-19 01:59:59,968 - Epoch 109 Done. Avg G Loss: 2.6071
+2026-03-19 01:59:59,968 - --- Epoch 109 Loss Breakdown ---
+2026-03-19 01:59:59,968 - Raw Losses: {'G_total': 2.6071, 'G_adv': 1.3875, 'G_cycle_adv': 6.113, 'G_cycle': 0.1099, 'G_l1_fs': 0.0284, 'G_lumi': 0.0498, 'G_wavelet': 0.1267, 'G_vgg': 0.6143}
+2026-03-19 01:59:59,968 - Weighted Contributions: {'cycle_w': 0.1099, 'cycle_adv_w': 0.6113, 'l1_fs_w': 0.0284, 'lumi_w': 0.0996, 'wavelet_w': 0.0633, 'vgg_w': 0.3071}
+2026-03-19 02:07:02,621 - Epoch 110 Done. Avg G Loss: 2.6027
+2026-03-19 02:07:02,621 - --- Epoch 110 Loss Breakdown ---
+2026-03-19 02:07:02,622 - Raw Losses: {'G_total': 2.6027, 'G_adv': 1.3882, 'G_cycle_adv': 6.0803, 'G_cycle': 0.1085, 'G_l1_fs': 0.0286, 'G_lumi': 0.0492, 'G_wavelet': 0.1267, 'G_vgg': 0.6153}
+2026-03-19 02:07:02,622 - Weighted Contributions: {'cycle_w': 0.1085, 'cycle_adv_w': 0.608, 'l1_fs_w': 0.0286, 'lumi_w': 0.0983, 'wavelet_w': 0.0633, 'vgg_w': 0.3077}
+2026-03-19 02:14:05,202 - Epoch 111 Done. Avg G Loss: 2.5838
+2026-03-19 02:14:05,202 - --- Epoch 111 Loss Breakdown ---
+2026-03-19 02:14:05,202 - Raw Losses: {'G_total': 2.5838, 'G_adv': 1.3864, 'G_cycle_adv': 5.9381, 'G_cycle': 0.1051, 'G_l1_fs': 0.0288, 'G_lumi': 0.0504, 'G_wavelet': 0.1264, 'G_vgg': 0.6114}
+2026-03-19 02:14:05,202 - Weighted Contributions: {'cycle_w': 0.1051, 'cycle_adv_w': 0.5938, 'l1_fs_w': 0.0288, 'lumi_w': 0.1008, 'wavelet_w': 0.0632, 'vgg_w': 0.3057}
+2026-03-19 02:21:07,752 - Epoch 112 Done. Avg G Loss: 2.5990
+2026-03-19 02:21:07,752 - --- Epoch 112 Loss Breakdown ---
+2026-03-19 02:21:07,752 - Raw Losses: {'G_total': 2.599, 'G_adv': 1.3898, 'G_cycle_adv': 6.1147, 'G_cycle': 0.1057, 'G_l1_fs': 0.0287, 'G_lumi': 0.0476, 'G_wavelet': 0.1255, 'G_vgg': 0.6107}
+2026-03-19 02:21:07,752 - Weighted Contributions: {'cycle_w': 0.1057, 'cycle_adv_w': 0.6115, 'l1_fs_w': 0.0287, 'lumi_w': 0.0953, 'wavelet_w': 0.0627, 'vgg_w': 0.3054}
+2026-03-19 02:28:11,316 - Epoch 113 Done. Avg G Loss: 2.5916
+2026-03-19 02:28:11,316 - --- Epoch 113 Loss Breakdown ---
+2026-03-19 02:28:11,316 - Raw Losses: {'G_total': 2.5916, 'G_adv': 1.39, 'G_cycle_adv': 5.9996, 'G_cycle': 0.1066, 'G_l1_fs': 0.0281, 'G_lumi': 0.0498, 'G_wavelet': 0.1252, 'G_vgg': 0.6095}
+2026-03-19 02:28:11,316 - Weighted Contributions: {'cycle_w': 0.1066, 'cycle_adv_w': 0.6, 'l1_fs_w': 0.0281, 'lumi_w': 0.0995, 'wavelet_w': 0.0626, 'vgg_w': 0.3047}
+2026-03-19 02:35:13,834 - Epoch 114 Done. Avg G Loss: 2.5776
+2026-03-19 02:35:13,835 - --- Epoch 114 Loss Breakdown ---
+2026-03-19 02:35:13,835 - Raw Losses: {'G_total': 2.5776, 'G_adv': 1.3874, 'G_cycle_adv': 5.9407, 'G_cycle': 0.104, 'G_l1_fs': 0.028, 'G_lumi': 0.0487, 'G_wavelet': 0.1251, 'G_vgg': 0.6083}
+2026-03-19 02:35:13,835 - Weighted Contributions: {'cycle_w': 0.104, 'cycle_adv_w': 0.5941, 'l1_fs_w': 0.028, 'lumi_w': 0.0974, 'wavelet_w': 0.0625, 'vgg_w': 0.3041}
+2026-03-19 02:42:16,416 - Epoch 115 Done. Avg G Loss: 2.5820
+2026-03-19 02:42:16,416 - --- Epoch 115 Loss Breakdown ---
+2026-03-19 02:42:16,416 - Raw Losses: {'G_total': 2.582, 'G_adv': 1.3879, 'G_cycle_adv': 5.9878, 'G_cycle': 0.1022, 'G_l1_fs': 0.0278, 'G_lumi': 0.0496, 'G_wavelet': 0.1249, 'G_vgg': 0.6075}
+2026-03-19 02:42:16,416 - Weighted Contributions: {'cycle_w': 0.1022, 'cycle_adv_w': 0.5988, 'l1_fs_w': 0.0278, 'lumi_w': 0.0991, 'wavelet_w': 0.0624, 'vgg_w': 0.3038}
+2026-03-19 02:49:18,929 - Epoch 116 Done. Avg G Loss: 2.5982
+2026-03-19 02:49:18,929 - --- Epoch 116 Loss Breakdown ---
+2026-03-19 02:49:18,929 - Raw Losses: {'G_total': 2.5982, 'G_adv': 1.3868, 'G_cycle_adv': 6.2506, 'G_cycle': 0.1023, 'G_l1_fs': 0.0279, 'G_lumi': 0.0458, 'G_wavelet': 0.1236, 'G_vgg': 0.6054}
+2026-03-19 02:49:18,929 - Weighted Contributions: {'cycle_w': 0.1023, 'cycle_adv_w': 0.6251, 'l1_fs_w': 0.0279, 'lumi_w': 0.0917, 'wavelet_w': 0.0618, 'vgg_w': 0.3027}
+2026-03-19 02:56:20,981 - Epoch 117 Done. Avg G Loss: 2.5776
+2026-03-19 02:56:20,981 - --- Epoch 117 Loss Breakdown ---
+2026-03-19 02:56:20,981 - Raw Losses: {'G_total': 2.5776, 'G_adv': 1.3886, 'G_cycle_adv': 6.0456, 'G_cycle': 0.1014, 'G_l1_fs': 0.0278, 'G_lumi': 0.0456, 'G_wavelet': 0.1233, 'G_vgg': 0.605}
+2026-03-19 02:56:20,981 - Weighted Contributions: {'cycle_w': 0.1014, 'cycle_adv_w': 0.6046, 'l1_fs_w': 0.0278, 'lumi_w': 0.0911, 'wavelet_w': 0.0616, 'vgg_w': 0.3025}
+2026-03-19 03:03:23,262 - Epoch 118 Done. Avg G Loss: 2.5912
+2026-03-19 03:03:23,263 - --- Epoch 118 Loss Breakdown ---
+2026-03-19 03:03:23,263 - Raw Losses: {'G_total': 2.5912, 'G_adv': 1.3875, 'G_cycle_adv': 6.1653, 'G_cycle': 0.1027, 'G_l1_fs': 0.027, 'G_lumi': 0.0472, 'G_wavelet': 0.1226, 'G_vgg': 0.6038}
+2026-03-19 03:03:23,263 - Weighted Contributions: {'cycle_w': 0.1027, 'cycle_adv_w': 0.6165, 'l1_fs_w': 0.027, 'lumi_w': 0.0943, 'wavelet_w': 0.0613, 'vgg_w': 0.3019}
+2026-03-19 03:10:24,772 - Epoch 119 Done. Avg G Loss: 2.6011
+2026-03-19 03:10:24,772 - --- Epoch 119 Loss Breakdown ---
+2026-03-19 03:10:24,772 - Raw Losses: {'G_total': 2.6011, 'G_adv': 1.3865, 'G_cycle_adv': 6.2947, 'G_cycle': 0.1017, 'G_l1_fs': 0.027, 'G_lumi': 0.0467, 'G_wavelet': 0.1228, 'G_vgg': 0.6034}
+2026-03-19 03:10:24,772 - Weighted Contributions: {'cycle_w': 0.1017, 'cycle_adv_w': 0.6295, 'l1_fs_w': 0.027, 'lumi_w': 0.0934, 'wavelet_w': 0.0614, 'vgg_w': 0.3017}
+2026-03-19 03:17:27,200 - Epoch 120 Done. Avg G Loss: 2.5639
+2026-03-19 03:17:27,200 - --- Epoch 120 Loss Breakdown ---
+2026-03-19 03:17:27,200 - Raw Losses: {'G_total': 2.5639, 'G_adv': 1.3873, 'G_cycle_adv': 5.9465, 'G_cycle': 0.0997, 'G_l1_fs': 0.0271, 'G_lumi': 0.0466, 'G_wavelet': 0.1221, 'G_vgg': 0.6016}
+2026-03-19 03:17:27,200 - Weighted Contributions: {'cycle_w': 0.0997, 'cycle_adv_w': 0.5947, 'l1_fs_w': 0.0271, 'lumi_w': 0.0932, 'wavelet_w': 0.0611, 'vgg_w': 0.3008}
+2026-03-19 03:24:30,528 - Epoch 121 Done. Avg G Loss: 2.6002
+2026-03-19 03:24:30,528 - --- Epoch 121 Loss Breakdown ---
+2026-03-19 03:24:30,528 - Raw Losses: {'G_total': 2.6002, 'G_adv': 1.3878, 'G_cycle_adv': 6.3198, 'G_cycle': 0.1002, 'G_l1_fs': 0.0268, 'G_lumi': 0.0459, 'G_wavelet': 0.122, 'G_vgg': 0.6012}
+2026-03-19 03:24:30,528 - Weighted Contributions: {'cycle_w': 0.1002, 'cycle_adv_w': 0.632, 'l1_fs_w': 0.0268, 'lumi_w': 0.0918, 'wavelet_w': 0.061, 'vgg_w': 0.3006}
+2026-03-19 03:31:32,962 - Epoch 122 Done. Avg G Loss: 2.5661
+2026-03-19 03:31:32,962 - --- Epoch 122 Loss Breakdown ---
+2026-03-19 03:31:32,962 - Raw Losses: {'G_total': 2.5661, 'G_adv': 1.3878, 'G_cycle_adv': 5.987, 'G_cycle': 0.1001, 'G_l1_fs': 0.0272, 'G_lumi': 0.045, 'G_wavelet': 0.122, 'G_vgg': 0.6025}
+2026-03-19 03:31:32,963 - Weighted Contributions: {'cycle_w': 0.1001, 'cycle_adv_w': 0.5987, 'l1_fs_w': 0.0272, 'lumi_w': 0.09, 'wavelet_w': 0.061, 'vgg_w': 0.3012}
+2026-03-19 03:38:35,919 - Epoch 123 Done. Avg G Loss: 2.5586
+2026-03-19 03:38:35,919 - --- Epoch 123 Loss Breakdown ---
+2026-03-19 03:38:35,919 - Raw Losses: {'G_total': 2.5586, 'G_adv': 1.3869, 'G_cycle_adv': 5.9886, 'G_cycle': 0.0983, 'G_l1_fs': 0.027, 'G_lumi': 0.044, 'G_wavelet': 0.1207, 'G_vgg': 0.5983}
+2026-03-19 03:38:35,919 - Weighted Contributions: {'cycle_w': 0.0983, 'cycle_adv_w': 0.5989, 'l1_fs_w': 0.027, 'lumi_w': 0.0881, 'wavelet_w': 0.0604, 'vgg_w': 0.2992}
+2026-03-19 03:45:37,798 - Epoch 124 Done. Avg G Loss: 2.5661
+2026-03-19 03:45:37,798 - --- Epoch 124 Loss Breakdown ---
+2026-03-19 03:45:37,798 - Raw Losses: {'G_total': 2.5661, 'G_adv': 1.3868, 'G_cycle_adv': 6.0608, 'G_cycle': 0.0982, 'G_l1_fs': 0.0264, 'G_lumi': 0.0447, 'G_wavelet': 0.1205, 'G_vgg': 0.5982}
+2026-03-19 03:45:37,798 - Weighted Contributions: {'cycle_w': 0.0982, 'cycle_adv_w': 0.6061, 'l1_fs_w': 0.0264, 'lumi_w': 0.0893, 'wavelet_w': 0.0602, 'vgg_w': 0.2991}
+2026-03-19 03:52:40,616 - Epoch 125 Done. Avg G Loss: 2.5741
+2026-03-19 03:52:40,617 - --- Epoch 125 Loss Breakdown ---
+2026-03-19 03:52:40,617 - Raw Losses: {'G_total': 2.5741, 'G_adv': 1.3856, 'G_cycle_adv': 6.1682, 'G_cycle': 0.0992, 'G_l1_fs': 0.0265, 'G_lumi': 0.0431, 'G_wavelet': 0.1206, 'G_vgg': 0.599}
+2026-03-19 03:52:40,617 - Weighted Contributions: {'cycle_w': 0.0992, 'cycle_adv_w': 0.6168, 'l1_fs_w': 0.0265, 'lumi_w': 0.0862, 'wavelet_w': 0.0603, 'vgg_w': 0.2995}
+2026-03-19 03:59:43,556 - Epoch 126 Done. Avg G Loss: 2.5828
+2026-03-19 03:59:43,556 - --- Epoch 126 Loss Breakdown ---
+2026-03-19 03:59:43,556 - Raw Losses: {'G_total': 2.5828, 'G_adv': 1.3876, 'G_cycle_adv': 6.2211, 'G_cycle': 0.0991, 'G_l1_fs': 0.0265, 'G_lumi': 0.0442, 'G_wavelet': 0.1203, 'G_vgg': 0.598}
+2026-03-19 03:59:43,556 - Weighted Contributions: {'cycle_w': 0.0991, 'cycle_adv_w': 0.6221, 'l1_fs_w': 0.0265, 'lumi_w': 0.0883, 'wavelet_w': 0.0601, 'vgg_w': 0.299}
+2026-03-19 04:06:45,305 - Epoch 127 Done. Avg G Loss: 2.5677
+2026-03-19 04:06:45,305 - --- Epoch 127 Loss Breakdown ---
+2026-03-19 04:06:45,306 - Raw Losses: {'G_total': 2.5677, 'G_adv': 1.3895, 'G_cycle_adv': 6.0572, 'G_cycle': 0.0975, 'G_l1_fs': 0.0263, 'G_lumi': 0.045, 'G_wavelet': 0.1202, 'G_vgg': 0.5971}
+2026-03-19 04:06:45,306 - Weighted Contributions: {'cycle_w': 0.0975, 'cycle_adv_w': 0.6057, 'l1_fs_w': 0.0263, 'lumi_w': 0.09, 'wavelet_w': 0.0601, 'vgg_w': 0.2986}
+2026-03-19 04:13:48,199 - Epoch 128 Done. Avg G Loss: 2.5501
+2026-03-19 04:13:48,199 - --- Epoch 128 Loss Breakdown ---
+2026-03-19 04:13:48,199 - Raw Losses: {'G_total': 2.5501, 'G_adv': 1.3874, 'G_cycle_adv': 5.977, 'G_cycle': 0.0975, 'G_l1_fs': 0.0254, 'G_lumi': 0.043, 'G_wavelet': 0.1189, 'G_vgg': 0.5931}
+2026-03-19 04:13:48,199 - Weighted Contributions: {'cycle_w': 0.0975, 'cycle_adv_w': 0.5977, 'l1_fs_w': 0.0254, 'lumi_w': 0.086, 'wavelet_w': 0.0595, 'vgg_w': 0.2966}
+2026-03-19 04:20:49,902 - Epoch 129 Done. Avg G Loss: 2.5657
+2026-03-19 04:20:49,902 - --- Epoch 129 Loss Breakdown ---
+2026-03-19 04:20:49,902 - Raw Losses: {'G_total': 2.5657, 'G_adv': 1.3865, 'G_cycle_adv': 6.1257, 'G_cycle': 0.0969, 'G_l1_fs': 0.0255, 'G_lumi': 0.0431, 'G_wavelet': 0.1191, 'G_vgg': 0.5969}
+2026-03-19 04:20:49,902 - Weighted Contributions: {'cycle_w': 0.0969, 'cycle_adv_w': 0.6126, 'l1_fs_w': 0.0255, 'lumi_w': 0.0863, 'wavelet_w': 0.0595, 'vgg_w': 0.2984}
+2026-03-19 04:27:52,496 - Epoch 130 Done. Avg G Loss: 2.5985
+2026-03-19 04:27:52,496 - --- Epoch 130 Loss Breakdown ---
+2026-03-19 04:27:52,496 - Raw Losses: {'G_total': 2.5985, 'G_adv': 1.3875, 'G_cycle_adv': 6.4192, 'G_cycle': 0.0965, 'G_l1_fs': 0.0259, 'G_lumi': 0.044, 'G_wavelet': 0.1197, 'G_vgg': 0.5978}
+2026-03-19 04:27:52,496 - Weighted Contributions: {'cycle_w': 0.0965, 'cycle_adv_w': 0.6419, 'l1_fs_w': 0.0259, 'lumi_w': 0.0879, 'wavelet_w': 0.0599, 'vgg_w': 0.2989}
+2026-03-19 04:34:55,495 - Epoch 131 Done. Avg G Loss: 2.5806
+2026-03-19 04:34:55,495 - --- Epoch 131 Loss Breakdown ---
+2026-03-19 04:34:55,495 - Raw Losses: {'G_total': 2.5806, 'G_adv': 1.3889, 'G_cycle_adv': 6.2646, 'G_cycle': 0.0959, 'G_l1_fs': 0.026, 'G_lumi': 0.0423, 'G_wavelet': 0.1191, 'G_vgg': 0.5983}
+2026-03-19 04:34:55,495 - Weighted Contributions: {'cycle_w': 0.0959, 'cycle_adv_w': 0.6265, 'l1_fs_w': 0.026, 'lumi_w': 0.0847, 'wavelet_w': 0.0595, 'vgg_w': 0.2992}
+2026-03-19 04:41:57,680 - Epoch 132 Done. Avg G Loss: 2.5759
+2026-03-19 04:41:57,680 - --- Epoch 132 Loss Breakdown ---
+2026-03-19 04:41:57,680 - Raw Losses: {'G_total': 2.5759, 'G_adv': 1.387, 'G_cycle_adv': 6.2505, 'G_cycle': 0.0942, 'G_l1_fs': 0.0252, 'G_lumi': 0.0427, 'G_wavelet': 0.1191, 'G_vgg': 0.5991}
+2026-03-19 04:41:57,680 - Weighted Contributions: {'cycle_w': 0.0942, 'cycle_adv_w': 0.625, 'l1_fs_w': 0.0252, 'lumi_w': 0.0853, 'wavelet_w': 0.0596, 'vgg_w': 0.2995}
+2026-03-19 04:49:00,269 - Epoch 133 Done. Avg G Loss: 2.5922
+2026-03-19 04:49:00,269 - --- Epoch 133 Loss Breakdown ---
+2026-03-19 04:49:00,269 - Raw Losses: {'G_total': 2.5922, 'G_adv': 1.3873, 'G_cycle_adv': 6.3725, 'G_cycle': 0.0964, 'G_l1_fs': 0.0252, 'G_lumi': 0.0439, 'G_wavelet': 0.1188, 'G_vgg': 0.5977}
+2026-03-19 04:49:00,269 - Weighted Contributions: {'cycle_w': 0.0964, 'cycle_adv_w': 0.6372, 'l1_fs_w': 0.0252, 'lumi_w': 0.0878, 'wavelet_w': 0.0594, 'vgg_w': 0.2989}
+2026-03-19 04:56:01,633 - Epoch 134 Done. Avg G Loss: 2.5777
+2026-03-19 04:56:01,633 - --- Epoch 134 Loss Breakdown ---
+2026-03-19 04:56:01,633 - Raw Losses: {'G_total': 2.5777, 'G_adv': 1.3868, 'G_cycle_adv': 6.2539, 'G_cycle': 0.0969, 'G_l1_fs': 0.025, 'G_lumi': 0.0425, 'G_wavelet': 0.1188, 'G_vgg': 0.5982}
+2026-03-19 04:56:01,633 - Weighted Contributions: {'cycle_w': 0.0969, 'cycle_adv_w': 0.6254, 'l1_fs_w': 0.025, 'lumi_w': 0.0851, 'wavelet_w': 0.0594, 'vgg_w': 0.2991}
+2026-03-19 05:03:03,639 - Epoch 135 Done. Avg G Loss: 2.6040
+2026-03-19 05:03:03,639 - --- Epoch 135 Loss Breakdown ---
+2026-03-19 05:03:03,639 - Raw Losses: {'G_total': 2.604, 'G_adv': 1.3879, 'G_cycle_adv': 6.5254, 'G_cycle': 0.0958, 'G_l1_fs': 0.0255, 'G_lumi': 0.0423, 'G_wavelet': 0.1184, 'G_vgg': 0.5971}
+2026-03-19 05:03:03,639 - Weighted Contributions: {'cycle_w': 0.0958, 'cycle_adv_w': 0.6525, 'l1_fs_w': 0.0255, 'lumi_w': 0.0847, 'wavelet_w': 0.0592, 'vgg_w': 0.2985}
+2026-03-19 05:10:06,834 - Epoch 136 Done. Avg G Loss: 2.6063
+2026-03-19 05:10:06,835 - --- Epoch 136 Loss Breakdown ---
+2026-03-19 05:10:06,835 - Raw Losses: {'G_total': 2.6063, 'G_adv': 1.3877, 'G_cycle_adv': 6.5385, 'G_cycle': 0.0954, 'G_l1_fs': 0.0249, 'G_lumi': 0.0429, 'G_wavelet': 0.1189, 'G_vgg': 0.5985}
+2026-03-19 05:10:06,835 - Weighted Contributions: {'cycle_w': 0.0954, 'cycle_adv_w': 0.6538, 'l1_fs_w': 0.0249, 'lumi_w': 0.0857, 'wavelet_w': 0.0595, 'vgg_w': 0.2993}
+2026-03-19 05:17:08,820 - Epoch 137 Done. Avg G Loss: 2.5983
+2026-03-19 05:17:08,820 - --- Epoch 137 Loss Breakdown ---
+2026-03-19 05:17:08,820 - Raw Losses: {'G_total': 2.5983, 'G_adv': 1.3877, 'G_cycle_adv': 6.5157, 'G_cycle': 0.0938, 'G_l1_fs': 0.025, 'G_lumi': 0.0408, 'G_wavelet': 0.118, 'G_vgg': 0.5995}
+2026-03-19 05:17:08,820 - Weighted Contributions: {'cycle_w': 0.0938, 'cycle_adv_w': 0.6516, 'l1_fs_w': 0.025, 'lumi_w': 0.0815, 'wavelet_w': 0.059, 'vgg_w': 0.2997}
+2026-03-19 05:24:11,235 - Epoch 138 Done. Avg G Loss: 2.5953
+2026-03-19 05:24:11,235 - --- Epoch 138 Loss Breakdown ---
+2026-03-19 05:24:11,235 - Raw Losses: {'G_total': 2.5953, 'G_adv': 1.3875, 'G_cycle_adv': 6.4443, 'G_cycle': 0.0959, 'G_l1_fs': 0.0247, 'G_lumi': 0.042, 'G_wavelet': 0.1184, 'G_vgg': 0.599}
+2026-03-19 05:24:11,235 - Weighted Contributions: {'cycle_w': 0.0959, 'cycle_adv_w': 0.6444, 'l1_fs_w': 0.0247, 'lumi_w': 0.084, 'wavelet_w': 0.0592, 'vgg_w': 0.2995}
+2026-03-19 05:31:13,591 - Epoch 139 Done. Avg G Loss: 2.5950
+2026-03-19 05:31:13,591 - --- Epoch 139 Loss Breakdown ---
+2026-03-19 05:31:13,591 - Raw Losses: {'G_total': 2.595, 'G_adv': 1.3868, 'G_cycle_adv': 6.4946, 'G_cycle': 0.0934, 'G_l1_fs': 0.0249, 'G_lumi': 0.0412, 'G_wavelet': 0.1182, 'G_vgg': 0.5977}
+2026-03-19 05:31:13,591 - Weighted Contributions: {'cycle_w': 0.0934, 'cycle_adv_w': 0.6495, 'l1_fs_w': 0.0249, 'lumi_w': 0.0824, 'wavelet_w': 0.0591, 'vgg_w': 0.2989}
+2026-03-19 05:38:16,171 - Epoch 140 Done. Avg G Loss: 2.5672
+2026-03-19 05:38:16,171 - --- Epoch 140 Loss Breakdown ---
+2026-03-19 05:38:16,171 - Raw Losses: {'G_total': 2.5672, 'G_adv': 1.3877, 'G_cycle_adv': 6.2355, 'G_cycle': 0.0931, 'G_l1_fs': 0.0244, 'G_lumi': 0.0404, 'G_wavelet': 0.1177, 'G_vgg': 0.5976}
+2026-03-19 05:38:16,171 - Weighted Contributions: {'cycle_w': 0.0931, 'cycle_adv_w': 0.6235, 'l1_fs_w': 0.0244, 'lumi_w': 0.0808, 'wavelet_w': 0.0589, 'vgg_w': 0.2988}
+2026-03-19 05:45:19,024 - Epoch 141 Done. Avg G Loss: 2.5852
+2026-03-19 05:45:19,024 - --- Epoch 141 Loss Breakdown ---
+2026-03-19 05:45:19,024 - Raw Losses: {'G_total': 2.5852, 'G_adv': 1.3952, 'G_cycle_adv': 6.3301, 'G_cycle': 0.0937, 'G_l1_fs': 0.0242, 'G_lumi': 0.0411, 'G_wavelet': 0.1175, 'G_vgg': 0.5966}
+2026-03-19 05:45:19,025 - Weighted Contributions: {'cycle_w': 0.0937, 'cycle_adv_w': 0.633, 'l1_fs_w': 0.0242, 'lumi_w': 0.0822, 'wavelet_w': 0.0587, 'vgg_w': 0.2983}
+2026-03-19 05:52:21,003 - Epoch 142 Done. Avg G Loss: 2.5682
+2026-03-19 05:52:21,003 - --- Epoch 142 Loss Breakdown ---
+2026-03-19 05:52:21,003 - Raw Losses: {'G_total': 2.5682, 'G_adv': 1.3867, 'G_cycle_adv': 6.2873, 'G_cycle': 0.0919, 'G_l1_fs': 0.0241, 'G_lumi': 0.0396, 'G_wavelet': 0.1174, 'G_vgg': 0.5979}
+2026-03-19 05:52:21,004 - Weighted Contributions: {'cycle_w': 0.0919, 'cycle_adv_w': 0.6287, 'l1_fs_w': 0.0241, 'lumi_w': 0.0791, 'wavelet_w': 0.0587, 'vgg_w': 0.2989}
+2026-03-19 05:59:24,390 - Epoch 143 Done. Avg G Loss: 2.5859
+2026-03-19 05:59:24,391 - --- Epoch 143 Loss Breakdown ---
+2026-03-19 05:59:24,391 - Raw Losses: {'G_total': 2.5859, 'G_adv': 1.3867, 'G_cycle_adv': 6.4421, 'G_cycle': 0.091, 'G_l1_fs': 0.0244, 'G_lumi': 0.0413, 'G_wavelet': 0.1178, 'G_vgg': 0.596}
+2026-03-19 05:59:24,391 - Weighted Contributions: {'cycle_w': 0.091, 'cycle_adv_w': 0.6442, 'l1_fs_w': 0.0244, 'lumi_w': 0.0826, 'wavelet_w': 0.0589, 'vgg_w': 0.298}
+2026-03-19 06:06:26,768 - Epoch 144 Done. Avg G Loss: 2.5838
+2026-03-19 06:06:26,768 - --- Epoch 144 Loss Breakdown ---
+2026-03-19 06:06:26,768 - Raw Losses: {'G_total': 2.5838, 'G_adv': 1.3873, 'G_cycle_adv': 6.4218, 'G_cycle': 0.0911, 'G_l1_fs': 0.0241, 'G_lumi': 0.0403, 'G_wavelet': 0.1175, 'G_vgg': 0.5993}
+2026-03-19 06:06:26,768 - Weighted Contributions: {'cycle_w': 0.0911, 'cycle_adv_w': 0.6422, 'l1_fs_w': 0.0241, 'lumi_w': 0.0806, 'wavelet_w': 0.0588, 'vgg_w': 0.2997}
+2026-03-19 06:13:29,021 - Epoch 145 Done. Avg G Loss: 2.6007
+2026-03-19 06:13:29,021 - --- Epoch 145 Loss Breakdown ---
+2026-03-19 06:13:29,021 - Raw Losses: {'G_total': 2.6007, 'G_adv': 1.3858, 'G_cycle_adv': 6.5438, 'G_cycle': 0.0934, 'G_l1_fs': 0.0242, 'G_lumi': 0.0417, 'G_wavelet': 0.1179, 'G_vgg': 0.6011}
+2026-03-19 06:13:29,021 - Weighted Contributions: {'cycle_w': 0.0934, 'cycle_adv_w': 0.6544, 'l1_fs_w': 0.0242, 'lumi_w': 0.0834, 'wavelet_w': 0.0589, 'vgg_w': 0.3006}
+2026-03-19 06:20:31,860 - Epoch 146 Done. Avg G Loss: 2.5951
+2026-03-19 06:20:31,860 - --- Epoch 146 Loss Breakdown ---
+2026-03-19 06:20:31,861 - Raw Losses: {'G_total': 2.5951, 'G_adv': 1.3875, 'G_cycle_adv': 6.5553, 'G_cycle': 0.0909, 'G_l1_fs': 0.0238, 'G_lumi': 0.0395, 'G_wavelet': 0.1173, 'G_vgg': 0.5993}
+2026-03-19 06:20:31,861 - Weighted Contributions: {'cycle_w': 0.0909, 'cycle_adv_w': 0.6555, 'l1_fs_w': 0.0238, 'lumi_w': 0.079, 'wavelet_w': 0.0586, 'vgg_w': 0.2997}
+2026-03-19 06:27:34,564 - Epoch 147 Done. Avg G Loss: 2.5938
+2026-03-19 06:27:34,564 - --- Epoch 147 Loss Breakdown ---
+2026-03-19 06:27:34,564 - Raw Losses: {'G_total': 2.5938, 'G_adv': 1.3864, 'G_cycle_adv': 6.5606, 'G_cycle': 0.0913, 'G_l1_fs': 0.0241, 'G_lumi': 0.0394, 'G_wavelet': 0.1175, 'G_vgg': 0.5968}
+2026-03-19 06:27:34,565 - Weighted Contributions: {'cycle_w': 0.0913, 'cycle_adv_w': 0.6561, 'l1_fs_w': 0.0241, 'lumi_w': 0.0787, 'wavelet_w': 0.0588, 'vgg_w': 0.2984}
+2026-03-19 06:34:37,360 - Epoch 148 Done. Avg G Loss: 2.5826
+2026-03-19 06:34:37,360 - --- Epoch 148 Loss Breakdown ---
+2026-03-19 06:34:37,360 - Raw Losses: {'G_total': 2.5826, 'G_adv': 1.387, 'G_cycle_adv': 6.4434, 'G_cycle': 0.0913, 'G_l1_fs': 0.0239, 'G_lumi': 0.0386, 'G_wavelet': 0.1172, 'G_vgg': 0.6006}
+2026-03-19 06:34:37,360 - Weighted Contributions: {'cycle_w': 0.0913, 'cycle_adv_w': 0.6443, 'l1_fs_w': 0.0239, 'lumi_w': 0.0771, 'wavelet_w': 0.0586, 'vgg_w': 0.3003}
+2026-03-19 06:41:39,475 - Epoch 149 Done. Avg G Loss: 2.5672
+2026-03-19 06:41:39,475 - --- Epoch 149 Loss Breakdown ---
+2026-03-19 06:41:39,475 - Raw Losses: {'G_total': 2.5672, 'G_adv': 1.3865, 'G_cycle_adv': 6.3013, 'G_cycle': 0.0902, 'G_l1_fs': 0.0239, 'G_lumi': 0.0392, 'G_wavelet': 0.1167, 'G_vgg': 0.5997}
+2026-03-19 06:41:39,475 - Weighted Contributions: {'cycle_w': 0.0902, 'cycle_adv_w': 0.6301, 'l1_fs_w': 0.0239, 'lumi_w': 0.0784, 'wavelet_w': 0.0583, 'vgg_w': 0.2999}
+2026-03-19 06:48:41,921 - Epoch 150 Done. Avg G Loss: 2.5752
+2026-03-19 06:48:41,921 - --- Epoch 150 Loss Breakdown ---
+2026-03-19 06:48:41,921 - Raw Losses: {'G_total': 2.5752, 'G_adv': 1.3861, 'G_cycle_adv': 6.4163, 'G_cycle': 0.0897, 'G_l1_fs': 0.0236, 'G_lumi': 0.0379, 'G_wavelet': 0.1169, 'G_vgg': 0.6001}
+2026-03-19 06:48:41,921 - Weighted Contributions: {'cycle_w': 0.0897, 'cycle_adv_w': 0.6416, 'l1_fs_w': 0.0236, 'lumi_w': 0.0757, 'wavelet_w': 0.0585, 'vgg_w': 0.3001}
+2026-03-19 06:55:45,290 - Epoch 151 Done. Avg G Loss: 2.5723
+2026-03-19 06:55:45,290 - --- Epoch 151 Loss Breakdown ---
+2026-03-19 06:55:45,290 - Raw Losses: {'G_total': 2.5723, 'G_adv': 1.3873, 'G_cycle_adv': 6.3934, 'G_cycle': 0.0885, 'G_l1_fs': 0.0235, 'G_lumi': 0.0389, 'G_wavelet': 0.116, 'G_vgg': 0.5957}
+2026-03-19 06:55:45,290 - Weighted Contributions: {'cycle_w': 0.0885, 'cycle_adv_w': 0.6393, 'l1_fs_w': 0.0235, 'lumi_w': 0.0778, 'wavelet_w': 0.058, 'vgg_w': 0.2978}
+2026-03-19 07:02:47,413 - Epoch 152 Done. Avg G Loss: 2.5707
+2026-03-19 07:02:47,413 - --- Epoch 152 Loss Breakdown ---
+2026-03-19 07:02:47,413 - Raw Losses: {'G_total': 2.5707, 'G_adv': 1.3852, 'G_cycle_adv': 6.4155, 'G_cycle': 0.0901, 'G_l1_fs': 0.0233, 'G_lumi': 0.0373, 'G_wavelet': 0.1156, 'G_vgg': 0.5962}
+2026-03-19 07:02:47,413 - Weighted Contributions: {'cycle_w': 0.0901, 'cycle_adv_w': 0.6416, 'l1_fs_w': 0.0233, 'lumi_w': 0.0746, 'wavelet_w': 0.0578, 'vgg_w': 0.2981}
+2026-03-19 07:09:49,954 - Epoch 153 Done. Avg G Loss: 2.5716
+2026-03-19 07:09:49,954 - --- Epoch 153 Loss Breakdown ---
+2026-03-19 07:09:49,954 - Raw Losses: {'G_total': 2.5716, 'G_adv': 1.3869, 'G_cycle_adv': 6.3926, 'G_cycle': 0.0891, 'G_l1_fs': 0.0239, 'G_lumi': 0.0375, 'G_wavelet': 0.1164, 'G_vgg': 0.5982}
+2026-03-19 07:09:49,954 - Weighted Contributions: {'cycle_w': 0.0891, 'cycle_adv_w': 0.6393, 'l1_fs_w': 0.0239, 'lumi_w': 0.0751, 'wavelet_w': 0.0582, 'vgg_w': 0.2991}
+2026-03-19 07:16:51,922 - Epoch 154 Done. Avg G Loss: 2.5798
+2026-03-19 07:16:51,922 - --- Epoch 154 Loss Breakdown ---
+2026-03-19 07:16:51,922 - Raw Losses: {'G_total': 2.5798, 'G_adv': 1.3869, 'G_cycle_adv': 6.5103, 'G_cycle': 0.0892, 'G_l1_fs': 0.0237, 'G_lumi': 0.0375, 'G_wavelet': 0.1155, 'G_vgg': 0.5924}
+2026-03-19 07:16:51,922 - Weighted Contributions: {'cycle_w': 0.0892, 'cycle_adv_w': 0.651, 'l1_fs_w': 0.0237, 'lumi_w': 0.075, 'wavelet_w': 0.0577, 'vgg_w': 0.2962}
+2026-03-19 07:23:54,667 - Epoch 155 Done. Avg G Loss: 2.5813
+2026-03-19 07:23:54,667 - --- Epoch 155 Loss Breakdown ---
+2026-03-19 07:23:54,667 - Raw Losses: {'G_total': 2.5813, 'G_adv': 1.3856, 'G_cycle_adv': 6.52, 'G_cycle': 0.0888, 'G_l1_fs': 0.0232, 'G_lumi': 0.038, 'G_wavelet': 0.1155, 'G_vgg': 0.5961}
+2026-03-19 07:23:54,667 - Weighted Contributions: {'cycle_w': 0.0888, 'cycle_adv_w': 0.652, 'l1_fs_w': 0.0232, 'lumi_w': 0.076, 'wavelet_w': 0.0578, 'vgg_w': 0.2981}
+2026-03-19 07:30:57,861 - Epoch 156 Done. Avg G Loss: 2.5812
+2026-03-19 07:30:57,861 - --- Epoch 156 Loss Breakdown ---
+2026-03-19 07:30:57,861 - Raw Losses: {'G_total': 2.5812, 'G_adv': 1.3868, 'G_cycle_adv': 6.5246, 'G_cycle': 0.0883, 'G_l1_fs': 0.0231, 'G_lumi': 0.0367, 'G_wavelet': 0.1158, 'G_vgg': 0.5982}
+2026-03-19 07:30:57,861 - Weighted Contributions: {'cycle_w': 0.0883, 'cycle_adv_w': 0.6525, 'l1_fs_w': 0.0231, 'lumi_w': 0.0735, 'wavelet_w': 0.0579, 'vgg_w': 0.2991}
+2026-03-19 07:37:59,960 - Epoch 157 Done. Avg G Loss: 2.5642
+2026-03-19 07:37:59,960 - --- Epoch 157 Loss Breakdown ---
+2026-03-19 07:37:59,961 - Raw Losses: {'G_total': 2.5642, 'G_adv': 1.3863, 'G_cycle_adv': 6.3789, 'G_cycle': 0.087, 'G_l1_fs': 0.0232, 'G_lumi': 0.0359, 'G_wavelet': 0.1157, 'G_vgg': 0.6004}
+2026-03-19 07:37:59,961 - Weighted Contributions: {'cycle_w': 0.087, 'cycle_adv_w': 0.6379, 'l1_fs_w': 0.0232, 'lumi_w': 0.0719, 'wavelet_w': 0.0579, 'vgg_w': 0.3002}
+2026-03-19 07:45:02,677 - Epoch 158 Done. Avg G Loss: 2.5708
+2026-03-19 07:45:02,677 - --- Epoch 158 Loss Breakdown ---
+2026-03-19 07:45:02,677 - Raw Losses: {'G_total': 2.5708, 'G_adv': 1.3893, 'G_cycle_adv': 6.4438, 'G_cycle': 0.0876, 'G_l1_fs': 0.0226, 'G_lumi': 0.036, 'G_wavelet': 0.1148, 'G_vgg': 0.5948}
+2026-03-19 07:45:02,677 - Weighted Contributions: {'cycle_w': 0.0876, 'cycle_adv_w': 0.6444, 'l1_fs_w': 0.0226, 'lumi_w': 0.072, 'wavelet_w': 0.0574, 'vgg_w': 0.2974}
+2026-03-19 07:52:04,544 - Epoch 159 Done. Avg G Loss: 2.5672
+2026-03-19 07:52:04,544 - --- Epoch 159 Loss Breakdown ---
+2026-03-19 07:52:04,544 - Raw Losses: {'G_total': 2.5672, 'G_adv': 1.3877, 'G_cycle_adv': 6.4057, 'G_cycle': 0.0874, 'G_l1_fs': 0.0231, 'G_lumi': 0.0358, 'G_wavelet': 0.1156, 'G_vgg': 0.5981}
+2026-03-19 07:52:04,544 - Weighted Contributions: {'cycle_w': 0.0874, 'cycle_adv_w': 0.6406, 'l1_fs_w': 0.0231, 'lumi_w': 0.0715, 'wavelet_w': 0.0578, 'vgg_w': 0.299}
+2026-03-19 07:59:06,438 - Epoch 160 Done. Avg G Loss: 2.5893
+2026-03-19 07:59:06,438 - --- Epoch 160 Loss Breakdown ---
+2026-03-19 07:59:06,438 - Raw Losses: {'G_total': 2.5893, 'G_adv': 1.3864, 'G_cycle_adv': 6.6448, 'G_cycle': 0.088, 'G_l1_fs': 0.0225, 'G_lumi': 0.0359, 'G_wavelet': 0.1148, 'G_vgg': 0.5975}
+2026-03-19 07:59:06,438 - Weighted Contributions: {'cycle_w': 0.088, 'cycle_adv_w': 0.6645, 'l1_fs_w': 0.0225, 'lumi_w': 0.0717, 'wavelet_w': 0.0574, 'vgg_w': 0.2988}
+2026-03-19 08:06:09,352 - Epoch 161 Done. Avg G Loss: 2.5691
+2026-03-19 08:06:09,352 - --- Epoch 161 Loss Breakdown ---
+2026-03-19 08:06:09,352 - Raw Losses: {'G_total': 2.5691, 'G_adv': 1.387, 'G_cycle_adv': 6.4214, 'G_cycle': 0.0883, 'G_l1_fs': 0.0227, 'G_lumi': 0.0362, 'G_wavelet': 0.1148, 'G_vgg': 0.5986}
+2026-03-19 08:06:09,352 - Weighted Contributions: {'cycle_w': 0.0883, 'cycle_adv_w': 0.6421, 'l1_fs_w': 0.0227, 'lumi_w': 0.0724, 'wavelet_w': 0.0574, 'vgg_w': 0.2993}
+2026-03-19 08:13:10,779 - Epoch 162 Done. Avg G Loss: 2.5631
+2026-03-19 08:13:10,779 - --- Epoch 162 Loss Breakdown ---
+2026-03-19 08:13:10,779 - Raw Losses: {'G_total': 2.5631, 'G_adv': 1.387, 'G_cycle_adv': 6.3915, 'G_cycle': 0.0879, 'G_l1_fs': 0.0228, 'G_lumi': 0.0361, 'G_wavelet': 0.1145, 'G_vgg': 0.5936}
+2026-03-19 08:13:10,779 - Weighted Contributions: {'cycle_w': 0.0879, 'cycle_adv_w': 0.6391, 'l1_fs_w': 0.0228, 'lumi_w': 0.0721, 'wavelet_w': 0.0572, 'vgg_w': 0.2968}
+2026-03-19 08:20:12,840 - Epoch 163 Done. Avg G Loss: 2.5712
+2026-03-19 08:20:12,840 - --- Epoch 163 Loss Breakdown ---
+2026-03-19 08:20:12,840 - Raw Losses: {'G_total': 2.5712, 'G_adv': 1.386, 'G_cycle_adv': 6.4985, 'G_cycle': 0.0861, 'G_l1_fs': 0.0222, 'G_lumi': 0.0361, 'G_wavelet': 0.1145, 'G_vgg': 0.5951}
+2026-03-19 08:20:12,840 - Weighted Contributions: {'cycle_w': 0.0861, 'cycle_adv_w': 0.6499, 'l1_fs_w': 0.0222, 'lumi_w': 0.0723, 'wavelet_w': 0.0572, 'vgg_w': 0.2976}
+2026-03-19 08:27:14,990 - Epoch 164 Done. Avg G Loss: 2.5614
+2026-03-19 08:27:14,990 - --- Epoch 164 Loss Breakdown ---
+2026-03-19 08:27:14,990 - Raw Losses: {'G_total': 2.5614, 'G_adv': 1.3872, 'G_cycle_adv': 6.3951, 'G_cycle': 0.0864, 'G_l1_fs': 0.0226, 'G_lumi': 0.0347, 'G_wavelet': 0.1145, 'G_vgg': 0.5981}
+2026-03-19 08:27:14,990 - Weighted Contributions: {'cycle_w': 0.0864, 'cycle_adv_w': 0.6395, 'l1_fs_w': 0.0226, 'lumi_w': 0.0693, 'wavelet_w': 0.0572, 'vgg_w': 0.2991}
+2026-03-19 08:34:17,719 - Epoch 165 Done. Avg G Loss: 2.5456
+2026-03-19 08:34:17,719 - --- Epoch 165 Loss Breakdown ---
+2026-03-19 08:34:17,719 - Raw Losses: {'G_total': 2.5456, 'G_adv': 1.387, 'G_cycle_adv': 6.2584, 'G_cycle': 0.0852, 'G_l1_fs': 0.0219, 'G_lumi': 0.0355, 'G_wavelet': 0.1141, 'G_vgg': 0.5953}
+2026-03-19 08:34:17,719 - Weighted Contributions: {'cycle_w': 0.0852, 'cycle_adv_w': 0.6258, 'l1_fs_w': 0.0219, 'lumi_w': 0.0709, 'wavelet_w': 0.057, 'vgg_w': 0.2976}
+2026-03-19 08:41:20,130 - Epoch 166 Done. Avg G Loss: 2.5603
+2026-03-19 08:41:20,130 - --- Epoch 166 Loss Breakdown ---
+2026-03-19 08:41:20,130 - Raw Losses: {'G_total': 2.5603, 'G_adv': 1.3857, 'G_cycle_adv': 6.409, 'G_cycle': 0.0852, 'G_l1_fs': 0.0225, 'G_lumi': 0.0343, 'G_wavelet': 0.1145, 'G_vgg': 0.6004}
+2026-03-19 08:41:20,130 - Weighted Contributions: {'cycle_w': 0.0852, 'cycle_adv_w': 0.6409, 'l1_fs_w': 0.0225, 'lumi_w': 0.0686, 'wavelet_w': 0.0572, 'vgg_w': 0.3002}
+2026-03-19 08:48:22,089 - Epoch 167 Done. Avg G Loss: 2.5257
+2026-03-19 08:48:22,089 - --- Epoch 167 Loss Breakdown ---
+2026-03-19 08:48:22,089 - Raw Losses: {'G_total': 2.5257, 'G_adv': 1.3858, 'G_cycle_adv': 6.1204, 'G_cycle': 0.0843, 'G_l1_fs': 0.022, 'G_lumi': 0.0342, 'G_wavelet': 0.1135, 'G_vgg': 0.5927}
+2026-03-19 08:48:22,089 - Weighted Contributions: {'cycle_w': 0.0843, 'cycle_adv_w': 0.612, 'l1_fs_w': 0.022, 'lumi_w': 0.0684, 'wavelet_w': 0.0568, 'vgg_w': 0.2963}
+2026-03-19 08:55:24,789 - Epoch 168 Done. Avg G Loss: 2.5418
+2026-03-19 08:55:24,789 - --- Epoch 168 Loss Breakdown ---
+2026-03-19 08:55:24,789 - Raw Losses: {'G_total': 2.5418, 'G_adv': 1.387, 'G_cycle_adv': 6.2353, 'G_cycle': 0.0835, 'G_l1_fs': 0.0218, 'G_lumi': 0.0349, 'G_wavelet': 0.1145, 'G_vgg': 0.5974}
+2026-03-19 08:55:24,789 - Weighted Contributions: {'cycle_w': 0.0835, 'cycle_adv_w': 0.6235, 'l1_fs_w': 0.0218, 'lumi_w': 0.0699, 'wavelet_w': 0.0572, 'vgg_w': 0.2987}
+2026-03-19 09:02:27,731 - Epoch 169 Done. Avg G Loss: 2.5407
+2026-03-19 09:02:27,731 - --- Epoch 169 Loss Breakdown ---
+2026-03-19 09:02:27,731 - Raw Losses: {'G_total': 2.5407, 'G_adv': 1.3864, 'G_cycle_adv': 6.2179, 'G_cycle': 0.0839, 'G_l1_fs': 0.0218, 'G_lumi': 0.0344, 'G_wavelet': 0.1156, 'G_vgg': 0.6003}
+2026-03-19 09:02:27,731 - Weighted Contributions: {'cycle_w': 0.0839, 'cycle_adv_w': 0.6218, 'l1_fs_w': 0.0218, 'lumi_w': 0.0689, 'wavelet_w': 0.0578, 'vgg_w': 0.3001}
+2026-03-19 09:09:30,387 - Epoch 170 Done. Avg G Loss: 2.5615
+2026-03-19 09:09:30,387 - --- Epoch 170 Loss Breakdown ---
+2026-03-19 09:09:30,387 - Raw Losses: {'G_total': 2.5615, 'G_adv': 1.3858, 'G_cycle_adv': 6.5105, 'G_cycle': 0.0847, 'G_l1_fs': 0.0215, 'G_lumi': 0.0341, 'G_wavelet': 0.1125, 'G_vgg': 0.5882}
+2026-03-19 09:09:30,387 - Weighted Contributions: {'cycle_w': 0.0847, 'cycle_adv_w': 0.651, 'l1_fs_w': 0.0215, 'lumi_w': 0.0682, 'wavelet_w': 0.0562, 'vgg_w': 0.2941}
+2026-03-19 09:16:35,456 - Epoch 171 Done. Avg G Loss: 2.5574
+2026-03-19 09:16:35,456 - --- Epoch 171 Loss Breakdown ---
+2026-03-19 09:16:35,456 - Raw Losses: {'G_total': 2.5574, 'G_adv': 1.3868, 'G_cycle_adv': 6.4372, 'G_cycle': 0.0832, 'G_l1_fs': 0.0216, 'G_lumi': 0.0337, 'G_wavelet': 0.1133, 'G_vgg': 0.5959}
+2026-03-19 09:16:35,456 - Weighted Contributions: {'cycle_w': 0.0832, 'cycle_adv_w': 0.6437, 'l1_fs_w': 0.0216, 'lumi_w': 0.0674, 'wavelet_w': 0.0567, 'vgg_w': 0.298}
+2026-03-19 09:23:39,580 - Epoch 172 Done. Avg G Loss: 2.5826
+2026-03-19 09:23:39,580 - --- Epoch 172 Loss Breakdown ---
+2026-03-19 09:23:39,581 - Raw Losses: {'G_total': 2.5826, 'G_adv': 1.3867, 'G_cycle_adv': 6.6503, 'G_cycle': 0.0851, 'G_l1_fs': 0.0216, 'G_lumi': 0.0338, 'G_wavelet': 0.1139, 'G_vgg': 0.5994}
+2026-03-19 09:23:39,581 - Weighted Contributions: {'cycle_w': 0.0851, 'cycle_adv_w': 0.665, 'l1_fs_w': 0.0216, 'lumi_w': 0.0676, 'wavelet_w': 0.0569, 'vgg_w': 0.2997}
+2026-03-19 09:30:44,833 - Epoch 173 Done. Avg G Loss: 2.5533
+2026-03-19 09:30:44,833 - --- Epoch 173 Loss Breakdown ---
+2026-03-19 09:30:44,833 - Raw Losses: {'G_total': 2.5533, 'G_adv': 1.387, 'G_cycle_adv': 6.3502, 'G_cycle': 0.084, 'G_l1_fs': 0.0215, 'G_lumi': 0.0348, 'G_wavelet': 0.1141, 'G_vgg': 0.5986}
+2026-03-19 09:30:44,833 - Weighted Contributions: {'cycle_w': 0.084, 'cycle_adv_w': 0.635, 'l1_fs_w': 0.0215, 'lumi_w': 0.0695, 'wavelet_w': 0.057, 'vgg_w': 0.2993}
+2026-03-19 09:37:47,836 - Epoch 174 Done. Avg G Loss: 2.5242
+2026-03-19 09:37:47,836 - --- Epoch 174 Loss Breakdown ---
+2026-03-19 09:37:47,836 - Raw Losses: {'G_total': 2.5242, 'G_adv': 1.3865, 'G_cycle_adv': 6.0972, 'G_cycle': 0.0828, 'G_l1_fs': 0.0213, 'G_lumi': 0.0337, 'G_wavelet': 0.1141, 'G_vgg': 0.5989}
+2026-03-19 09:37:47,836 - Weighted Contributions: {'cycle_w': 0.0828, 'cycle_adv_w': 0.6097, 'l1_fs_w': 0.0213, 'lumi_w': 0.0674, 'wavelet_w': 0.057, 'vgg_w': 0.2994}
+2026-03-19 09:44:56,551 - Epoch 175 Done. Avg G Loss: 2.5471
+2026-03-19 09:44:56,551 - --- Epoch 175 Loss Breakdown ---
+2026-03-19 09:44:56,551 - Raw Losses: {'G_total': 2.5471, 'G_adv': 1.3867, 'G_cycle_adv': 6.3135, 'G_cycle': 0.0836, 'G_l1_fs': 0.0216, 'G_lumi': 0.0343, 'G_wavelet': 0.1135, 'G_vgg': 0.597}
+2026-03-19 09:44:56,551 - Weighted Contributions: {'cycle_w': 0.0836, 'cycle_adv_w': 0.6313, 'l1_fs_w': 0.0216, 'lumi_w': 0.0685, 'wavelet_w': 0.0568, 'vgg_w': 0.2985}
+2026-03-19 09:52:16,649 - Epoch 176 Done. Avg G Loss: 2.5677
+2026-03-19 09:52:16,649 - --- Epoch 176 Loss Breakdown ---
+2026-03-19 09:52:16,649 - Raw Losses: {'G_total': 2.5677, 'G_adv': 1.3868, 'G_cycle_adv': 6.5787, 'G_cycle': 0.0821, 'G_l1_fs': 0.0214, 'G_lumi': 0.0326, 'G_wavelet': 0.113, 'G_vgg': 0.5956}
+2026-03-19 09:52:16,649 - Weighted Contributions: {'cycle_w': 0.0821, 'cycle_adv_w': 0.6579, 'l1_fs_w': 0.0214, 'lumi_w': 0.0652, 'wavelet_w': 0.0565, 'vgg_w': 0.2978}
+2026-03-19 09:59:34,073 - Epoch 177 Done. Avg G Loss: 2.5497
+2026-03-19 09:59:34,074 - --- Epoch 177 Loss Breakdown ---
+2026-03-19 09:59:34,074 - Raw Losses: {'G_total': 2.5497, 'G_adv': 1.3864, 'G_cycle_adv': 6.3776, 'G_cycle': 0.0835, 'G_l1_fs': 0.0214, 'G_lumi': 0.0329, 'G_wavelet': 0.113, 'G_vgg': 0.5969}
+2026-03-19 09:59:34,074 - Weighted Contributions: {'cycle_w': 0.0835, 'cycle_adv_w': 0.6378, 'l1_fs_w': 0.0214, 'lumi_w': 0.0657, 'wavelet_w': 0.0565, 'vgg_w': 0.2985}
+2026-03-19 10:06:52,304 - Epoch 178 Done. Avg G Loss: 2.5613
+2026-03-19 10:06:52,304 - --- Epoch 178 Loss Breakdown ---
+2026-03-19 10:06:52,304 - Raw Losses: {'G_total': 2.5613, 'G_adv': 1.3872, 'G_cycle_adv': 6.4617, 'G_cycle': 0.0839, 'G_l1_fs': 0.0213, 'G_lumi': 0.0332, 'G_wavelet': 0.1131, 'G_vgg': 0.5998}
+2026-03-19 10:06:52,304 - Weighted Contributions: {'cycle_w': 0.0839, 'cycle_adv_w': 0.6462, 'l1_fs_w': 0.0213, 'lumi_w': 0.0663, 'wavelet_w': 0.0566, 'vgg_w': 0.2999}
+2026-03-19 10:14:04,085 - Epoch 179 Done. Avg G Loss: 2.5606
+2026-03-19 10:14:04,085 - --- Epoch 179 Loss Breakdown ---
+2026-03-19 10:14:04,085 - Raw Losses: {'G_total': 2.5606, 'G_adv': 1.3871, 'G_cycle_adv': 6.5016, 'G_cycle': 0.0825, 'G_l1_fs': 0.0213, 'G_lumi': 0.0322, 'G_wavelet': 0.1128, 'G_vgg': 0.5974}
+2026-03-19 10:14:04,085 - Weighted Contributions: {'cycle_w': 0.0825, 'cycle_adv_w': 0.6502, 'l1_fs_w': 0.0213, 'lumi_w': 0.0644, 'wavelet_w': 0.0564, 'vgg_w': 0.2987}
+2026-03-19 10:21:13,442 - Epoch 180 Done. Avg G Loss: 2.5531
+2026-03-19 10:21:13,442 - --- Epoch 180 Loss Breakdown ---
+2026-03-19 10:21:13,442 - Raw Losses: {'G_total': 2.5531, 'G_adv': 1.3861, 'G_cycle_adv': 6.473, 'G_cycle': 0.0818, 'G_l1_fs': 0.021, 'G_lumi': 0.0318, 'G_wavelet': 0.1125, 'G_vgg': 0.5942}
+2026-03-19 10:21:13,442 - Weighted Contributions: {'cycle_w': 0.0818, 'cycle_adv_w': 0.6473, 'l1_fs_w': 0.021, 'lumi_w': 0.0636, 'wavelet_w': 0.0562, 'vgg_w': 0.2971}
+2026-03-19 10:28:21,722 - Epoch 181 Done. Avg G Loss: 2.5552
+2026-03-19 10:28:21,722 - --- Epoch 181 Loss Breakdown ---
+2026-03-19 10:28:21,722 - Raw Losses: {'G_total': 2.5552, 'G_adv': 1.3866, 'G_cycle_adv': 6.5088, 'G_cycle': 0.0811, 'G_l1_fs': 0.0209, 'G_lumi': 0.0315, 'G_wavelet': 0.1115, 'G_vgg': 0.5939}
+2026-03-19 10:28:21,722 - Weighted Contributions: {'cycle_w': 0.0811, 'cycle_adv_w': 0.6509, 'l1_fs_w': 0.0209, 'lumi_w': 0.0631, 'wavelet_w': 0.0558, 'vgg_w': 0.2969}
+2026-03-19 10:35:26,764 - Epoch 182 Done. Avg G Loss: 2.5225
+2026-03-19 10:35:26,764 - --- Epoch 182 Loss Breakdown ---
+2026-03-19 10:35:26,764 - Raw Losses: {'G_total': 2.5225, 'G_adv': 1.3869, 'G_cycle_adv': 6.1362, 'G_cycle': 0.0812, 'G_l1_fs': 0.0209, 'G_lumi': 0.0321, 'G_wavelet': 0.1124, 'G_vgg': 0.599}
+2026-03-19 10:35:26,764 - Weighted Contributions: {'cycle_w': 0.0812, 'cycle_adv_w': 0.6136, 'l1_fs_w': 0.0209, 'lumi_w': 0.0641, 'wavelet_w': 0.0562, 'vgg_w': 0.2995}
+2026-03-19 10:42:32,856 - Epoch 183 Done. Avg G Loss: 2.5445
+2026-03-19 10:42:32,857 - --- Epoch 183 Loss Breakdown ---
+2026-03-19 10:42:32,857 - Raw Losses: {'G_total': 2.5445, 'G_adv': 1.3869, 'G_cycle_adv': 6.3667, 'G_cycle': 0.0818, 'G_l1_fs': 0.0212, 'G_lumi': 0.0313, 'G_wavelet': 0.1126, 'G_vgg': 0.5983}
+2026-03-19 10:42:32,857 - Weighted Contributions: {'cycle_w': 0.0818, 'cycle_adv_w': 0.6367, 'l1_fs_w': 0.0212, 'lumi_w': 0.0625, 'wavelet_w': 0.0563, 'vgg_w': 0.2991}
+2026-03-19 10:49:38,005 - Epoch 184 Done. Avg G Loss: 2.4992
+2026-03-19 10:49:38,006 - --- Epoch 184 Loss Breakdown ---
+2026-03-19 10:49:38,006 - Raw Losses: {'G_total': 2.4992, 'G_adv': 1.3869, 'G_cycle_adv': 5.9333, 'G_cycle': 0.0805, 'G_l1_fs': 0.0208, 'G_lumi': 0.0317, 'G_wavelet': 0.112, 'G_vgg': 0.5965}
+2026-03-19 10:49:38,006 - Weighted Contributions: {'cycle_w': 0.0805, 'cycle_adv_w': 0.5933, 'l1_fs_w': 0.0208, 'lumi_w': 0.0634, 'wavelet_w': 0.056, 'vgg_w': 0.2982}
+2026-03-19 10:56:44,087 - Epoch 185 Done. Avg G Loss: 2.4828
+2026-03-19 10:56:44,088 - --- Epoch 185 Loss Breakdown ---
+2026-03-19 10:56:44,088 - Raw Losses: {'G_total': 2.4828, 'G_adv': 1.3867, 'G_cycle_adv': 5.813, 'G_cycle': 0.0799, 'G_l1_fs': 0.0205, 'G_lumi': 0.0316, 'G_wavelet': 0.1112, 'G_vgg': 0.5911}
+2026-03-19 10:56:44,088 - Weighted Contributions: {'cycle_w': 0.0799, 'cycle_adv_w': 0.5813, 'l1_fs_w': 0.0205, 'lumi_w': 0.0632, 'wavelet_w': 0.0556, 'vgg_w': 0.2956}
+2026-03-19 11:03:50,832 - Epoch 186 Done. Avg G Loss: 2.4976
+2026-03-19 11:03:50,832 - --- Epoch 186 Loss Breakdown ---
+2026-03-19 11:03:50,833 - Raw Losses: {'G_total': 2.4976, 'G_adv': 1.3865, 'G_cycle_adv': 6.003, 'G_cycle': 0.0787, 'G_l1_fs': 0.0203, 'G_lumi': 0.0306, 'G_wavelet': 0.1113, 'G_vgg': 0.5902}
+2026-03-19 11:03:50,833 - Weighted Contributions: {'cycle_w': 0.0787, 'cycle_adv_w': 0.6003, 'l1_fs_w': 0.0203, 'lumi_w': 0.0611, 'wavelet_w': 0.0557, 'vgg_w': 0.2951}
+2026-03-19 11:10:56,276 - Epoch 187 Done. Avg G Loss: 2.5087
+2026-03-19 11:10:56,276 - --- Epoch 187 Loss Breakdown ---
+2026-03-19 11:10:56,276 - Raw Losses: {'G_total': 2.5087, 'G_adv': 1.3865, 'G_cycle_adv': 6.112, 'G_cycle': 0.0783, 'G_l1_fs': 0.0202, 'G_lumi': 0.0305, 'G_wavelet': 0.1114, 'G_vgg': 0.592}
+2026-03-19 11:10:56,276 - Weighted Contributions: {'cycle_w': 0.0783, 'cycle_adv_w': 0.6112, 'l1_fs_w': 0.0202, 'lumi_w': 0.0609, 'wavelet_w': 0.0557, 'vgg_w': 0.296}
+2026-03-19 11:18:03,537 - Epoch 188 Done. Avg G Loss: 2.5097
+2026-03-19 11:18:03,537 - --- Epoch 188 Loss Breakdown ---
+2026-03-19 11:18:03,537 - Raw Losses: {'G_total': 2.5097, 'G_adv': 1.3874, 'G_cycle_adv': 6.0664, 'G_cycle': 0.079, 'G_l1_fs': 0.0201, 'G_lumi': 0.0318, 'G_wavelet': 0.112, 'G_vgg': 0.594}
+2026-03-19 11:18:03,537 - Weighted Contributions: {'cycle_w': 0.079, 'cycle_adv_w': 0.6066, 'l1_fs_w': 0.0201, 'lumi_w': 0.0636, 'wavelet_w': 0.056, 'vgg_w': 0.297}
+2026-03-19 11:25:08,298 - Epoch 189 Done. Avg G Loss: 2.5028
+2026-03-19 11:25:08,298 - --- Epoch 189 Loss Breakdown ---
+2026-03-19 11:25:08,298 - Raw Losses: {'G_total': 2.5028, 'G_adv': 1.3866, 'G_cycle_adv': 6.0566, 'G_cycle': 0.0783, 'G_l1_fs': 0.0202, 'G_lumi': 0.0305, 'G_wavelet': 0.1107, 'G_vgg': 0.5915}
+2026-03-19 11:25:08,298 - Weighted Contributions: {'cycle_w': 0.0783, 'cycle_adv_w': 0.6057, 'l1_fs_w': 0.0202, 'lumi_w': 0.0609, 'wavelet_w': 0.0554, 'vgg_w': 0.2957}
+2026-03-19 11:32:14,017 - Epoch 190 Done. Avg G Loss: 2.5243
+2026-03-19 11:32:14,017 - --- Epoch 190 Loss Breakdown ---
+2026-03-19 11:32:14,017 - Raw Losses: {'G_total': 2.5243, 'G_adv': 1.3872, 'G_cycle_adv': 6.252, 'G_cycle': 0.0795, 'G_l1_fs': 0.0202, 'G_lumi': 0.0297, 'G_wavelet': 0.1111, 'G_vgg': 0.5946}
+2026-03-19 11:32:14,017 - Weighted Contributions: {'cycle_w': 0.0795, 'cycle_adv_w': 0.6252, 'l1_fs_w': 0.0202, 'lumi_w': 0.0594, 'wavelet_w': 0.0555, 'vgg_w': 0.2973}
+2026-03-19 11:39:20,428 - Epoch 191 Done. Avg G Loss: 2.5278
+2026-03-19 11:39:20,428 - --- Epoch 191 Loss Breakdown ---
+2026-03-19 11:39:20,428 - Raw Losses: {'G_total': 2.5278, 'G_adv': 1.386, 'G_cycle_adv': 6.3132, 'G_cycle': 0.0777, 'G_l1_fs': 0.0201, 'G_lumi': 0.0298, 'G_wavelet': 0.1113, 'G_vgg': 0.5951}
+2026-03-19 11:39:20,428 - Weighted Contributions: {'cycle_w': 0.0777, 'cycle_adv_w': 0.6313, 'l1_fs_w': 0.0201, 'lumi_w': 0.0595, 'wavelet_w': 0.0556, 'vgg_w': 0.2976}
+2026-03-19 11:46:25,174 - Epoch 192 Done. Avg G Loss: 2.5045
+2026-03-19 11:46:25,175 - --- Epoch 192 Loss Breakdown ---
+2026-03-19 11:46:25,175 - Raw Losses: {'G_total': 2.5045, 'G_adv': 1.3865, 'G_cycle_adv': 6.0451, 'G_cycle': 0.0788, 'G_l1_fs': 0.02, 'G_lumi': 0.0311, 'G_wavelet': 0.1116, 'G_vgg': 0.5935}
+2026-03-19 11:46:25,175 - Weighted Contributions: {'cycle_w': 0.0788, 'cycle_adv_w': 0.6045, 'l1_fs_w': 0.02, 'lumi_w': 0.0621, 'wavelet_w': 0.0558, 'vgg_w': 0.2967}
+2026-03-19 11:53:31,683 - Epoch 193 Done. Avg G Loss: 2.4858
+2026-03-19 11:53:31,684 - --- Epoch 193 Loss Breakdown ---
+2026-03-19 11:53:31,684 - Raw Losses: {'G_total': 2.4858, 'G_adv': 1.3866, 'G_cycle_adv': 5.9153, 'G_cycle': 0.077, 'G_l1_fs': 0.0198, 'G_lumi': 0.0304, 'G_wavelet': 0.1103, 'G_vgg': 0.5899}
+2026-03-19 11:53:31,684 - Weighted Contributions: {'cycle_w': 0.077, 'cycle_adv_w': 0.5915, 'l1_fs_w': 0.0198, 'lumi_w': 0.0608, 'wavelet_w': 0.0551, 'vgg_w': 0.2949}
+2026-03-19 12:00:36,224 - Epoch 194 Done. Avg G Loss: 2.5018
+2026-03-19 12:00:36,225 - --- Epoch 194 Loss Breakdown ---
+2026-03-19 12:00:36,225 - Raw Losses: {'G_total': 2.5018, 'G_adv': 1.3862, 'G_cycle_adv': 6.0904, 'G_cycle': 0.0768, 'G_l1_fs': 0.0199, 'G_lumi': 0.0298, 'G_wavelet': 0.1102, 'G_vgg': 0.5903}
+2026-03-19 12:00:36,225 - Weighted Contributions: {'cycle_w': 0.0768, 'cycle_adv_w': 0.609, 'l1_fs_w': 0.0199, 'lumi_w': 0.0597, 'wavelet_w': 0.0551, 'vgg_w': 0.2952}
+2026-03-19 12:07:42,070 - Epoch 195 Done. Avg G Loss: 2.4871
+2026-03-19 12:07:42,070 - --- Epoch 195 Loss Breakdown ---
+2026-03-19 12:07:42,070 - Raw Losses: {'G_total': 2.4871, 'G_adv': 1.3864, 'G_cycle_adv': 5.9338, 'G_cycle': 0.0765, 'G_l1_fs': 0.0198, 'G_lumi': 0.0301, 'G_wavelet': 0.1107, 'G_vgg': 0.5912}
+2026-03-19 12:07:42,070 - Weighted Contributions: {'cycle_w': 0.0765, 'cycle_adv_w': 0.5934, 'l1_fs_w': 0.0198, 'lumi_w': 0.0601, 'wavelet_w': 0.0554, 'vgg_w': 0.2956}
+2026-03-19 12:14:50,849 - Epoch 196 Done. Avg G Loss: 2.4948
+2026-03-19 12:14:50,850 - --- Epoch 196 Loss Breakdown ---
+2026-03-19 12:14:50,850 - Raw Losses: {'G_total': 2.4948, 'G_adv': 1.386, 'G_cycle_adv': 6.047, 'G_cycle': 0.0762, 'G_l1_fs': 0.0197, 'G_lumi': 0.0286, 'G_wavelet': 0.1101, 'G_vgg': 0.5915}
+2026-03-19 12:14:50,850 - Weighted Contributions: {'cycle_w': 0.0762, 'cycle_adv_w': 0.6047, 'l1_fs_w': 0.0197, 'lumi_w': 0.0573, 'wavelet_w': 0.055, 'vgg_w': 0.2957}
+2026-03-19 12:21:56,845 - Epoch 197 Done. Avg G Loss: 2.4797
+2026-03-19 12:21:56,845 - --- Epoch 197 Loss Breakdown ---
+2026-03-19 12:21:56,845 - Raw Losses: {'G_total': 2.4797, 'G_adv': 1.3869, 'G_cycle_adv': 5.9035, 'G_cycle': 0.0758, 'G_l1_fs': 0.0195, 'G_lumi': 0.0286, 'G_wavelet': 0.1097, 'G_vgg': 0.5903}
+2026-03-19 12:21:56,845 - Weighted Contributions: {'cycle_w': 0.0758, 'cycle_adv_w': 0.5903, 'l1_fs_w': 0.0195, 'lumi_w': 0.0572, 'wavelet_w': 0.0549, 'vgg_w': 0.2951}
+2026-03-19 12:29:03,768 - Epoch 198 Done. Avg G Loss: 2.4749
+2026-03-19 12:29:03,768 - --- Epoch 198 Loss Breakdown ---
+2026-03-19 12:29:03,768 - Raw Losses: {'G_total': 2.4749, 'G_adv': 1.3863, 'G_cycle_adv': 5.8881, 'G_cycle': 0.0748, 'G_l1_fs': 0.0196, 'G_lumi': 0.0288, 'G_wavelet': 0.1095, 'G_vgg': 0.5861}
+2026-03-19 12:29:03,768 - Weighted Contributions: {'cycle_w': 0.0748, 'cycle_adv_w': 0.5888, 'l1_fs_w': 0.0196, 'lumi_w': 0.0577, 'wavelet_w': 0.0547, 'vgg_w': 0.293}
+2026-03-19 12:36:09,047 - Epoch 199 Done. Avg G Loss: 2.4678
+2026-03-19 12:36:09,047 - --- Epoch 199 Loss Breakdown ---
+2026-03-19 12:36:09,047 - Raw Losses: {'G_total': 2.4678, 'G_adv': 1.3863, 'G_cycle_adv': 5.833, 'G_cycle': 0.0738, 'G_l1_fs': 0.0191, 'G_lumi': 0.0293, 'G_wavelet': 0.1091, 'G_vgg': 0.5843}
+2026-03-19 12:36:09,047 - Weighted Contributions: {'cycle_w': 0.0738, 'cycle_adv_w': 0.5833, 'l1_fs_w': 0.0191, 'lumi_w': 0.0586, 'wavelet_w': 0.0545, 'vgg_w': 0.2921}
+2026-03-19 12:43:16,720 - Epoch 200 Done. Avg G Loss: 2.4801
+2026-03-19 12:43:16,720 - --- Epoch 200 Loss Breakdown ---
+2026-03-19 12:43:16,720 - Raw Losses: {'G_total': 2.4801, 'G_adv': 1.3866, 'G_cycle_adv': 5.8994, 'G_cycle': 0.0755, 'G_l1_fs': 0.0193, 'G_lumi': 0.0298, 'G_wavelet': 0.1096, 'G_vgg': 0.5886}
+2026-03-19 12:43:16,720 - Weighted Contributions: {'cycle_w': 0.0755, 'cycle_adv_w': 0.5899, 'l1_fs_w': 0.0193, 'lumi_w': 0.0597, 'wavelet_w': 0.0548, 'vgg_w': 0.2943}
+2026-03-19 12:50:29,121 - Epoch 201 Done. Avg G Loss: 2.4897
+2026-03-19 12:50:29,121 - --- Epoch 201 Loss Breakdown ---
+2026-03-19 12:50:29,121 - Raw Losses: {'G_total': 2.4897, 'G_adv': 1.3867, 'G_cycle_adv': 6.0018, 'G_cycle': 0.0745, 'G_l1_fs': 0.0195, 'G_lumi': 0.0291, 'G_wavelet': 0.1099, 'G_vgg': 0.5913}
+2026-03-19 12:50:29,121 - Weighted Contributions: {'cycle_w': 0.0745, 'cycle_adv_w': 0.6002, 'l1_fs_w': 0.0195, 'lumi_w': 0.0582, 'wavelet_w': 0.055, 'vgg_w': 0.2956}
+2026-03-19 12:57:46,777 - Epoch 202 Done. Avg G Loss: 2.4844
+2026-03-19 12:57:46,777 - --- Epoch 202 Loss Breakdown ---
+2026-03-19 12:57:46,777 - Raw Losses: {'G_total': 2.4844, 'G_adv': 1.3866, 'G_cycle_adv': 5.9717, 'G_cycle': 0.075, 'G_l1_fs': 0.0191, 'G_lumi': 0.0281, 'G_wavelet': 0.1098, 'G_vgg': 0.5907}
+2026-03-19 12:57:46,778 - Weighted Contributions: {'cycle_w': 0.075, 'cycle_adv_w': 0.5972, 'l1_fs_w': 0.0191, 'lumi_w': 0.0562, 'wavelet_w': 0.0549, 'vgg_w': 0.2953}
+2026-03-19 13:05:08,512 - Epoch 203 Done. Avg G Loss: 2.4452
+2026-03-19 13:05:08,512 - --- Epoch 203 Loss Breakdown ---
+2026-03-19 13:05:08,513 - Raw Losses: {'G_total': 2.4452, 'G_adv': 1.3868, 'G_cycle_adv': 5.6357, 'G_cycle': 0.0736, 'G_l1_fs': 0.0188, 'G_lumi': 0.0281, 'G_wavelet': 0.1088, 'G_vgg': 0.5837}
+2026-03-19 13:05:08,513 - Weighted Contributions: {'cycle_w': 0.0736, 'cycle_adv_w': 0.5636, 'l1_fs_w': 0.0188, 'lumi_w': 0.0562, 'wavelet_w': 0.0544, 'vgg_w': 0.2918}
+2026-03-19 13:12:28,924 - Epoch 204 Done. Avg G Loss: 2.4735
+2026-03-19 13:12:28,925 - --- Epoch 204 Loss Breakdown ---
+2026-03-19 13:12:28,925 - Raw Losses: {'G_total': 2.4735, 'G_adv': 1.387, 'G_cycle_adv': 5.9004, 'G_cycle': 0.0746, 'G_l1_fs': 0.0192, 'G_lumi': 0.028, 'G_wavelet': 0.1086, 'G_vgg': 0.5849}
+2026-03-19 13:12:28,925 - Weighted Contributions: {'cycle_w': 0.0746, 'cycle_adv_w': 0.59, 'l1_fs_w': 0.0192, 'lumi_w': 0.056, 'wavelet_w': 0.0543, 'vgg_w': 0.2924}
+2026-03-19 13:19:48,941 - Epoch 205 Done. Avg G Loss: 2.4618
+2026-03-19 13:19:48,941 - --- Epoch 205 Loss Breakdown ---
+2026-03-19 13:19:48,941 - Raw Losses: {'G_total': 2.4618, 'G_adv': 1.3863, 'G_cycle_adv': 5.8231, 'G_cycle': 0.0738, 'G_l1_fs': 0.0189, 'G_lumi': 0.0282, 'G_wavelet': 0.1075, 'G_vgg': 0.5804}
+2026-03-19 13:19:48,941 - Weighted Contributions: {'cycle_w': 0.0738, 'cycle_adv_w': 0.5823, 'l1_fs_w': 0.0189, 'lumi_w': 0.0565, 'wavelet_w': 0.0538, 'vgg_w': 0.2902}
+2026-03-19 13:27:09,264 - Epoch 206 Done. Avg G Loss: 2.4712
+2026-03-19 13:27:09,264 - --- Epoch 206 Loss Breakdown ---
+2026-03-19 13:27:09,264 - Raw Losses: {'G_total': 2.4712, 'G_adv': 1.3867, 'G_cycle_adv': 5.8919, 'G_cycle': 0.0735, 'G_l1_fs': 0.0187, 'G_lumi': 0.028, 'G_wavelet': 0.1087, 'G_vgg': 0.5856}
+2026-03-19 13:27:09,264 - Weighted Contributions: {'cycle_w': 0.0735, 'cycle_adv_w': 0.5892, 'l1_fs_w': 0.0187, 'lumi_w': 0.0559, 'wavelet_w': 0.0543, 'vgg_w': 0.2928}
+2026-03-19 13:34:31,037 - Epoch 207 Done. Avg G Loss: 2.4506
+2026-03-19 13:34:31,037 - --- Epoch 207 Loss Breakdown ---
+2026-03-19 13:34:31,037 - Raw Losses: {'G_total': 2.4506, 'G_adv': 1.3861, 'G_cycle_adv': 5.7465, 'G_cycle': 0.0724, 'G_l1_fs': 0.0188, 'G_lumi': 0.0269, 'G_wavelet': 0.1076, 'G_vgg': 0.5819}
+2026-03-19 13:34:31,037 - Weighted Contributions: {'cycle_w': 0.0724, 'cycle_adv_w': 0.5747, 'l1_fs_w': 0.0188, 'lumi_w': 0.0539, 'wavelet_w': 0.0538, 'vgg_w': 0.2909}
+2026-03-19 13:41:54,061 - Epoch 208 Done. Avg G Loss: 2.4579
+2026-03-19 13:41:54,061 - --- Epoch 208 Loss Breakdown ---
+2026-03-19 13:41:54,062 - Raw Losses: {'G_total': 2.4579, 'G_adv': 1.3866, 'G_cycle_adv': 5.8271, 'G_cycle': 0.0726, 'G_l1_fs': 0.0187, 'G_lumi': 0.0272, 'G_wavelet': 0.107, 'G_vgg': 0.579}
+2026-03-19 13:41:54,062 - Weighted Contributions: {'cycle_w': 0.0726, 'cycle_adv_w': 0.5827, 'l1_fs_w': 0.0187, 'lumi_w': 0.0543, 'wavelet_w': 0.0535, 'vgg_w': 0.2895}
+2026-03-19 13:49:16,638 - Epoch 209 Done. Avg G Loss: 2.4974
+2026-03-19 13:49:16,638 - --- Epoch 209 Loss Breakdown ---
+2026-03-19 13:49:16,638 - Raw Losses: {'G_total': 2.4974, 'G_adv': 1.3865, 'G_cycle_adv': 6.1744, 'G_cycle': 0.0733, 'G_l1_fs': 0.019, 'G_lumi': 0.0272, 'G_wavelet': 0.1079, 'G_vgg': 0.5857}
+2026-03-19 13:49:16,638 - Weighted Contributions: {'cycle_w': 0.0733, 'cycle_adv_w': 0.6174, 'l1_fs_w': 0.019, 'lumi_w': 0.0544, 'wavelet_w': 0.0539, 'vgg_w': 0.2929}
+2026-03-19 13:56:39,436 - Epoch 210 Done. Avg G Loss: 2.4440
+2026-03-19 13:56:39,436 - --- Epoch 210 Loss Breakdown ---
+2026-03-19 13:56:39,437 - Raw Losses: {'G_total': 2.444, 'G_adv': 1.3869, 'G_cycle_adv': 5.6352, 'G_cycle': 0.0741, 'G_l1_fs': 0.0189, 'G_lumi': 0.027, 'G_wavelet': 0.1078, 'G_vgg': 0.5856}
+2026-03-19 13:56:39,437 - Weighted Contributions: {'cycle_w': 0.0741, 'cycle_adv_w': 0.5635, 'l1_fs_w': 0.0189, 'lumi_w': 0.0539, 'wavelet_w': 0.0539, 'vgg_w': 0.2928}
+2026-03-19 14:04:02,509 - Epoch 211 Done. Avg G Loss: 2.4575
+2026-03-19 14:04:02,509 - --- Epoch 211 Loss Breakdown ---
+2026-03-19 14:04:02,509 - Raw Losses: {'G_total': 2.4575, 'G_adv': 1.3859, 'G_cycle_adv': 5.8261, 'G_cycle': 0.0723, 'G_l1_fs': 0.0184, 'G_lumi': 0.0268, 'G_wavelet': 0.1075, 'G_vgg': 0.5822}
+2026-03-19 14:04:02,509 - Weighted Contributions: {'cycle_w': 0.0723, 'cycle_adv_w': 0.5826, 'l1_fs_w': 0.0184, 'lumi_w': 0.0535, 'wavelet_w': 0.0538, 'vgg_w': 0.2911}
+2026-03-19 14:11:24,903 - Epoch 212 Done. Avg G Loss: 2.4681
+2026-03-19 14:11:24,903 - --- Epoch 212 Loss Breakdown ---
+2026-03-19 14:11:24,903 - Raw Losses: {'G_total': 2.4681, 'G_adv': 1.3879, 'G_cycle_adv': 5.8838, 'G_cycle': 0.0723, 'G_l1_fs': 0.0186, 'G_lumi': 0.0269, 'G_wavelet': 0.108, 'G_vgg': 0.586}
+2026-03-19 14:11:24,903 - Weighted Contributions: {'cycle_w': 0.0723, 'cycle_adv_w': 0.5884, 'l1_fs_w': 0.0186, 'lumi_w': 0.0538, 'wavelet_w': 0.054, 'vgg_w': 0.293}
+2026-03-19 14:18:48,217 - Epoch 213 Done. Avg G Loss: 2.4848
+2026-03-19 14:18:48,218 - --- Epoch 213 Loss Breakdown ---
+2026-03-19 14:18:48,218 - Raw Losses: {'G_total': 2.4848, 'G_adv': 1.3877, 'G_cycle_adv': 5.9993, 'G_cycle': 0.0723, 'G_l1_fs': 0.0188, 'G_lumi': 0.0272, 'G_wavelet': 0.1093, 'G_vgg': 0.5939}
+2026-03-19 14:18:48,218 - Weighted Contributions: {'cycle_w': 0.0723, 'cycle_adv_w': 0.5999, 'l1_fs_w': 0.0188, 'lumi_w': 0.0545, 'wavelet_w': 0.0546, 'vgg_w': 0.297}
+2026-03-19 14:26:10,955 - Epoch 214 Done. Avg G Loss: 2.4762
+2026-03-19 14:26:10,955 - --- Epoch 214 Loss Breakdown ---
+2026-03-19 14:26:10,955 - Raw Losses: {'G_total': 2.4762, 'G_adv': 1.3875, 'G_cycle_adv': 5.8769, 'G_cycle': 0.0731, 'G_l1_fs': 0.0187, 'G_lumi': 0.0271, 'G_wavelet': 0.1098, 'G_vgg': 0.5999}
+2026-03-19 14:26:10,955 - Weighted Contributions: {'cycle_w': 0.0731, 'cycle_adv_w': 0.5877, 'l1_fs_w': 0.0187, 'lumi_w': 0.0543, 'wavelet_w': 0.0549, 'vgg_w': 0.2999}
+2026-03-19 14:33:33,222 - Epoch 215 Done. Avg G Loss: 2.4730
+2026-03-19 14:33:33,222 - --- Epoch 215 Loss Breakdown ---
+2026-03-19 14:33:33,223 - Raw Losses: {'G_total': 2.473, 'G_adv': 1.3874, 'G_cycle_adv': 5.8593, 'G_cycle': 0.0729, 'G_l1_fs': 0.0188, 'G_lumi': 0.0268, 'G_wavelet': 0.1096, 'G_vgg': 0.5991}
+2026-03-19 14:33:33,223 - Weighted Contributions: {'cycle_w': 0.0729, 'cycle_adv_w': 0.5859, 'l1_fs_w': 0.0188, 'lumi_w': 0.0536, 'wavelet_w': 0.0548, 'vgg_w': 0.2995}
+2026-03-19 14:40:56,744 - Epoch 216 Done. Avg G Loss: 2.4595
+2026-03-19 14:40:56,745 - --- Epoch 216 Loss Breakdown ---
+2026-03-19 14:40:56,745 - Raw Losses: {'G_total': 2.4595, 'G_adv': 1.387, 'G_cycle_adv': 5.7836, 'G_cycle': 0.0716, 'G_l1_fs': 0.0189, 'G_lumi': 0.0262, 'G_wavelet': 0.1088, 'G_vgg': 0.5938}
+2026-03-19 14:40:56,745 - Weighted Contributions: {'cycle_w': 0.0716, 'cycle_adv_w': 0.5784, 'l1_fs_w': 0.0189, 'lumi_w': 0.0523, 'wavelet_w': 0.0544, 'vgg_w': 0.2969}
+2026-03-19 14:48:19,640 - Epoch 217 Done. Avg G Loss: 2.4630
+2026-03-19 14:48:19,640 - --- Epoch 217 Loss Breakdown ---
+2026-03-19 14:48:19,641 - Raw Losses: {'G_total': 2.463, 'G_adv': 1.3886, 'G_cycle_adv': 5.8126, 'G_cycle': 0.0718, 'G_l1_fs': 0.0187, 'G_lumi': 0.0262, 'G_wavelet': 0.1083, 'G_vgg': 0.5919}
+2026-03-19 14:48:19,641 - Weighted Contributions: {'cycle_w': 0.0718, 'cycle_adv_w': 0.5813, 'l1_fs_w': 0.0187, 'lumi_w': 0.0524, 'wavelet_w': 0.0542, 'vgg_w': 0.296}
+2026-03-19 14:55:38,214 - Epoch 218 Done. Avg G Loss: 2.4688
+2026-03-19 14:55:38,215 - --- Epoch 218 Loss Breakdown ---
+2026-03-19 14:55:38,215 - Raw Losses: {'G_total': 2.4688, 'G_adv': 1.3864, 'G_cycle_adv': 5.9149, 'G_cycle': 0.0713, 'G_l1_fs': 0.0183, 'G_lumi': 0.0263, 'G_wavelet': 0.1082, 'G_vgg': 0.5894}
+2026-03-19 14:55:38,215 - Weighted Contributions: {'cycle_w': 0.0713, 'cycle_adv_w': 0.5915, 'l1_fs_w': 0.0183, 'lumi_w': 0.0525, 'wavelet_w': 0.0541, 'vgg_w': 0.2947}
+2026-03-19 15:02:57,705 - Epoch 219 Done. Avg G Loss: 2.4715
+2026-03-19 15:02:57,705 - --- Epoch 219 Loss Breakdown ---
+2026-03-19 15:02:57,705 - Raw Losses: {'G_total': 2.4715, 'G_adv': 1.3875, 'G_cycle_adv': 5.9272, 'G_cycle': 0.0712, 'G_l1_fs': 0.0182, 'G_lumi': 0.0269, 'G_wavelet': 0.1083, 'G_vgg': 0.5875}
+2026-03-19 15:02:57,705 - Weighted Contributions: {'cycle_w': 0.0712, 'cycle_adv_w': 0.5927, 'l1_fs_w': 0.0182, 'lumi_w': 0.0539, 'wavelet_w': 0.0541, 'vgg_w': 0.2938}
+2026-03-19 15:10:17,961 - Epoch 220 Done. Avg G Loss: 2.4660
+2026-03-19 15:10:17,961 - --- Epoch 220 Loss Breakdown ---
+2026-03-19 15:10:17,962 - Raw Losses: {'G_total': 2.466, 'G_adv': 1.3873, 'G_cycle_adv': 5.9012, 'G_cycle': 0.0702, 'G_l1_fs': 0.0183, 'G_lumi': 0.0257, 'G_wavelet': 0.1078, 'G_vgg': 0.5896}
+2026-03-19 15:10:17,962 - Weighted Contributions: {'cycle_w': 0.0702, 'cycle_adv_w': 0.5901, 'l1_fs_w': 0.0183, 'lumi_w': 0.0514, 'wavelet_w': 0.0539, 'vgg_w': 0.2948}
+2026-03-19 15:17:37,041 - Epoch 221 Done. Avg G Loss: 2.4468
+2026-03-19 15:17:37,042 - --- Epoch 221 Loss Breakdown ---
+2026-03-19 15:17:37,042 - Raw Losses: {'G_total': 2.4468, 'G_adv': 1.3871, 'G_cycle_adv': 5.7057, 'G_cycle': 0.0703, 'G_l1_fs': 0.0183, 'G_lumi': 0.0262, 'G_wavelet': 0.1081, 'G_vgg': 0.5881}
+2026-03-19 15:17:37,042 - Weighted Contributions: {'cycle_w': 0.0703, 'cycle_adv_w': 0.5706, 'l1_fs_w': 0.0183, 'lumi_w': 0.0525, 'wavelet_w': 0.054, 'vgg_w': 0.294}
