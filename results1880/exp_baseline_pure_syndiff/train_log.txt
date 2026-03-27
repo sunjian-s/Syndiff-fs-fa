@@ -1,0 +1,6 @@
+2026-03-27 18:33:43,667 - Start Training on Rank 0
+2026-03-27 18:33:47,167 - train data size:470
+2026-03-27 18:33:47,168 - val data size:15
+2026-03-27 18:34:51,715 - Start Training on Rank 0
+2026-03-27 18:34:54,904 - train data size:470
+2026-03-27 18:34:54,904 - val data size:15

@@ -15,170 +15,8 @@ import torch.distributed as dist
 import shutil
 from skimage.metrics import peak_signal_noise_ratio as psnr
 
-# ✅【新增】导入进度条和工具箱
 from tqdm import tqdm
-from utils_train import get_logger, make_exp_dir, LossTracker
-
-import torch
-import torch.nn as nn
-import torchvision.models as models
-
-class VGG19PerceptualLoss(nn.Module):
-    def __init__(
-        self,
-        device,
-        use_layer4=False,
-        layer_weights=None,
-    ):
-        super().__init__()
-        vgg = models.vgg19(weights=models.VGG19_Weights.IMAGENET1K_V1).features
-        self.slice1 = nn.Sequential(*list(vgg.children())[:4])    # relu1_2
-        self.slice2 = nn.Sequential(*list(vgg.children())[4:9])   # relu2_2
-        self.slice3 = nn.Sequential(*list(vgg.children())[9:18])  # relu3_4
-        self.use_layer4 = use_layer4
-        if self.use_layer4:
-            self.slice4 = nn.Sequential(*list(vgg.children())[18:27])  # relu4_4
-
-        for param in self.parameters():
-            param.requires_grad = False
-
-        if layer_weights is None:
-            if self.use_layer4:
-                self.layer_weights = [1.0, 1.0, 0.5, 0.25]
-            else:
-                self.layer_weights = [1.0, 1.0, 0.5]
-        else:
-            self.layer_weights = layer_weights
-
-        self.register_buffer(
-            "mean",
-            torch.tensor([0.485, 0.456, 0.406]).view(1, 3, 1, 1)
-        )
-        self.register_buffer(
-            "std",
-            torch.tensor([0.229, 0.224, 0.225]).view(1, 3, 1, 1)
-        )
-
-        self.to(device)
-
-    def _preprocess(self, x):
-        # 假设输入范围 [-1, 1]
-        x = (x + 1.0) / 2.0
-        x = torch.clamp(x, 0.0, 1.0)
-
-        # 单通道复制成 3 通道
-        if x.size(1) == 1:
-            x = x.repeat(1, 3, 1, 1)
-        elif x.size(1) > 3:
-            x = x[:, :3, :, :]
-
-        x = (x - self.mean) / self.std
-        return x
-
-    def forward(self, gen_img, real_img):
-        x = self._preprocess(gen_img)
-        y = self._preprocess(real_img)
-
-        h_x1 = self.slice1(x)
-        h_y1 = self.slice1(y)
-
-        h_x2 = self.slice2(h_x1)
-        h_y2 = self.slice2(h_y1)
-
-        h_x3 = self.slice3(h_x2)
-        h_y3 = self.slice3(h_y2)
-
-        loss = (
-            self.layer_weights[0] * F.l1_loss(h_x1, h_y1) +
-            self.layer_weights[1] * F.l1_loss(h_x2, h_y2) +
-            self.layer_weights[2] * F.l1_loss(h_x3, h_y3)
-        )
-
-        if self.use_layer4:
-            h_x4 = self.slice4(h_x3)
-            h_y4 = self.slice4(h_y3)
-            loss = loss + self.layer_weights[3] * F.l1_loss(h_x4, h_y4)
-
-        return loss
-# ============================================
-# 【新增】1. 小波损失函数 (Wavelet Loss)
-import torch
-import torch.nn as nn
-import torch.nn.functional as F
-
-class WaveletLoss(nn.Module):
-    def __init__(self, device='cuda', weight_low=1.0, weight_high=2.0):
-        super(WaveletLoss, self).__init__()
-        self.device = device
-        # 【修正】将高频惩罚从 10.0 降维至 2.0，防止高频特征劫持梯度
-        self.weight_low = weight_low
-        self.weight_high = weight_high
-
-    def forward(self, input, target):
-        # 兼容1/3通道转灰度 (输入数据范围为 [-1, 1])
-        def to_gray(x):
-            if x.shape[1] == 1:
-                return x 
-            elif x.shape[1] == 3:
-                # 即使在 [-1, 1] 空间，线性加权依然成立
-                return 0.299 * x[:,0,:,:] + 0.587 * x[:,1,:,:] + 0.114 * x[:,2,:,:]
-            else:
-                raise ValueError(f"不支持的通道数：{x.shape[1]}")
-        
-        input_gray = to_gray(input).unsqueeze(1)
-        target_gray = to_gray(target).unsqueeze(1)
-
-        # 提取低频 (LL)
-        input_LL = F.avg_pool2d(input_gray, kernel_size=2, stride=2)
-        target_LL = F.avg_pool2d(target_gray, kernel_size=2, stride=2)
-        
-        # 必须使用 bilinear 防御棋盘格伪影
-        input_up = F.interpolate(input_LL, scale_factor=2, mode='bilinear', align_corners=False)
-        target_up = F.interpolate(target_LL, scale_factor=2, mode='bilinear', align_corners=False)
-        
-        # 提取高频 (High)
-        input_high = input_gray - input_up
-        target_high = target_gray - target_up
-
-        loss_low = F.l1_loss(input_LL, target_LL)
-        loss_high = F.l1_loss(input_high, target_high)
-        
-        return self.weight_low * loss_low + self.weight_high * loss_high
-# ============================================
-# 【新增】2. 亮度加权损失 (LFSG的核心 - 亮度部分)
-# ============================================
-import torch
-import torch.nn as nn
-
-class LuminanceWeightedLoss(nn.Module):
-    """高亮/极暗极值惩罚：附带严密的 FOV 背景拦截防御"""
-    def __init__(self, alpha=3.0, is_target_ffa=True, bg_threshold=-0.9):
-        super().__init__()
-        # 【修正】将 alpha 从 10.0 降至 3.0，提供适度注意力引导，避免梯度爆炸
-        self.alpha = alpha
-        self.is_target_ffa = is_target_ffa
-        # 在严格的 [-1, 1] 空间中，黑边绝对值为 -1.0，-0.9 是极佳的安全阈值
-        self.bg_threshold = bg_threshold 
-
-    def forward(self, pred, target):
-        # 映射掩码空间：[-1, 1] -> [0, 1]，用于计算亮度权重
-        target_norm = (target + 1.0) * 0.5 
-        
-        # 提取 FOV 掩码 (组织区域为 1，背景黑边为 0)
-        fov_mask = (target > self.bg_threshold).float().detach()
-        
-        if self.is_target_ffa:
-            # FFA 域：白亮病灶/血管加权 (越接近1权重越大)
-            weight_mask = 1.0 + self.alpha * (target_norm ** 4.0).detach() 
-        else:
-            # Fundus 域：暗色病灶加权
-            weight_mask = 1.0 + self.alpha * ((1.0 - target_norm) ** 4.0).detach()
-            
-        # 核心纠偏：强行将 FOV 外的背景黑边权重拍回 1.0
-        weight_mask = torch.where(fov_mask > 0, weight_mask, torch.ones_like(weight_mask))
-            
-        diff = torch.abs(pred - target)
-        return torch.mean(diff * weight_mask)
+from utils_train import get_logger, LossTracker
 
 # 分布式训练场景下的深度学习模型基础框架
 def copy_source(file, output_dir):
@@ -387,8 +225,6 @@ def train_syndiff(rank, gpu, args):
     
     # Loss 实例化
     # ✅ 修正代码
-    criterion_wavelet = WaveletLoss(device).to(device)
-    criterion_lumi = LuminanceWeightedLoss(alpha=10.0).to(device)
 
     # 模型实例化
     gen_diffusive_1 = NCSNpp(args).to(device)
@@ -495,22 +331,14 @@ def train_syndiff(rank, gpu, args):
     # 因为你用了 DDP 多卡训练 (有 rank 变量)，为了防止报错，
     # 最稳妥的获取当前显卡 device 的写法如下：
     # ✅ 修正代码 (直接用上面已定义的 device)
-    vgg_perceptual = VGG19PerceptualLoss(device=device, use_layer4=False)
     # 实例化，后续可以可以加到第四层
-    # vgg_perceptual = VGG19PerceptualLoss(
-    #     device=current_device,
-    #     use_layer4=True,
-    #     layer_weights=[1.0, 1.0, 0.5, 0.25]
-    # )
     # ==========================================================
         
     for epoch in range(init_epoch, args.num_epoch+1):
         train_sampler.set_epoch(epoch)
         
         # 👇 【新增】用于记录当前 Epoch 累加值的字典
-        epoch_losses_raw = {"G_total": 0.0, "G_adv": 0.0, "G_cycle_adv": 0.0, "G_cycle": 0.0, "G_l1_fs": 0.0, "G_lumi": 0.0, "G_wavelet": 0.0, "G_vgg": 0.0}
-
-        epoch_losses_weighted = {"cycle_w": 0.0, "cycle_adv_w": 0.0, "l1_fs_w": 0.0, "lumi_w": 0.0, "wavelet_w": 0.0, "vgg_w": 0.0}
+        epoch_losses_raw = {"G_adv": 0.0, "G_cycle": 0.0, "G_l1": 0.0}
         
         # ✅【新增】进度条封装 (仅在 Rank 0 显示)
         # 这样你就不会看到满屏滚动的 print，而是一个优雅的进度条
@@ -522,8 +350,6 @@ def train_syndiff(rank, gpu, args):
         # 用于记录 epoch 平均 loss
         epoch_g_loss = 0.0
         epoch_d_loss = 0.0
-        epoch_inno_loss = 0.0
-        epoch_vgg_loss = 0.0
         
         for iteration, (x1, x2) in loader_iter:
             # 开启梯度
@@ -671,45 +497,22 @@ def train_syndiff(rank, gpu, args):
             errG2_L1 = F.l1_loss(x2_0_predict_diff[:,0:C,:,:], real_data2)
             errG_L1 = errG1_L1 + errG2_L1 
 
-            # ===================== 2. 创新损失（亮度+小波） =====================
-            errG1_lumi = criterion_lumi(x1_0_predict_diff[:,0:C,:,:], real_data1)
-            errG2_lumi = criterion_lumi(x2_0_predict_diff[:,0:C,:,:], real_data2)
-            errG_lumi = errG1_lumi + errG2_lumi  
-
-            errG1_wavelet = criterion_wavelet(x1_0_predict_diff[:,0:C,:,:], real_data1)
-            errG2_wavelet = criterion_wavelet(x2_0_predict_diff[:,0:C,:,:], real_data2)
-            errG_wavelet = errG1_wavelet + errG2_wavelet  
-
-            # ===================== 3. VGG感知损失（新增） =====================
-            errG1_vgg = vgg_perceptual(x1_0_predict_diff[:,0:C,:,:], real_data1)
-            errG2_vgg = vgg_perceptual(x2_0_predict_diff[:,0:C,:,:], real_data2)
-            errG_vgg = errG1_vgg + errG2_vgg  
-
-            # ===================== 4. 循环一致性损失 =====================
+            # ===================== 2. 循环一致性损失 =====================
             errG1_cycle = F.l1_loss(x1_0_predict_cycle, real_data1)
             errG2_cycle = F.l1_loss(x2_0_predict_cycle, real_data2)            
             errG_cycle = errG1_cycle + errG2_cycle  
 
             # ======================================
-            # 固定权重定义（本地写死，无命令行）
+            # 绝对复刻原作者的权重环境 (基线控制变量)
             # ======================================
-         
-            # ======================================
-            # 修正后的固定权重定义（对冲梯度劫持）
-            # ======================================
-            lambda_l1_loss = 1.5      # 保持 L1 作为绝对主导，锚定基础结构
-            lambda_lumi = 0.5         # 内部有 alpha=10，外部需降级至 0.1 (最高提供 1.1 倍暴击，足够引导关注，不会引发崩盘)
-            lambda_wavelet = 0.5     # 内部高频 weight=10，外部降至 0.1 (高频惩罚控制在 1.0 左右)
-            lambda_vgg = 0.05         # 仅作为极弱的特征层正则化，防止自然图像纹理污染眼底视盘和血管的平滑度
+            lambda_l1_loss = 0.5  # 严格遵从原作者的扩散模型软约束设定
 
-            # ===================== 🔥 终极总损失（全用本地变量，无args！） =====================
-            errG = lambda_l1_loss * errG_L1 \
-                + lambda_l1_loss * errG_cycle \
+            # ===================== 🔥 终极总损失 =====================
+            # 完全还原原始公式：0.5 * Cycle + Adv + Cycle_Adv + 0.5 * 跨域L1
+            errG = lambda_l1_loss * errG_cycle \
                 + errG_adv \
                 + errG_cycle_adv \
-                + lambda_lumi * errG_lumi \
-                + lambda_wavelet * errG_wavelet \
-                + lambda_vgg * errG_vgg
+                + lambda_l1_loss * errG_L1
             # ======================================================================
 
             errG.backward()
@@ -718,40 +521,9 @@ def train_syndiff(rank, gpu, args):
            # 👇 【修复版】累加裸值 (Raw) —— 自动初始化字典键，解决KeyError
             # 👇 【终极修复】先初始化所有字典键，再累加（永不报错）
             # ===================== Raw 损失裸值 初始化 + 累加 =====================
-            epoch_losses_raw.setdefault("G_total", 0.0)
-            epoch_losses_raw.setdefault("G_adv", 0.0)
-            epoch_losses_raw.setdefault("G_cycle_adv", 0.0)
-            epoch_losses_raw.setdefault("G_cycle", 0.0)
-            epoch_losses_raw.setdefault("G_l1", 0.0)
-            epoch_losses_raw.setdefault("G_lumi", 0.0)
-            epoch_losses_raw.setdefault("G_wavelet", 0.0)
-            epoch_losses_raw.setdefault("G_vgg", 0.0)
-
-            epoch_losses_raw["G_total"] += errG.item()
             epoch_losses_raw["G_adv"] += errG_adv.item()
-            epoch_losses_raw["G_cycle_adv"] += errG_cycle_adv.item()
             epoch_losses_raw["G_cycle"] += errG_cycle.item()
             epoch_losses_raw["G_l1"] += errG_L1.item()
-            epoch_losses_raw["G_lumi"] += errG_lumi.item()
-            epoch_losses_raw["G_wavelet"] += errG_wavelet.item()
-            epoch_losses_raw["G_vgg"] += errG_vgg.item()
-
-            # ===================== Weighted 加权损失 初始化 + 累加 =====================
-            epoch_losses_weighted.setdefault("G_adv_w", 0.0)
-            epoch_losses_weighted.setdefault("G_cycle_adv_w", 0.0)
-            epoch_losses_weighted.setdefault("G_cycle_w", 0.0)
-            epoch_losses_weighted.setdefault("G_l1_w", 0.0)
-            epoch_losses_weighted.setdefault("G_lumi_w", 0.0)
-            epoch_losses_weighted.setdefault("G_wavelet_w", 0.0)
-            epoch_losses_weighted.setdefault("G_vgg_w", 0.0)
-
-            epoch_losses_weighted["G_adv_w"] += errG_adv.item()
-            epoch_losses_weighted["G_cycle_adv_w"] += errG_cycle_adv.item()
-            epoch_losses_weighted["G_cycle_w"] += (lambda_l1_loss * errG_cycle).item()
-            epoch_losses_weighted["G_l1_w"] += (lambda_l1_loss * errG_L1).item()
-            epoch_losses_weighted["G_lumi_w"] += (lambda_lumi * errG_lumi).item()
-            epoch_losses_weighted["G_wavelet_w"] += (lambda_wavelet * errG_wavelet).item()
-            epoch_losses_weighted["G_vgg_w"] += (lambda_vgg * errG_vgg).item()
             optimizer_gen_diffusive_1.step()
             optimizer_gen_diffusive_2.step()
             optimizer_gen_non_diffusive_1to2.step()
@@ -766,21 +538,14 @@ def train_syndiff(rank, gpu, args):
                 epoch_d_loss += errD.item()
                 
                 # 【关键修复】删掉所有 args.，用本地写死的权重变量！
-                current_inno_loss = (lambda_lumi * errG_lumi).item() + \
-                                    (lambda_wavelet * errG_wavelet).item()
-                epoch_inno_loss += current_inno_loss
                 
-                current_vgg_loss = (lambda_vgg * errG_vgg).item()
-                epoch_vgg_loss += current_vgg_loss
                 
                 # 进度条显示（无任何args，纯本地变量）
                 loader_iter.set_postfix({
                     "G": f"{errG.item():.3f}",
                     "D": f"{errD.item():.3f}",
                     "Cyc": f"{(lambda_l1_loss * errG_cycle).item():.3f}",
-                    "L1": f"{(lambda_l1_loss * errG_L1).item():.3f}",
-                    "Inno": f"{current_inno_loss:.3f}",
-                    "VGG": f"{current_vgg_loss:.3f}"
+                    "L1": f"{(lambda_l1_loss * errG_L1).item():.3f}"
                 })
         # 学习率衰减
         if not args.no_lr_decay:
@@ -797,20 +562,28 @@ def train_syndiff(rank, gpu, args):
         # ✅【新增】每个 Epoch 结束后更新 Loss 曲线图
         if rank == 0:
             avg_g_loss = epoch_g_loss / len(data_loader)
+            avg_d_loss = epoch_d_loss / len(data_loader)
             tracker.update(epoch, avg_g_loss)
-            logger.info(f"Epoch {epoch} Done. Avg G Loss: {avg_g_loss:.4f}")
+            logger.info(f"Epoch {epoch} Done. Avg G Loss: {avg_g_loss:.4f}, Avg D Loss: {avg_d_loss:.4f}")
             
             # 👇 【严格对齐缩进】计算并打印极其详尽的 Loss 拆解
             num_batches = len(data_loader)
             
             for k in epoch_losses_raw:
                 epoch_losses_raw[k] /= num_batches
-            for k in epoch_losses_weighted:
-                epoch_losses_weighted[k] /= num_batches
+            tracker.update_named(epoch, {
+                "G_adv": epoch_losses_raw["G_adv"],
+                "G_cycle": epoch_losses_raw["G_cycle"],
+                "G_l1": epoch_losses_raw["G_l1"],
+                "D_total": avg_d_loss,
+            })
                 
             logger.info(f"--- Epoch {epoch} Loss Breakdown ---")
             logger.info(f"Raw Losses: { {k: round(v, 4) for k, v in epoch_losses_raw.items()} }")
-            logger.info(f"Weighted Contributions: { {k: round(v, 4) for k, v in epoch_losses_weighted.items()} }")    
+            logger.info(f"G_l1: {epoch_losses_raw['G_l1']:.6f}")
+            logger.info(f"G_cycle: {epoch_losses_raw['G_cycle']:.6f}")
+            logger.info(f"G_adv: {epoch_losses_raw['G_adv']:.6f}")
+            logger.info(f"D_total: {avg_d_loss:.6f}")
 
             def save_rgb(tensor, path):
                 if tensor.shape[1] > 3:
@@ -818,57 +591,57 @@ def train_syndiff(rank, gpu, args):
                 else:
                     torchvision.utils.save_image(tensor, path, normalize=True)
 
-            if epoch % 40 == 0:
+            if epoch % 10 == 0:
                 save_rgb(x1_pos_sample, os.path.join(exp_path, 'xpos1_epoch_{}.png'.format(epoch)))
                 save_rgb(x2_pos_sample, os.path.join(exp_path, 'xpos2_epoch_{}.png'.format(epoch)))
-            
-            # 2. 生成并保存 Domain 2 -> Domain 1 的样本
-            # 拼接噪声和源域数据
-            x1_t = torch.cat((torch.randn_like(real_data1), real_data2), axis=1)
-            fake_sample1 = sample_from_model(pos_coeff, gen_diffusive_1, args.num_timesteps, x1_t, T, args)
-            
-            # 【核心修改点】拼接展示时只用RGB切片
-            vis_real2 = real_data2[:, :3, :, :]
-            vis_fake1 = fake_sample1[:, :3, :, :]
-            fake_sample1_vis = torch.cat((vis_real2, vis_fake1), axis=-1)
-            torchvision.utils.save_image(fake_sample1_vis, os.path.join(exp_path, 'sample1_discrete_epoch_{}.png'.format(epoch)), normalize=True)
-            
-            # 生成粗糙预测
-            pred1 = gen_non_diffusive_2to1(real_data2)
-            
-            # 生成扩散精修结果
-            x2_t = torch.cat((torch.randn_like(real_data2), pred1), axis=1)
-            fake_sample2_tilda = gen_diffusive_2(x2_t , t2, latent_z2)   
-            
-            # 【核心修改点】复杂对比图的RGB切片
-            vis_pred1 = pred1[:, :3, :, :]
-            vis_cycle1 = gen_non_diffusive_1to2(pred1)[:, :3, :, :]
-            vis_fake2_tilda = fake_sample2_tilda[:, :3, :, :]
-            
-            # 拼接：真实图 | 粗糙预测 | 循环重建 | 扩散精修
-            pred1_vis = torch.cat((vis_real2, vis_pred1, vis_cycle1, vis_fake2_tilda), axis=-1)
-            torchvision.utils.save_image(pred1_vis, os.path.join(exp_path, 'sample1_translated_epoch_{}.png'.format(epoch)), normalize=True)
+                
+                # 2. 生成并保存 Domain 2 -> Domain 1 的样本
+                # 拼接噪声和源域数据
+                x1_t = torch.cat((torch.randn_like(real_data1), real_data2), axis=1)
+                fake_sample1 = sample_from_model(pos_coeff, gen_diffusive_1, args.num_timesteps, x1_t, T, args)
+                
+                # 【核心修改点】拼接展示时只用RGB切片
+                vis_real2 = real_data2[:, :3, :, :]
+                vis_fake1 = fake_sample1[:, :3, :, :]
+                fake_sample1_vis = torch.cat((vis_real2, vis_fake1), axis=-1)
+                torchvision.utils.save_image(fake_sample1_vis, os.path.join(exp_path, 'sample1_discrete_epoch_{}.png'.format(epoch)), normalize=True)
+                
+                # 生成粗糙预测
+                pred1 = gen_non_diffusive_2to1(real_data2)
+                
+                # 生成扩散精修结果
+                x2_t = torch.cat((torch.randn_like(real_data2), pred1), axis=1)
+                fake_sample2_tilda = gen_diffusive_2(x2_t , t2, latent_z2)   
+                
+                # 【核心修改点】复杂对比图的RGB切片
+                vis_pred1 = pred1[:, :3, :, :]
+                vis_cycle1 = gen_non_diffusive_1to2(pred1)[:, :3, :, :]
+                vis_fake2_tilda = fake_sample2_tilda[:, :3, :, :]
+                
+                # 拼接：真实图 | 粗糙预测 | 循环重建 | 扩散精修
+                pred1_vis = torch.cat((vis_real2, vis_pred1, vis_cycle1, vis_fake2_tilda), axis=-1)
+                torchvision.utils.save_image(pred1_vis, os.path.join(exp_path, 'sample1_translated_epoch_{}.png'.format(epoch)), normalize=True)
 
-            # 3. 生成并保存 Domain 1 -> Domain 2 的样本 (同上)
-            x2_t = torch.cat((torch.randn_like(real_data2), real_data1), axis=1)
-            fake_sample2 = sample_from_model(pos_coeff, gen_diffusive_2, args.num_timesteps, x2_t, T, args)
-            
-            vis_real1 = real_data1[:, :3, :, :]
-            vis_fake2 = fake_sample2[:, :3, :, :]
-            fake_sample2_vis = torch.cat((vis_real1, vis_fake2), axis=-1)
-            torchvision.utils.save_image(fake_sample2_vis, os.path.join(exp_path, 'sample2_discrete_epoch_{}.png'.format(epoch)), normalize=True)
-            
-            pred2 = gen_non_diffusive_1to2(real_data1)
-            
-            x1_t = torch.cat((torch.randn_like(real_data1), pred2), axis=1)
-            fake_sample1_tilda = gen_diffusive_1(x1_t , t1, latent_z1)   
-            
-            vis_pred2 = pred2[:, :3, :, :]
-            vis_cycle2 = gen_non_diffusive_2to1(pred2)[:, :3, :, :]
-            vis_fake1_tilda = fake_sample1_tilda[:, :3, :, :]
-            
-            pred2_vis = torch.cat((vis_real1, vis_pred2, vis_cycle2, vis_fake1_tilda), axis=-1)
-            torchvision.utils.save_image(pred2_vis, os.path.join(exp_path, 'sample2_translated_epoch_{}.png'.format(epoch)), normalize=True)
+                # 3. 生成并保存 Domain 1 -> Domain 2 的样本 (同上)
+                x2_t = torch.cat((torch.randn_like(real_data2), real_data1), axis=1)
+                fake_sample2 = sample_from_model(pos_coeff, gen_diffusive_2, args.num_timesteps, x2_t, T, args)
+                
+                vis_real1 = real_data1[:, :3, :, :]
+                vis_fake2 = fake_sample2[:, :3, :, :]
+                fake_sample2_vis = torch.cat((vis_real1, vis_fake2), axis=-1)
+                torchvision.utils.save_image(fake_sample2_vis, os.path.join(exp_path, 'sample2_discrete_epoch_{}.png'.format(epoch)), normalize=True)
+                
+                pred2 = gen_non_diffusive_1to2(real_data1)
+                
+                x1_t = torch.cat((torch.randn_like(real_data1), pred2), axis=1)
+                fake_sample1_tilda = gen_diffusive_1(x1_t , t1, latent_z1)   
+                
+                vis_pred2 = pred2[:, :3, :, :]
+                vis_cycle2 = gen_non_diffusive_2to1(pred2)[:, :3, :, :]
+                vis_fake1_tilda = fake_sample1_tilda[:, :3, :, :]
+                
+                pred2_vis = torch.cat((vis_real1, vis_pred2, vis_cycle2, vis_fake1_tilda), axis=-1)
+                torchvision.utils.save_image(pred2_vis, os.path.join(exp_path, 'sample2_translated_epoch_{}.png'.format(epoch)), normalize=True)
             
             # 4. 保存模型内容 (Checkpoint)
             if args.save_content:
@@ -1008,7 +781,7 @@ if __name__ == '__main__':
     parser.add_argument('--attn_resolutions', nargs='+', type=int, default=[16],
                         help='resolution list for global attention, e.g. --attn_resolutions 16 8')
     # ✅ 局部注意力（用于高分辨率 256/128/64），做消融用
-    parser.add_argument('--local_attn_type', type=str, default='coord', choices=['none', 'cbam', 'scsa', 'coord'],
+    parser.add_argument('--local_attn_type', type=str, default='none', choices=['none', 'cbam', 'scsa', 'coord'],
                     help='local attention type for ablation')
     parser.add_argument('--local_attn_resolutions', nargs='+', type=int, default=[128, 64, 32],
                     help='resolution list for local attention')
@@ -1048,7 +821,7 @@ if __name__ == '__main__':
     parser.add_argument('--lazy_reg', type=int, default=None, help='lazy regulariation.')
     parser.add_argument('--save_content', action='store_true',default=False)
     parser.add_argument('--save_content_every', type=int, default=40, help='save content for resuming every x epochs')
-    parser.add_argument('--save_ckpt_every', type=int, default=10, help='save ckpt every x epochs')
+    parser.add_argument('--save_ckpt_every', type=int, default=20, help='save ckpt every x epochs')
     parser.add_argument('--lambda_l1_loss', type=float, default=2.0, help='weightening of l1 loss part of diffusion ans cycle models')
     parser.add_argument('--num_proc_node', type=int, default=1, help='The number of nodes in multi node env.')
     parser.add_argument('--num_process_per_node', type=int, default=1, help='number of gpus')

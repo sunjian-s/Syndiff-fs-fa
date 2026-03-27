@@ -2,6 +2,7 @@ import logging
 import os
 import matplotlib.pyplot as plt
 from datetime import datetime
+from collections import defaultdict
 
 # ============================
 # 1. 日志工具 (Logger)
@@ -47,6 +48,8 @@ class LossTracker:
         self.epochs = []
         self.train_losses = []
         self.val_losses = [] # 如果你有验证集的话
+        self.named_train_losses = defaultdict(list)
+        self.named_val_losses = defaultdict(list)
         
     def update(self, epoch, train_loss, val_loss=None):
         self.epochs.append(epoch)
@@ -71,3 +74,33 @@ class LossTracker:
         # 保存图片，覆盖旧的，实现“动态更新”
         plt.savefig(os.path.join(self.save_dir, 'loss_curve.png'))
         plt.close()
+
+    def update_named(self, epoch, train_loss_dict, val_loss_dict=None):
+        if not self.epochs or self.epochs[-1] != epoch:
+            self.epochs.append(epoch)
+
+        for name, value in train_loss_dict.items():
+            self.named_train_losses[name].append(value)
+
+        if val_loss_dict is not None:
+            for name, value in val_loss_dict.items():
+                self.named_val_losses[name].append(value)
+
+        self.plot_named()
+
+    def plot_named(self):
+        for name, values in self.named_train_losses.items():
+            plt.figure(figsize=(10, 6))
+            plt.plot(self.epochs[:len(values)], values, label=f'{name} Train', color='blue', linewidth=2)
+
+            if name in self.named_val_losses and self.named_val_losses[name]:
+                val_values = self.named_val_losses[name]
+                plt.plot(self.epochs[:len(val_values)], val_values, label=f'{name} Val', color='orange', linestyle='--', linewidth=2)
+
+            plt.title(f'{name} Curve')
+            plt.xlabel('Epochs')
+            plt.ylabel(name)
+            plt.legend()
+            plt.grid(True, alpha=0.3)
+            plt.savefig(os.path.join(self.save_dir, f'{name}_curve.png'))
+            plt.close()
