@@ -364,8 +364,8 @@ def main():
     parser.add_argument('--n_mlp', type=int, default=3)
     
     # --- 关键修复：补全缺失的 Attention 参数 ---
-    parser.add_argument('--attn_resolutions', nargs='+', type=int, default=[16, 8])
-    parser.add_argument('--local_attn_type', type=str, default='cbam')
+    parser.add_argument('--attn_resolutions', nargs='+', type=int, default=[16])
+    parser.add_argument('--local_attn_type', type=str, default='none')
     parser.add_argument('--local_attn_resolutions', nargs='+', type=int, default=[256, 128, 64])
     # ------------------------------------------
 

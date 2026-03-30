@@ -288,6 +288,7 @@ class NCSNpp(nn.Module):
             LocalAttnBlock = None
         else:
             raise ValueError(f'local_attn_type {local_attn_type} not supported')
+        self.has_local_attn = LocalAttnBlock is not None
         Upsample = functools.partial(layerspp.Upsample,
                                      with_conv=resamp_with_conv, fir=fir, fir_kernel=fir_kernel)
 
@@ -487,7 +488,7 @@ class NCSNpp(nn.Module):
                 h = modules[m_idx](hs[-1], temb, zemb); m_idx += 1
 
                 # ✅ local attn
-                if (len(self.local_attn_resolutions) > 0) and (h.shape[-1] in self.local_attn_resolutions):
+                if self.has_local_attn and (len(self.local_attn_resolutions) > 0) and (h.shape[-1] in self.local_attn_resolutions):
                     h = modules[m_idx](h); m_idx += 1
 
                 # global attn
@@ -529,7 +530,7 @@ class NCSNpp(nn.Module):
                 h = modules[m_idx](torch.cat([h, hs.pop()], dim=1), temb, zemb); m_idx += 1
 
             # ✅ local attn
-            if (len(self.local_attn_resolutions) > 0) and (h.shape[-1] in self.local_attn_resolutions):
+            if self.has_local_attn and (len(self.local_attn_resolutions) > 0) and (h.shape[-1] in self.local_attn_resolutions):
                 h = modules[m_idx](h); m_idx += 1
 
             # global attn

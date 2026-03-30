@@ -1,5 +1,7 @@
 import logging
 import os
+import matplotlib
+matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 from datetime import datetime
 from collections import defaultdict
