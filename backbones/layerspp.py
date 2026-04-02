@@ -8,20 +8,21 @@
 定义 NCSN++ 所需的层 (Layers++)
 改编自 https://github.com/yang-song/score_sde_pytorch/blob/main/models/layerspp.py
 """
-from . import layers  # 导入基础层 (如 ddpm_conv3x3, NIN)
+from . import layers # 导入基础层 (如 ddpm_conv3x3, NIN)
 from . import up_or_down_sampling, dense_layer
 import torch.nn as nn
 import torch
 import torch.nn.functional as F
 import numpy as np
-import torchvision.ops
+import torchvision.ops 
+#from .snake_conv import DynamicSnakeConv  # ✅ 确保 snake_conv.py 在同级目录下
 
 # --- 从基础层文件中导入，方便本文件调用 ---
 conv1x1 = layers.ddpm_conv1x1
 conv3x3 = layers.ddpm_conv3x3
 NIN = layers.NIN
 default_init = layers.default_init
-dense = dense_layer.dense
+dense = dense_layer.dense 
 
 # =========================================================================
 # 可变形卷积 v2 (DCNv2) - [保留定义以备对比实验]
@@ -31,32 +32,29 @@ class DeformableConv2d(nn.Module):
     可变形卷积 v2 (DCNv2)
     注：在当前版本中，默认使用下方的 DynamicSnakeConv 替代此模块。
     """
-    def __init__(self, in_channels, out_channels, kernel_size=3, stride=1, padding=1,
-                 bias=True, init_scale=1.):
+    def __init__(self, in_channels, out_channels, kernel_size=3, stride=1, padding=1, bias=True, init_scale=1.):
         super(DeformableConv2d, self).__init__()
-
+        
         self.stride = stride
         self.padding = padding
         self.kernel_size = kernel_size
-
-        self.offset_conv = nn.Conv2d(
-            in_channels,
-            3 * kernel_size * kernel_size,
-            kernel_size=kernel_size,
-            stride=stride,
-            padding=padding,
-            bias=True
-        )
-
+        
+        self.offset_conv = nn.Conv2d(in_channels, 
+                                     3 * kernel_size * kernel_size, 
+                                     kernel_size=kernel_size, 
+                                     stride=stride, 
+                                     padding=padding, 
+                                     bias=True)
+        
         nn.init.constant_(self.offset_conv.weight, 0)
         nn.init.constant_(self.offset_conv.bias, 0)
-
+        
         self.weight = nn.Parameter(torch.Tensor(out_channels, in_channels, kernel_size, kernel_size))
         if bias:
             self.bias = nn.Parameter(torch.Tensor(out_channels))
         else:
             self.register_parameter('bias', None)
-
+            
         self.weight.data = default_init(scale=init_scale)(self.weight.data.shape)
         if bias:
             nn.init.zeros_(self.bias)
@@ -66,15 +64,13 @@ class DeformableConv2d(nn.Module):
         o1, o2, mask = torch.chunk(out, 3, dim=1)
         offset = torch.cat((o1, o2), dim=1)
         mask = torch.sigmoid(mask)
-        return torchvision.ops.deform_conv2d(
-            input=x,
-            offset=offset,
-            weight=self.weight,
-            bias=self.bias,
-            stride=self.stride,
-            padding=self.padding,
-            mask=mask
-        )
+        return torchvision.ops.deform_conv2d(input=x, 
+                                             offset=offset, 
+                                             weight=self.weight, 
+                                             bias=self.bias, 
+                                             stride=self.stride, 
+                                             padding=self.padding, 
+                                             mask=mask)
 
 # =========================================================================
 # 基础层定义 (AdaGN, Fourier, etc.)
@@ -89,8 +85,8 @@ class AdaptiveGroupNorm(nn.Module):
         super().__init__()
         self.norm = nn.GroupNorm(num_groups, in_channel, affine=False, eps=1e-6)
         self.style = dense(style_dim, in_channel * 2)
-        self.style.bias.data[:in_channel] = 1  # gamma
-        self.style.bias.data[in_channel:] = 0  # beta
+        self.style.bias.data[:in_channel] = 1 # gamma
+        self.style.bias.data[in_channel:] = 0 # beta
 
     def forward(self, input, style):
         style = self.style(style).unsqueeze(2).unsqueeze(3)
@@ -109,6 +105,7 @@ class GaussianFourierProjection(nn.Module):
         x_proj = x[:, None] * self.W[None, :] * 2 * np.pi
         return torch.cat([torch.sin(x_proj), torch.cos(x_proj)], dim=-1)
 
+
 class Combine(nn.Module):
     """用于融合 U-Net 中的跳跃连接"""
     def __init__(self, dim1, dim2, method='cat'):
@@ -125,15 +122,12 @@ class Combine(nn.Module):
         else:
             raise ValueError(f'Method {self.method} not recognized.')
 
-# =========================================================================
-# (NCSNpp 风格) 全局自注意力块
-# =========================================================================
+
 class AttnBlockpp(nn.Module):
     """(NCSNpp 风格的) 自注意力块"""
     def __init__(self, channels, skip_rescale=False, init_scale=0.):
         super().__init__()
-        self.GroupNorm_0 = nn.GroupNorm(num_groups=min(channels // 4, 32),
-                                        num_channels=channels, eps=1e-6)
+        self.GroupNorm_0 = nn.GroupNorm(num_groups=min(channels // 4, 32), num_channels=channels, eps=1e-6)
         self.NIN_0 = NIN(channels, channels)
         self.NIN_1 = NIN(channels, channels)
         self.NIN_2 = NIN(channels, channels)
@@ -153,128 +147,13 @@ class AttnBlockpp(nn.Module):
         w = torch.reshape(w, (B, H, W, H, W))
         h = torch.einsum('bhwij,bcij->bchw', w, v)
         h = self.NIN_3(h)
-
+        
         if not self.skip_rescale:
             return x + h
         else:
             return (x + h) / np.sqrt(2.)
 
-# =========================================================================
-# ✅ 新增：局部注意力（用于高分辨率 256/128/64）
-# =========================================================================
 
-import torch
-import torch.nn as nn
-import torch.nn.functional as F
-import numpy as np
-
-import torch
-import torch.nn as nn
-import numpy as np
-
-class MS_CBAMpp(nn.Module):
-    """多尺度CBAMpp：底层逻辑重构版（严格消除方差漂移与BN崩溃风险）"""
-    def __init__(self, channels, reduction=16, spatial_scales=[3, 5, 7], skip_rescale=False):
-        super().__init__()
-        hidden = max(channels // reduction, 4)
-        self.skip_rescale = skip_rescale
-
-        # 1. 通道注意力分支
-        # 【修正】彻底剔除 BatchNorm2d，避免 1x1 空间维度在极小 Batch Size 下的统计崩溃
-        self.mlp = nn.Sequential(
-            nn.Conv2d(channels, hidden, 1, bias=False),
-            nn.SiLU(),
-            nn.Conv2d(hidden, channels, 1, bias=False),
-        )
-
-        # 2. 空间注意力分支（多尺度提取）
-        self.spatial_convs = nn.ModuleList([
-            nn.Conv2d(2, 1, kernel_size=k, padding=k//2, bias=False) 
-            for k in spatial_scales
-        ])
-        
-        # 【修正】使用 GroupNorm 替代 BatchNorm2d，彻底解除对 Batch Size 的依赖
-        self.spatial_gn = nn.GroupNorm(1, len(spatial_scales)) 
-        self.spatial_fuse = nn.Conv2d(len(spatial_scales), 1, kernel_size=1, bias=False)
-
-        # 3. 稳态初始化控制阀（核心修复）
-        # 【新增】引入可学习的零常数门控，强制初始状态为严格的恒等映射 (Identity Mapping)
-        self.gamma = nn.Parameter(torch.zeros(1))
-
-    def forward(self, x):
-        # ---------------- 底层特征推演 ----------------
-        
-        # 【阶段一：通道特征加权】
-        avg_out = torch.mean(x, dim=(2, 3), keepdim=True)
-        max_out = torch.amax(x, dim=(2, 3), keepdim=True)
-        # Sigmoid 初始态由于权重随机/较小，输出约为 0.5
-        ca = torch.sigmoid(self.mlp(avg_out) + self.mlp(max_out)) 
-        h = x * ca  
-
-        # 【阶段二：多尺度空间特征加权】
-        avg_c = torch.mean(h, dim=1, keepdim=True)
-        max_c = torch.amax(h, dim=1, keepdim=True)
-        spatial_feat = torch.cat([avg_c, max_c], dim=1)  # (B, 2, H, W)
-        
-        # 并行计算多尺度感受野
-        multi_scale_feat = [conv(spatial_feat) for conv in self.spatial_convs]
-        multi_scale_feat = torch.cat(multi_scale_feat, dim=1)  # (B, len(spatial_scales), H, W)
-        
-        # 归一化后融合成单通道空间权重
-        multi_scale_feat = self.spatial_gn(multi_scale_feat)
-        sa = torch.sigmoid(self.spatial_fuse(multi_scale_feat))  # (B, 1, H, W)
-        h = h * sa  
-
-        # 【阶段三：零初始化残差保护】
-        # gamma 初始为 0，无论前置激活值如何，此时 h 严格被截断为 0
-        h = self.gamma * h 
-
-       # 【核心修正】彻底移除 sqrt(2) 缩放，保证严格的恒等映射
-        return x + h
-# class SCSALitepp(nn.Module):
-#     """
-#     SCSA-Lite: 轻量版“空间(高宽) + 通道”协同注意力
-#     更偏细节/结构（血管、小病灶）增强，计算量低，适合插在高分辨率。
-#     """
-#     def __init__(self, channels, ks=(3, 7), reduction=16, skip_rescale=False):
-#         super().__init__()
-#         self.dw_h = nn.ModuleList([
-#             nn.Conv1d(channels, channels, k, padding=k // 2, groups=channels, bias=True) for k in ks
-#         ])
-#         self.dw_w = nn.ModuleList([
-#             nn.Conv1d(channels, channels, k, padding=k // 2, groups=channels, bias=True) for k in ks
-#         ])
-#         hidden = max(channels // reduction, 4)
-#         self.fc1 = nn.Conv2d(channels, hidden, 1, bias=True)
-#         self.act = nn.SiLU()
-#         self.fc2 = nn.Conv2d(hidden, channels, 1, bias=True)
-#         self.skip_rescale = skip_rescale
-
-#     def forward(self, x):
-#         B, C, H, W = x.shape
-#         x_h = x.mean(dim=3)  # (B,C,H)
-#         x_w = x.mean(dim=2)  # (B,C,W)
-
-#         h_sum = 0
-#         w_sum = 0
-#         for conv in self.dw_h:
-#             h_sum = h_sum + conv(x_h)
-#         for conv in self.dw_w:
-#             w_sum = w_sum + conv(x_w)
-
-#         a_h = h_sum.unsqueeze(-1)  # (B,C,H,1)
-#         a_w = w_sum.unsqueeze(-2)  # (B,C,1,W)
-#         spatial = torch.sigmoid(a_h + a_w)  # (B,C,H,W)
-
-#         y = (x * spatial).mean(dim=(2, 3), keepdim=True)  # (B,C,1,1)
-#         ch = torch.sigmoid(self.fc2(self.act(self.fc1(y))))
-
-#         h = x * spatial * ch
-#         return (x + h) / np.sqrt(2.) if self.skip_rescale else (x + h)
-
-# =========================================================================
-# Upsample / Downsample
-# =========================================================================
 class Upsample(nn.Module):
     """上采样模块"""
     def __init__(self, in_ch=None, out_ch=None, with_conv=False, fir=False, fir_kernel=(1, 3, 3, 1)):
@@ -285,10 +164,9 @@ class Upsample(nn.Module):
                 self.Conv_0 = conv3x3(in_ch, out_ch)
         else:
             if with_conv:
-                self.Conv2d_0 = up_or_down_sampling.Conv2d(
-                    in_ch, out_ch, kernel=3, up=True,
-                    resample_kernel=fir_kernel, use_bias=True, kernel_init=default_init()
-                )
+                self.Conv2d_0 = up_or_down_sampling.Conv2d(in_ch, out_ch, kernel=3, up=True,
+                                                           resample_kernel=fir_kernel,
+                                                           use_bias=True, kernel_init=default_init())
         self.fir = fir
         self.with_conv = with_conv
         self.fir_kernel = fir_kernel
@@ -307,6 +185,7 @@ class Upsample(nn.Module):
                 h = self.Conv2d_0(x)
         return h
 
+
 class Downsample(nn.Module):
     """下采样模块"""
     def __init__(self, in_ch=None, out_ch=None, with_conv=False, fir=False, fir_kernel=(1, 3, 3, 1)):
@@ -317,10 +196,9 @@ class Downsample(nn.Module):
                 self.Conv_0 = conv3x3(in_ch, out_ch, stride=2, padding=0)
         else:
             if with_conv:
-                self.Conv2d_0 = up_or_down_sampling.Conv2d(
-                    in_ch, out_ch, kernel=3, down=True,
-                    resample_kernel=fir_kernel, use_bias=True, kernel_init=default_init()
-                )
+                self.Conv2d_0 = up_or_down_sampling.Conv2d(in_ch, out_ch, kernel=3, down=True,
+                                                           resample_kernel=fir_kernel,
+                                                           use_bias=True, kernel_init=default_init())
         self.fir = fir
         self.fir_kernel = fir_kernel
         self.with_conv = with_conv
@@ -342,30 +220,37 @@ class Downsample(nn.Module):
         return x
 
 # =========================================================================
-# ResNet Blocks
+# ResNet Blocks (已集成 Snake Conv)
 # =========================================================================
+
 class ResnetBlockDDPMpp_Adagn(nn.Module):
     """
     (NCSNpp 风格) 残差块 - Baseline 版本
     【修改说明】已移除 DynamicSnakeConv，恢复为标准 conv3x3
     """
-    def __init__(self, act, in_ch, out_ch=None, temb_dim=None, zemb_dim=None,
-                 conv_shortcut=False, dropout=0.1, skip_rescale=False, init_scale=0.):
+    def __init__(self, act, in_ch, out_ch=None, temb_dim=None, zemb_dim=None, conv_shortcut=False,
+                 dropout=0.1, skip_rescale=False, init_scale=0.):
         super().__init__()
         out_ch = out_ch if out_ch else in_ch
-
+        
         self.GroupNorm_0 = AdaptiveGroupNorm(min(in_ch // 4, 32), in_ch, zemb_dim)
+        
+        # =========== 【回滚修改点 START】 ===========
+        # 原代码：self.Conv_0 = DynamicSnakeConv(in_ch, out_ch, kernel_size=5)
+        # 修改后：使用标准 3x3 卷积
         self.Conv_0 = conv3x3(in_ch, out_ch)
-
+        # =========== 【回滚修改点 END】 =============
+        
         if temb_dim is not None:
             self.Dense_0 = nn.Linear(temb_dim, out_ch)
             self.Dense_0.weight.data = default_init()(self.Dense_0.weight.data.shape)
             nn.init.zeros_(self.Dense_0.bias)
-
+            
         self.GroupNorm_1 = AdaptiveGroupNorm(min(out_ch // 4, 32), out_ch, zemb_dim)
         self.Dropout_0 = nn.Dropout(dropout)
+        
         self.Conv_1 = conv3x3(out_ch, out_ch, init_scale=init_scale)
-
+        
         if in_ch != out_ch:
             if conv_shortcut:
                 self.Conv_2 = conv3x3(in_ch, out_ch)
@@ -379,21 +264,21 @@ class ResnetBlockDDPMpp_Adagn(nn.Module):
 
     def forward(self, x, temb=None, zemb=None):
         h = self.act(self.GroupNorm_0(x, zemb))
-        h = self.Conv_0(h)
-
+        h = self.Conv_0(h) # 这里现在是普通的卷积了
+        
         if temb is not None:
             h += self.Dense_0(self.act(temb))[:, :, None, None]
-
+            
         h = self.act(self.GroupNorm_1(h, zemb))
         h = self.Dropout_0(h)
         h = self.Conv_1(h)
-
+        
         if x.shape[1] != self.out_ch:
             if self.conv_shortcut:
                 x = self.Conv_2(x)
             else:
                 x = self.NIN_0(x)
-
+                
         if not self.skip_rescale:
             return x + h
         else:
@@ -402,27 +287,30 @@ class ResnetBlockDDPMpp_Adagn(nn.Module):
 class ResnetBlockBigGANpp_Adagn(nn.Module):
     """
     (BigGAN 风格) 残差块
+    ✅【修改】使用 Dynamic Snake Convolution
     """
-    def __init__(self, act, in_ch, out_ch=None, temb_dim=None, zemb_dim=None,
-                 up=False, down=False, dropout=0.1, fir=False, fir_kernel=(1, 3, 3, 1),
+    def __init__(self, act, in_ch, out_ch=None, temb_dim=None, zemb_dim=None, up=False, down=False,
+                 dropout=0.1, fir=False, fir_kernel=(1, 3, 3, 1),
                  skip_rescale=True, init_scale=0.):
         super().__init__()
 
         out_ch = out_ch if out_ch else in_ch
         self.GroupNorm_0 = AdaptiveGroupNorm(min(in_ch // 4, 32), in_ch, zemb_dim)
-
+        
         self.up = up
         self.down = down
         self.fir = fir
         self.fir_kernel = fir_kernel
 
-        self.Conv_0 = conv3x3(in_ch, out_ch)
-
+        # ✅【创新点应用】使用 Dynamic Snake Conv
+        #self.Conv_0 = DynamicSnakeConv(in_ch, out_ch, kernel_size=5)
+        self.Conv_0 = conv3x3(in_ch, out_ch) # <--- 加上这一行
+        
         if temb_dim is not None:
             self.Dense_0 = nn.Linear(temb_dim, out_ch)
             self.Dense_0.weight.data = default_init()(self.Dense_0.weight.shape)
             nn.init.zeros_(self.Dense_0.bias)
-
+        
         self.GroupNorm_1 = AdaptiveGroupNorm(min(out_ch // 4, 32), out_ch, zemb_dim)
         self.Dropout_0 = nn.Dropout(dropout)
         self.Conv_1 = conv3x3(out_ch, out_ch, init_scale=init_scale)
@@ -452,14 +340,14 @@ class ResnetBlockBigGANpp_Adagn(nn.Module):
                 h = up_or_down_sampling.naive_downsample_2d(h, factor=2)
                 x = up_or_down_sampling.naive_downsample_2d(x, factor=2)
 
-        h = self.Conv_0(h)
-
+        h = self.Conv_0(h) # Snake Conv
+        
         if temb is not None:
             h += self.Dense_0(self.act(temb))[:, :, None, None]
         h = self.act(self.GroupNorm_1(h, zemb))
         h = self.Dropout_0(h)
         h = self.Conv_1(h)
-
+        
         if self.in_ch != self.out_ch or self.up or self.down:
             x = self.Conv_2(x)
 
@@ -467,34 +355,37 @@ class ResnetBlockBigGANpp_Adagn(nn.Module):
             return x + h
         else:
             return (x + h) / np.sqrt(2.)
+    
 
 class ResnetBlockBigGANpp_Adagn_one(nn.Module):
     """
     (BigGAN 风格 - 单次注入) 残差块
+    ✅【修改】使用 Dynamic Snake Convolution
     """
-    def __init__(self, act, in_ch, out_ch=None, temb_dim=None, zemb_dim=None,
-                 up=False, down=False, dropout=0.1, fir=False, fir_kernel=(1, 3, 3, 1),
+    def __init__(self, act, in_ch, out_ch=None, temb_dim=None, zemb_dim=None, up=False, down=False,
+                 dropout=0.1, fir=False, fir_kernel=(1, 3, 3, 1),
                  skip_rescale=True, init_scale=0.):
         super().__init__()
 
         out_ch = out_ch if out_ch else in_ch
         self.GroupNorm_0 = AdaptiveGroupNorm(min(in_ch // 4, 32), in_ch, zemb_dim)
-
+        
         self.up = up
         self.down = down
         self.fir = fir
         self.fir_kernel = fir_kernel
 
-        self.Conv_0 = conv3x3(in_ch, out_ch)
-
+        # ✅【创新点应用】使用 Dynamic Snake Conv
+        #self.Conv_0 = DynamicSnakeConv(in_ch, out_ch, kernel_size=5)
+        self.Conv_0 = conv3x3(in_ch, out_ch) # <--- 加上这一行
+        
         if temb_dim is not None:
             self.Dense_0 = nn.Linear(temb_dim, out_ch)
             self.Dense_0.weight.data = default_init()(self.Dense_0.weight.shape)
             nn.init.zeros_(self.Dense_0.bias)
-
-        self.GroupNorm_1 = nn.GroupNorm(num_groups=min(out_ch // 4, 32),
-                                        num_channels=out_ch, eps=1e-6)
-
+        
+        self.GroupNorm_1 = nn.GroupNorm(num_groups=min(out_ch // 4, 32), num_channels=out_ch, eps=1e-6)
+        
         self.Dropout_0 = nn.Dropout(dropout)
         self.Conv_1 = conv3x3(out_ch, out_ch, init_scale=init_scale)
         if in_ch != out_ch or up or down:
@@ -523,15 +414,15 @@ class ResnetBlockBigGANpp_Adagn_one(nn.Module):
                 h = up_or_down_sampling.naive_downsample_2d(h, factor=2)
                 x = up_or_down_sampling.naive_downsample_2d(x, factor=2)
 
-        h = self.Conv_0(h)
-
+        h = self.Conv_0(h) # Snake Conv
+        
         if temb is not None:
             h += self.Dense_0(self.act(temb))[:, :, None, None]
-
-        h = self.act(self.GroupNorm_1(h))
+        
+        h = self.act(self.GroupNorm_1(h)) 
         h = self.Dropout_0(h)
         h = self.Conv_1(h)
-
+        
         if self.in_ch != self.out_ch or self.up or self.down:
             x = self.Conv_2(x)
 

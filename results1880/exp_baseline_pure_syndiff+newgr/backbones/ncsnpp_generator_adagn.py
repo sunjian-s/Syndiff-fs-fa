@@ -14,6 +14,7 @@
 
 from . import utils, layers, layerspp, dense_layer # 导入所有基础“积木”模块
 import torch.nn as nn
+import torch.nn.functional as F
 import functools
 import torch
 import numpy as np
@@ -47,6 +48,95 @@ class PixelNorm(nn.Module):
         return input / torch.sqrt(torch.mean(input ** 2, dim=1, keepdim=True) + 1e-8)
 
 
+class MS_CBAMpp_v2(nn.Module):
+    """
+    针对微动脉瘤 (MA) 极值病灶优化的多尺度 CBAM 模块
+    """
+    def __init__(self, channels, reduction=16, spatial_scales=[3, 5, 7], skip_rescale=False):
+        super().__init__()
+        hidden = max(channels // reduction, 4)
+        self.skip_rescale = skip_rescale
+
+        self.mlp_avg = nn.Sequential(
+            nn.Conv2d(channels, hidden, 1, bias=False),
+            nn.SiLU(inplace=True),
+            nn.Conv2d(hidden, channels, 1, bias=False),
+        )
+        self.mlp_max = nn.Sequential(
+            nn.Conv2d(channels, hidden, 1, bias=False),
+            nn.SiLU(inplace=True),
+            nn.Conv2d(hidden, channels, 1, bias=False),
+        )
+
+        nn.init.zeros_(self.mlp_avg[-1].weight)
+        nn.init.zeros_(self.mlp_max[-1].weight)
+
+        self.spatial_convs = nn.ModuleList([
+            nn.Conv2d(4, 1, kernel_size=k, padding=k // 2, bias=False)
+            for k in spatial_scales
+        ])
+        self.spatial_norm = nn.InstanceNorm2d(
+            len(spatial_scales), affine=True, track_running_stats=False
+        )
+        self.spatial_fuse = nn.Conv2d(len(spatial_scales), 1, kernel_size=1, bias=False)
+        nn.init.constant_(self.spatial_fuse.weight, 1.0 / len(spatial_scales))
+
+        self.gamma = nn.Parameter(torch.ones(1) * 0.05)
+
+        self.register_buffer(
+            'gauss_small',
+            self._gaussian_kernel(3, sigma=0.5).view(1, 1, 3, 3)
+        )
+        self.register_buffer(
+            'gauss_large',
+            self._gaussian_kernel(5, sigma=1.5).view(1, 1, 5, 5)
+        )
+
+    def _gaussian_kernel(self, size, sigma):
+        coords = torch.arange(size, dtype=torch.float32) - size // 2
+        g = torch.exp(-(coords ** 2) / (2 * sigma ** 2))
+        kernel = g.outer(g)
+        kernel /= kernel.sum()
+        return kernel
+
+    def compute_dog(self, x):
+        gray = x.mean(dim=1, keepdim=True)
+        small_blur = F.conv2d(
+            F.pad(gray, (1, 1, 1, 1), mode='reflect'),
+            self.gauss_small
+        )
+        large_blur = F.conv2d(
+            F.pad(gray, (2, 2, 2, 2), mode='reflect'),
+            self.gauss_large
+        )
+        return small_blur - large_blur
+
+    def forward(self, x):
+        avg_out = torch.mean(x, dim=(2, 3), keepdim=True)
+        max_out = torch.amax(x, dim=(2, 3), keepdim=True)
+
+        ca_avg = self.mlp_avg(avg_out)
+        ca_max = self.mlp_max(max_out)
+        ca = torch.sigmoid(ca_avg + ca_max)
+        h = x * ca
+
+        avg_c = torch.mean(h, dim=1, keepdim=True)
+        max_c = torch.amax(h, dim=1, keepdim=True)
+        std_c = torch.sqrt(torch.var(h, dim=1, keepdim=True, unbiased=False) + 1e-5)
+        dog_c = self.compute_dog(h)
+
+        spatial_feat = torch.cat([avg_c, max_c, std_c, dog_c], dim=1)
+        multi_scale_feat = [conv(spatial_feat) for conv in self.spatial_convs]
+        multi_scale_feat = torch.cat(multi_scale_feat, dim=1)
+        multi_scale_feat = self.spatial_norm(multi_scale_feat)
+        sa = torch.sigmoid(self.spatial_fuse(multi_scale_feat))
+
+        h = self.gamma * (h * sa)
+        if self.skip_rescale:
+            return (x + h) / np.sqrt(2.)
+        return x + h
+
+
 @utils.register_model(name='ncsnpp') # 【关键】将这个类注册到全局 _MODELS 字典中，名称为 'ncsnpp'
 class NCSNpp(nn.Module):
   """【核心】NCSN++ U-Net 模型架构 (扩散模型的生成器)"""
@@ -54,6 +144,7 @@ class NCSNpp(nn.Module):
   def __init__(self, config):
     super().__init__()
     self.config = config
+    self.use_bottleneck_mscbam = getattr(config, 'use_bottleneck_mscbam', True)
     self.not_use_tanh = config.not_use_tanh # 输出层是否使用 Tanh
     self.act = act = nn.SiLU() # 【关键】使用 SiLU (Swish) 作为全局激活函数
     self.z_emb_dim = z_emb_dim = config.z_emb_dim # 风格/条件 z 向量的维度 (例如 256)
@@ -222,8 +313,12 @@ class NCSNpp(nn.Module):
     # --- 5. 构建 U-Net 瓶颈 (Bottleneck) ---
     in_ch = hs_c[-1] # 获取 U-Net 最底层的通道数
     modules.append(ResnetBlock(in_ch=in_ch))
+    if self.use_bottleneck_mscbam:
+      modules.append(MS_CBAMpp_v2(in_ch, skip_rescale=False))
     modules.append(AttnBlock(channels=in_ch)) # 在最底层应用注意力
     modules.append(ResnetBlock(in_ch=in_ch))
+    if self.use_bottleneck_mscbam:
+      modules.append(MS_CBAMpp_v2(in_ch, skip_rescale=False))
 
     pyramid_ch = 0
     # --- 6. 构建 U-Net 解码器 (Decoder / Upsampling) ---
@@ -382,8 +477,12 @@ class NCSNpp(nn.Module):
     # --- 3. 瓶颈 (Bottleneck) ---
     h = hs[-1] # U-Net 最底层的特征
     h = modules[m_idx](h, temb, zemb); m_idx += 1 # ResBlock
+    if self.use_bottleneck_mscbam:
+      h = modules[m_idx](h); m_idx += 1 # MS_CBAMpp_v2
     h = modules[m_idx](h); m_idx += 1 # AttnBlock
     h = modules[m_idx](h, temb, zemb); m_idx += 1 # ResBlock
+    if self.use_bottleneck_mscbam:
+      h = modules[m_idx](h); m_idx += 1 # MS_CBAMpp_v2
 
     pyramid = None
 

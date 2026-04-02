@@ -15,8 +15,100 @@ import torch.distributed as dist
 import shutil
 from skimage.metrics import peak_signal_noise_ratio as psnr
 
+# ✅【新增】导入进度条和工具箱
 from tqdm import tqdm
-from utils_train import get_logger, LossTracker
+from utils_train import get_logger, make_exp_dir, LossTracker
+
+# ============================================
+# 【新增】1. 小波损失函数 (Wavelet Loss)
+# ============================================
+class WaveletLoss(nn.Module):
+    def __init__(self, device):
+        super(WaveletLoss, self).__init__()
+        self.device = device
+
+    def forward(self, input, target):
+        # 输入形状: [B, 3, H, W]
+        # 1. 将 RGB 转灰度 (简化计算，关注结构)
+        input_gray = 0.299 * input[:,0,:,:] + 0.587 * input[:,1,:,:] + 0.114 * input[:,2,:,:]
+        target_gray = 0.299 * target[:,0,:,:] + 0.587 * target[:,1,:,:] + 0.114 * target[:,2,:,:]
+        
+        # 增加通道维度 [B, 1, H, W]
+        input_gray = input_gray.unsqueeze(1)
+        target_gray = target_gray.unsqueeze(1)
+
+        # 2. Haar 小波分解 (使用 AvgPool 模拟)
+        input_LL = F.avg_pool2d(input_gray, kernel_size=2, stride=2)
+        target_LL = F.avg_pool2d(target_gray, kernel_size=2, stride=2)
+        
+        # 原始图下采样后的差异 (类似于 HL, LH, HH 的组合信息)
+        input_up = F.interpolate(input_LL, scale_factor=2, mode='nearest')
+        target_up = F.interpolate(target_LL, scale_factor=2, mode='nearest')
+        
+        input_high = input_gray - input_up
+        target_high = target_gray - target_up
+
+        # 3. 计算 Loss
+        loss_low = F.l1_loss(input_LL, target_LL)
+        loss_high = F.l1_loss(input_high, target_high)
+
+        return loss_low + 2.0 * loss_high # 让模型更关注高频细节
+
+# ============================================
+# 【新增】2. 亮度加权损失 (LFSG的核心 - 亮度部分)
+# ============================================
+class LuminanceWeightedLoss(nn.Module):
+    def __init__(self, weight_factor=5.0, dark_factor=5.0, focus_sharpness=2.0, device='cuda'):
+        """
+        参数建议：
+        - weight_factor / dark_factor: 建议从 10.0 降到 5.0 甚至 2.0，防止 Loss 数值过大导致梯度爆炸。
+        - focus_sharpness: 控制对极值的关注度，2.0 是比较平滑的二次方。
+        """
+        super(LuminanceWeightedLoss, self).__init__()
+        self.bright_factor = weight_factor 
+        self.dark_factor = dark_factor
+        self.power = focus_sharpness
+        
+        # 定义 RGB 转灰度的权重 (标准 Rec.601 公式)
+        # 形状: [1, 3, 1, 1] 方便广播
+        self.to_gray_weight = torch.tensor([0.299, 0.587, 0.114], device=device).view(1, 3, 1, 1)
+
+    def forward(self, pred, target):
+        # 1. 计算 Target 的真实亮度 (Luminance)
+        # 输入 Target 范围假设是 [-1, 1]
+        
+        # 先归一化到 [0, 1]
+        target_norm = (target + 1.0) * 0.5
+        
+        if target.shape[1] == 3:
+            # 如果是 RGB，使用加权平均计算灰度
+            # 结果形状: [B, 1, H, W]
+            target_luminance = (target_norm * self.to_gray_weight).sum(dim=1, keepdim=True)
+        else:
+            # 如果已经是灰度图，直接使用
+            target_luminance = target_norm
+
+        # 2. 计算双向权重 (基于亮度图)
+        # bright_part 关注高亮区域 (如渗出物)
+        bright_part = target_luminance ** self.power
+        
+        # dark_part 关注暗部区域 (如血管、出血点)
+        dark_part = (1.0 - target_luminance) ** self.power
+        
+        # 3. 组合权重图
+        # 基础权重 1.0 + 增强权重
+        weight_map = 1.0 + (self.bright_factor * bright_part) + (self.dark_factor * dark_part)
+        
+        # 【关键】将 weight_map 从计算图中分离，我们只希望它作为系数，不希望网络去优化"如何生成权重"
+        weight_map = weight_map.detach()
+        
+        # 4. 计算 Weighted L1 Loss
+        diff = torch.abs(pred - target)
+        
+        # 广播机制：[B, 3, H, W] * [B, 1, H, W] -> [B, 3, H, W]
+        loss = torch.mean(diff * weight_map)
+        
+        return loss
 
 # 分布式训练场景下的深度学习模型基础框架
 def copy_source(file, output_dir):
@@ -164,7 +256,7 @@ def sample_from_model(coefficients, generator, n_time, x_init, T, opt):
             t_time = t
             latent_z = torch.randn(x.size(0), opt.nz, device=x.device)
             x_0 = generator(torch.cat((x,source),axis=1), t_time, latent_z)
-            x_new = sample_posterior(coefficients, x_0[:,0:C,:,:], x, t)
+            x_new = sample_posterior(coefficients, x_0[:,0:C,:], x, t)
             x = x_new.detach()
         
     return x
@@ -224,7 +316,8 @@ def train_syndiff(rank, gpu, args):
     to_range_0_1 = lambda x: (x + 1.) / 2.
     
     # Loss 实例化
-    # ✅ 修正代码
+    criterion_wavelet = WaveletLoss(device).to(device)
+    criterion_lumi = LuminanceWeightedLoss(weight_factor=10.0).to(device)
 
     # 模型实例化
     gen_diffusive_1 = NCSNpp(args).to(device)
@@ -325,20 +418,8 @@ def train_syndiff(rank, gpu, args):
     else:
         global_step, epoch, init_epoch = 0, 0, 0
         
-    # ==========================================================
-    # ✅ 【第二步：新增】初始化 VGG-19 感知损失提取器
-    # ==========================================================
-    # 因为你用了 DDP 多卡训练 (有 rank 变量)，为了防止报错，
-    # 最稳妥的获取当前显卡 device 的写法如下：
-    # ✅ 修正代码 (直接用上面已定义的 device)
-    # 实例化，后续可以可以加到第四层
-    # ==========================================================
-        
     for epoch in range(init_epoch, args.num_epoch+1):
         train_sampler.set_epoch(epoch)
-        
-        # 👇 【新增】用于记录当前 Epoch 累加值的字典
-        epoch_losses_raw = {"G_adv": 0.0, "G_cycle": 0.0, "G_l1": 0.0}
         
         # ✅【新增】进度条封装 (仅在 Rank 0 显示)
         # 这样你就不会看到满屏滚动的 print，而是一个优雅的进度条
@@ -350,6 +431,14 @@ def train_syndiff(rank, gpu, args):
         # 用于记录 epoch 平均 loss
         epoch_g_loss = 0.0
         epoch_d_loss = 0.0
+        epoch_g_adv_loss = 0.0
+        epoch_g_cycle_adv_loss = 0.0
+        epoch_g_l1_loss = 0.0
+        epoch_g_cycle_loss = 0.0
+        epoch_g_lumi_loss = 0.0
+        epoch_g_wavelet_loss = 0.0
+        epoch_g_innovative_loss = 0.0
+        epoch_d_cycle_loss = 0.0
         
         for iteration, (x1, x2) in loader_iter:
             # 开启梯度
@@ -410,8 +499,8 @@ def train_syndiff(rank, gpu, args):
             x2_0_predict_diff = gen_diffusive_2(torch.cat((x2_tp1.detach(), x1_0_predict), axis=1), t2, latent_z2)
 
             C = args.num_channels
-            x1_pos_sample = sample_posterior(pos_coeff, x1_0_predict_diff[:,0:C,:,:], x1_tp1, t1)
-            x2_pos_sample = sample_posterior(pos_coeff, x2_0_predict_diff[:,0:C,:,:], x2_tp1, t2)
+            x1_pos_sample = sample_posterior(pos_coeff, x1_0_predict_diff[:,0:C,:], x1_tp1, t1)
+            x2_pos_sample = sample_posterior(pos_coeff, x2_0_predict_diff[:,0:C,:], x2_tp1, t2)
 
             output1 = disc_diffusive_1(x1_pos_sample, t1, x1_tp1.detach()).view(-1)
             output2 = disc_diffusive_2(x2_pos_sample, t2, x2_tp1.detach()).view(-1)       
@@ -476,8 +565,8 @@ def train_syndiff(rank, gpu, args):
             x1_0_predict_diff = gen_diffusive_1(torch.cat((x1_tp1.detach(), x2_0_predict), axis=1), t1, latent_z1)
             x2_0_predict_diff = gen_diffusive_2(torch.cat((x2_tp1.detach(), x1_0_predict), axis=1), t2, latent_z2)            
 
-            x1_pos_sample = sample_posterior(pos_coeff, x1_0_predict_diff[:,0:C,:,:], x1_tp1, t1)
-            x2_pos_sample = sample_posterior(pos_coeff, x2_0_predict_diff[:,0:C,:,:], x2_tp1, t2)
+            x1_pos_sample = sample_posterior(pos_coeff, x1_0_predict_diff[:,0:C,:], x1_tp1, t1)
+            x2_pos_sample = sample_posterior(pos_coeff, x2_0_predict_diff[:,0:C,:], x2_tp1, t2)
 
             output1 = disc_diffusive_1(x1_pos_sample, t1, x1_tp1.detach()).view(-1)
             output2 = disc_diffusive_2(x2_pos_sample, t2, x2_tp1.detach()).view(-1)  
@@ -492,61 +581,60 @@ def train_syndiff(rank, gpu, args):
             errG_cycle_adv2 = F.softplus(-D_cycle2_fake).mean()   
             errG_cycle_adv = errG_cycle_adv1 + errG_cycle_adv2
 
-                        # ===================== 1. 基础L1损失 =====================
-            errG1_L1 = F.l1_loss(x1_0_predict_diff[:,0:C,:,:], real_data1)
-            errG2_L1 = F.l1_loss(x2_0_predict_diff[:,0:C,:,:], real_data2)
+            errG1_L1 = F.l1_loss(x1_0_predict_diff[:,0:C,:], real_data1)
+            errG2_L1 = F.l1_loss(x2_0_predict_diff[:,0:C,:], real_data2)
             errG_L1 = errG1_L1 + errG2_L1 
 
-            # ===================== 2. 循环一致性损失 =====================
+            # ✅【应用】创新 Loss
+            errG1_lumi = criterion_lumi(x1_0_predict_diff[:,0:C,:], real_data1)
+            errG2_lumi = criterion_lumi(x2_0_predict_diff[:,0:C,:], real_data2)
+            errG_lumi = errG1_lumi + errG2_lumi
+
+            errG1_wavelet = criterion_wavelet(x1_0_predict_diff[:,0:C,:], real_data1)
+            errG2_wavelet = criterion_wavelet(x2_0_predict_diff[:,0:C,:], real_data2)
+            errG_wavelet = errG1_wavelet + errG2_wavelet
+
+            errG_innovative = args.lambda_lumi * errG_lumi + args.lambda_wavelet * errG_wavelet
+
             errG1_cycle = F.l1_loss(x1_0_predict_cycle, real_data1)
             errG2_cycle = F.l1_loss(x2_0_predict_cycle, real_data2)            
-            errG_cycle = errG1_cycle + errG2_cycle  
+            errG_cycle = errG1_cycle + errG2_cycle            
 
-            # ======================================
-            # 绝对复刻原作者的权重环境 (基线控制变量)
-            # ======================================
-            lambda_l1_loss = 0.5  # 严格遵从原作者的扩散模型软约束设定
-
-            # ===================== 🔥 终极总损失 =====================
-            # 完全还原原始公式：0.5 * Cycle + Adv + Cycle_Adv + 0.5 * 跨域L1
-            errG = lambda_l1_loss * errG_cycle \
-                + errG_adv \
-                + errG_cycle_adv \
-                + lambda_l1_loss * errG_L1
-            # ======================================================================
-
-            errG.backward()
+            # 总生成器损失
+            errG = args.lambda_l1_loss*errG_cycle + errG_adv + errG_cycle_adv + args.lambda_l1_loss*errG_L1 + errG_innovative
             
-           # 👇 【新增】累加裸值 (Raw) —— 未加权的原始损失值
-           # 👇 【修复版】累加裸值 (Raw) —— 自动初始化字典键，解决KeyError
-            # 👇 【终极修复】先初始化所有字典键，再累加（永不报错）
-            # ===================== Raw 损失裸值 初始化 + 累加 =====================
-            epoch_losses_raw["G_adv"] += errG_adv.item()
-            epoch_losses_raw["G_cycle"] += errG_cycle.item()
-            epoch_losses_raw["G_l1"] += errG_L1.item()
+            # 反向传播和更新
+            # torch.autograd.set_detect_anomaly(True) # 调试时可开启
+            errG.backward()
+
             optimizer_gen_diffusive_1.step()
             optimizer_gen_diffusive_2.step()
             optimizer_gen_non_diffusive_1to2.step()
             optimizer_gen_non_diffusive_2to1.step()           
 
             global_step += 1
-
-            # ✅【新增】更新进度条后缀 (实时查看 Loss)
+            
             # ✅【新增】更新进度条后缀 (实时查看 Loss)
             if rank == 0:
                 epoch_g_loss += errG.item()
                 epoch_d_loss += errD.item()
-                
-                # 【关键修复】删掉所有 args.，用本地写死的权重变量！
-                
-                
-                # 进度条显示（无任何args，纯本地变量）
+                epoch_g_adv_loss += errG_adv.item()
+                epoch_g_cycle_adv_loss += errG_cycle_adv.item()
+                epoch_g_l1_loss += errG_L1.item()
+                epoch_g_cycle_loss += errG_cycle.item()
+                epoch_g_lumi_loss += errG_lumi.item()
+                epoch_g_wavelet_loss += errG_wavelet.item()
+                epoch_g_innovative_loss += errG_innovative.item()
+                epoch_d_cycle_loss += errD_cycle.item()
+                # 在进度条右边显示当前的 G Loss 和 D Loss
                 loader_iter.set_postfix({
                     "G": f"{errG.item():.3f}",
                     "D": f"{errD.item():.3f}",
-                    "Cyc": f"{(lambda_l1_loss * errG_cycle).item():.3f}",
-                    "L1": f"{(lambda_l1_loss * errG_L1).item():.3f}"
+                    "Cyc": f"{errG_cycle.item():.3f}",
+                    "Lum": f"{errG_lumi.item():.3f}",
+                    "Wav": f"{errG_wavelet.item():.3f}"
                 })
+        
         # 学习率衰减
         if not args.no_lr_decay:
             scheduler_gen_diffusive_1.step()
@@ -559,31 +647,56 @@ def train_syndiff(rank, gpu, args):
             scheduler_disc_non_diffusive_cycle2.step()
 
         # ✅【新增】每个 Epoch 结束后更新 Loss 曲线图
-        # ✅【新增】每个 Epoch 结束后更新 Loss 曲线图
         if rank == 0:
             avg_g_loss = epoch_g_loss / len(data_loader)
             avg_d_loss = epoch_d_loss / len(data_loader)
+            avg_g_adv_loss = epoch_g_adv_loss / len(data_loader)
+            avg_g_cycle_adv_loss = epoch_g_cycle_adv_loss / len(data_loader)
+            avg_g_l1_loss = epoch_g_l1_loss / len(data_loader)
+            avg_g_cycle_loss = epoch_g_cycle_loss / len(data_loader)
+            avg_g_lumi_loss = epoch_g_lumi_loss / len(data_loader)
+            avg_g_wavelet_loss = epoch_g_wavelet_loss / len(data_loader)
+            avg_g_innovative_loss = epoch_g_innovative_loss / len(data_loader)
+            avg_d_cycle_loss = epoch_d_cycle_loss / len(data_loader)
+            # tracker.update 会自动画图保存到 experiments 文件夹
             tracker.update(epoch, avg_g_loss)
-            logger.info(f"Epoch {epoch} Done. Avg G Loss: {avg_g_loss:.4f}, Avg D Loss: {avg_d_loss:.4f}")
-            
-            # 👇 【严格对齐缩进】计算并打印极其详尽的 Loss 拆解
-            num_batches = len(data_loader)
-            
-            for k in epoch_losses_raw:
-                epoch_losses_raw[k] /= num_batches
             tracker.update_named(epoch, {
-                "G_adv": epoch_losses_raw["G_adv"],
-                "G_cycle": epoch_losses_raw["G_cycle"],
-                "G_l1": epoch_losses_raw["G_l1"],
-                "D_total": avg_d_loss,
+                'g_total': avg_g_loss,
+                'd_diffusive': avg_d_loss,
+                'd_cycle': avg_d_cycle_loss,
+                'g_adv': avg_g_adv_loss,
+                'g_cycle_adv': avg_g_cycle_adv_loss,
+                'g_l1': avg_g_l1_loss,
+                'g_cycle_l1': avg_g_cycle_loss,
+                'g_lumi': avg_g_lumi_loss,
+                'g_wavelet': avg_g_wavelet_loss,
+                'g_innovative': avg_g_innovative_loss,
             })
-                
-            logger.info(f"--- Epoch {epoch} Loss Breakdown ---")
-            logger.info(f"Raw Losses: { {k: round(v, 4) for k, v in epoch_losses_raw.items()} }")
-            logger.info(f"G_l1: {epoch_losses_raw['G_l1']:.6f}")
-            logger.info(f"G_cycle: {epoch_losses_raw['G_cycle']:.6f}")
-            logger.info(f"G_adv: {epoch_losses_raw['G_adv']:.6f}")
-            logger.info(f"D_total: {avg_d_loss:.6f}")
+            np.savez(
+                os.path.join(exp_path, 'loss_metrics.npz'),
+                epochs=np.array(tracker.epochs),
+                g_total=np.array(tracker.named_train_losses['g_total']),
+                d_diffusive=np.array(tracker.named_train_losses['d_diffusive']),
+                d_cycle=np.array(tracker.named_train_losses['d_cycle']),
+                g_adv=np.array(tracker.named_train_losses['g_adv']),
+                g_cycle_adv=np.array(tracker.named_train_losses['g_cycle_adv']),
+                g_l1=np.array(tracker.named_train_losses['g_l1']),
+                g_cycle_l1=np.array(tracker.named_train_losses['g_cycle_l1']),
+                g_lumi=np.array(tracker.named_train_losses['g_lumi']),
+                g_wavelet=np.array(tracker.named_train_losses['g_wavelet']),
+                g_innovative=np.array(tracker.named_train_losses['g_innovative']),
+            )
+            
+            # 日志记录
+            logger.info(f"Epoch {epoch} Done. Avg G Loss: {avg_g_loss:.4f}")
+            logger.info(
+                "Loss Breakdown | "
+                f"D_diff={avg_d_loss:.4f} | D_cycle={avg_d_cycle_loss:.4f} | "
+                f"G_adv={avg_g_adv_loss:.4f} | G_cycle_adv={avg_g_cycle_adv_loss:.4f} | "
+                f"G_L1={avg_g_l1_loss:.4f} | G_cycle_L1={avg_g_cycle_loss:.4f} | "
+                f"G_lumi={avg_g_lumi_loss:.4f} | G_wavelet={avg_g_wavelet_loss:.4f} | "
+                f"G_innovative={avg_g_innovative_loss:.4f}"
+            )
 
             def save_rgb(tensor, path):
                 if tensor.shape[1] > 3:
@@ -594,54 +707,54 @@ def train_syndiff(rank, gpu, args):
             if epoch % 10 == 0:
                 save_rgb(x1_pos_sample, os.path.join(exp_path, 'xpos1_epoch_{}.png'.format(epoch)))
                 save_rgb(x2_pos_sample, os.path.join(exp_path, 'xpos2_epoch_{}.png'.format(epoch)))
-                
-                # 2. 生成并保存 Domain 2 -> Domain 1 的样本
-                # 拼接噪声和源域数据
-                x1_t = torch.cat((torch.randn_like(real_data1), real_data2), axis=1)
-                fake_sample1 = sample_from_model(pos_coeff, gen_diffusive_1, args.num_timesteps, x1_t, T, args)
-                
-                # 【核心修改点】拼接展示时只用RGB切片
-                vis_real2 = real_data2[:, :3, :, :]
-                vis_fake1 = fake_sample1[:, :3, :, :]
-                fake_sample1_vis = torch.cat((vis_real2, vis_fake1), axis=-1)
-                torchvision.utils.save_image(fake_sample1_vis, os.path.join(exp_path, 'sample1_discrete_epoch_{}.png'.format(epoch)), normalize=True)
-                
-                # 生成粗糙预测
-                pred1 = gen_non_diffusive_2to1(real_data2)
-                
-                # 生成扩散精修结果
-                x2_t = torch.cat((torch.randn_like(real_data2), pred1), axis=1)
-                fake_sample2_tilda = gen_diffusive_2(x2_t , t2, latent_z2)   
-                
-                # 【核心修改点】复杂对比图的RGB切片
-                vis_pred1 = pred1[:, :3, :, :]
-                vis_cycle1 = gen_non_diffusive_1to2(pred1)[:, :3, :, :]
-                vis_fake2_tilda = fake_sample2_tilda[:, :3, :, :]
-                
-                # 拼接：真实图 | 粗糙预测 | 循环重建 | 扩散精修
-                pred1_vis = torch.cat((vis_real2, vis_pred1, vis_cycle1, vis_fake2_tilda), axis=-1)
-                torchvision.utils.save_image(pred1_vis, os.path.join(exp_path, 'sample1_translated_epoch_{}.png'.format(epoch)), normalize=True)
+            
+            # 2. 生成并保存 Domain 2 -> Domain 1 的样本
+            # 拼接噪声和源域数据
+            x1_t = torch.cat((torch.randn_like(real_data1), real_data2), axis=1)
+            fake_sample1 = sample_from_model(pos_coeff, gen_diffusive_1, args.num_timesteps, x1_t, T, args)
+            
+            # 【核心修改点】拼接展示时只用RGB切片
+            vis_real2 = real_data2[:, :3, :, :]
+            vis_fake1 = fake_sample1[:, :3, :, :]
+            fake_sample1_vis = torch.cat((vis_real2, vis_fake1), axis=-1)
+            torchvision.utils.save_image(fake_sample1_vis, os.path.join(exp_path, 'sample1_discrete_epoch_{}.png'.format(epoch)), normalize=True)
+            
+            # 生成粗糙预测
+            pred1 = gen_non_diffusive_2to1(real_data2)
+            
+            # 生成扩散精修结果
+            x2_t = torch.cat((torch.randn_like(real_data2), pred1), axis=1)
+            fake_sample2_tilda = gen_diffusive_2(x2_t , t2, latent_z2)   
+            
+            # 【核心修改点】复杂对比图的RGB切片
+            vis_pred1 = pred1[:, :3, :, :]
+            vis_cycle1 = gen_non_diffusive_1to2(pred1)[:, :3, :, :]
+            vis_fake2_tilda = fake_sample2_tilda[:, :3, :, :]
+            
+            # 拼接：真实图 | 粗糙预测 | 循环重建 | 扩散精修
+            pred1_vis = torch.cat((vis_real2, vis_pred1, vis_cycle1, vis_fake2_tilda), axis=-1)
+            torchvision.utils.save_image(pred1_vis, os.path.join(exp_path, 'sample1_translated_epoch_{}.png'.format(epoch)), normalize=True)
 
-                # 3. 生成并保存 Domain 1 -> Domain 2 的样本 (同上)
-                x2_t = torch.cat((torch.randn_like(real_data2), real_data1), axis=1)
-                fake_sample2 = sample_from_model(pos_coeff, gen_diffusive_2, args.num_timesteps, x2_t, T, args)
-                
-                vis_real1 = real_data1[:, :3, :, :]
-                vis_fake2 = fake_sample2[:, :3, :, :]
-                fake_sample2_vis = torch.cat((vis_real1, vis_fake2), axis=-1)
-                torchvision.utils.save_image(fake_sample2_vis, os.path.join(exp_path, 'sample2_discrete_epoch_{}.png'.format(epoch)), normalize=True)
-                
-                pred2 = gen_non_diffusive_1to2(real_data1)
-                
-                x1_t = torch.cat((torch.randn_like(real_data1), pred2), axis=1)
-                fake_sample1_tilda = gen_diffusive_1(x1_t , t1, latent_z1)   
-                
-                vis_pred2 = pred2[:, :3, :, :]
-                vis_cycle2 = gen_non_diffusive_2to1(pred2)[:, :3, :, :]
-                vis_fake1_tilda = fake_sample1_tilda[:, :3, :, :]
-                
-                pred2_vis = torch.cat((vis_real1, vis_pred2, vis_cycle2, vis_fake1_tilda), axis=-1)
-                torchvision.utils.save_image(pred2_vis, os.path.join(exp_path, 'sample2_translated_epoch_{}.png'.format(epoch)), normalize=True)
+            # 3. 生成并保存 Domain 1 -> Domain 2 的样本 (同上)
+            x2_t = torch.cat((torch.randn_like(real_data2), real_data1), axis=1)
+            fake_sample2 = sample_from_model(pos_coeff, gen_diffusive_2, args.num_timesteps, x2_t, T, args)
+            
+            vis_real1 = real_data1[:, :3, :, :]
+            vis_fake2 = fake_sample2[:, :3, :, :]
+            fake_sample2_vis = torch.cat((vis_real1, vis_fake2), axis=-1)
+            torchvision.utils.save_image(fake_sample2_vis, os.path.join(exp_path, 'sample2_discrete_epoch_{}.png'.format(epoch)), normalize=True)
+            
+            pred2 = gen_non_diffusive_1to2(real_data1)
+            
+            x1_t = torch.cat((torch.randn_like(real_data1), pred2), axis=1)
+            fake_sample1_tilda = gen_diffusive_1(x1_t , t1, latent_z1)   
+            
+            vis_pred2 = pred2[:, :3, :, :]
+            vis_cycle2 = gen_non_diffusive_2to1(pred2)[:, :3, :, :]
+            vis_fake1_tilda = fake_sample1_tilda[:, :3, :, :]
+            
+            pred2_vis = torch.cat((vis_real1, vis_pred2, vis_cycle2, vis_fake1_tilda), axis=-1)
+            torchvision.utils.save_image(pred2_vis, os.path.join(exp_path, 'sample2_translated_epoch_{}.png'.format(epoch)), normalize=True)
             
             # 4. 保存模型内容 (Checkpoint)
             if args.save_content:
@@ -777,16 +890,8 @@ if __name__ == '__main__':
     parser.add_argument('--n_mlp', type=int, default=3, help='number of mlp layers for z')
     parser.add_argument('--ch_mult', nargs='+', type=int, help='channel multiplier')
     parser.add_argument('--num_res_blocks', type=int, default=2, help='number of resnet blocks per scale')
-    # ✅ 全局 self-attn 的分辨率（建议只放低分辨率，如 16/8）
     parser.add_argument('--attn_resolutions', nargs='+', type=int, default=[16],
-                        help='resolution list for global attention, e.g. --attn_resolutions 16 8')
-    # ✅ 局部注意力（用于高分辨率 256/128/64），做消融用
-    parser.add_argument('--local_attn_type', type=str, default='none', choices=['none', 'cbam', 'scsa', 'coord'],
-                    help='local attention type for ablation')
-    parser.add_argument('--local_attn_resolutions', nargs='+', type=int, default=[128, 64, 32],
-                    help='resolution list for local attention')
-
-
+                        help='resolution(s) of applying attention')
     parser.add_argument('--dropout', type=float, default=0., help='drop-out rate')
     parser.add_argument('--resamp_with_conv', action='store_false', default=True, help='always up/down sampling with conv')
     parser.add_argument('--conditional', action='store_false', default=True, help='noise conditional')
@@ -794,12 +899,18 @@ if __name__ == '__main__':
     parser.add_argument('--fir_kernel', default=[1, 3, 3, 1], help='FIR kernel')
     parser.add_argument('--skip_rescale', action='store_false', default=True, help='skip rescale')
     parser.add_argument('--resblock_type', default='biggan', help='tyle of resnet block, choice in biggan and ddpm')
+    parser.add_argument('--local_attn_type', type=str, default='none', choices=['none', 'cbam', 'scsa'],
+                        help='legacy local attention option for compatibility with existing train.sh')
     parser.add_argument('--progressive', type=str, default='none', choices=['none', 'output_skip', 'residual'], help='progressive type for output') 
     parser.add_argument('--progressive_input', type=str, default='residual', choices=['none', 'input_skip', 'residual'], help='progressive type for input')
     parser.add_argument('--progressive_combine', type=str, default='sum', choices=['sum', 'cat'], help='progressive combine method.')
     parser.add_argument('--embedding_type', type=str, default='positional', choices=['positional', 'fourier'], help='type of time embedding')
     parser.add_argument('--fourier_scale', type=float, default=16., help='scale of fourier transform')
     parser.add_argument('--not_use_tanh', action='store_true',default=False)
+    parser.add_argument('--use_bottleneck_mscbam', action='store_true', default=True,
+                        help='enable MS_CBAMpp_v2 in the generator bottleneck')
+    parser.add_argument('--disable_bottleneck_mscbam', action='store_false', dest='use_bottleneck_mscbam',
+                        help='disable MS_CBAMpp_v2 in the generator bottleneck')
     parser.add_argument('--exp', default='ixi_synth', help='name of experiment')
     parser.add_argument('--input_path', help='path to input data')
     parser.add_argument('--output_path', help='path to output saves')
@@ -820,9 +931,11 @@ if __name__ == '__main__':
     parser.add_argument('--r1_gamma', type=float, default=0.05, help='coef for r1 reg')
     parser.add_argument('--lazy_reg', type=int, default=None, help='lazy regulariation.')
     parser.add_argument('--save_content', action='store_true',default=False)
-    parser.add_argument('--save_content_every', type=int, default=40, help='save content for resuming every x epochs')
-    parser.add_argument('--save_ckpt_every', type=int, default=20, help='save ckpt every x epochs')
-    parser.add_argument('--lambda_l1_loss', type=float, default=2.0, help='weightening of l1 loss part of diffusion ans cycle models')
+    parser.add_argument('--save_content_every', type=int, default=10, help='save content for resuming every x epochs')
+    parser.add_argument('--save_ckpt_every', type=int, default=10, help='save ckpt every x epochs')
+    parser.add_argument('--lambda_l1_loss', type=float, default=0.5, help='weightening of l1 loss part of diffusion ans cycle models')
+    parser.add_argument('--lambda_lumi', type=float, default=0.2, help='weight for luminance-weighted reconstruction loss')
+    parser.add_argument('--lambda_wavelet', type=float, default=0.1, help='weight for wavelet reconstruction loss')
     parser.add_argument('--num_proc_node', type=int, default=1, help='The number of nodes in multi node env.')
     parser.add_argument('--num_process_per_node', type=int, default=1, help='number of gpus')
     parser.add_argument('--node_rank', type=int, default=0, help='The index of node.')
