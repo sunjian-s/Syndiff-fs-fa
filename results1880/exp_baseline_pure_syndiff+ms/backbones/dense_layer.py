@@ -12,7 +12,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 from torch.nn.init import _calculate_fan_in_and_fan_out
 import numpy as np
-
+# 不需要看
 
 def _calculate_correct_fan(tensor, mode):
     """

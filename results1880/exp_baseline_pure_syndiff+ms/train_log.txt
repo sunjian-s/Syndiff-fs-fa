@@ -1,0 +1,290 @@
+2026-04-02 17:54:37,493 - Start Training on Rank 0
+2026-04-02 17:54:55,073 - train data size:470
+2026-04-02 17:54:55,073 - val data size:15
+2026-04-02 18:05:25,895 - Epoch 0 Done. Avg G Loss: 6.6515
+2026-04-02 18:05:25,895 - Loss Breakdown | D_diff=6.7501 | D_cycle=1.9158 | G_adv=2.7219 | G_cycle_adv=3.1370 | G_L1=0.3368 | G_cycle_L1=0.5121 | G_lumi=1.6460 | G_wavelet=0.3898 | G_innovative=0.3682
+2026-04-02 18:13:26,870 - Epoch 1 Done. Avg G Loss: 6.5961
+2026-04-02 18:13:26,871 - Loss Breakdown | D_diff=3.0443 | D_cycle=1.4031 | G_adv=1.5446 | G_cycle_adv=4.3783 | G_L1=0.2712 | G_cycle_L1=0.4787 | G_lumi=1.3284 | G_wavelet=0.3267 | G_innovative=0.2983
+2026-04-02 18:21:17,665 - Epoch 2 Done. Avg G Loss: 6.7989
+2026-04-02 18:21:17,666 - Loss Breakdown | D_diff=2.9494 | D_cycle=1.2623 | G_adv=1.4702 | G_cycle_adv=4.6767 | G_L1=0.2515 | G_cycle_L1=0.4983 | G_lumi=1.2329 | G_wavelet=0.3045 | G_innovative=0.2770
+2026-04-02 18:29:08,198 - Epoch 3 Done. Avg G Loss: 6.8344
+2026-04-02 18:29:08,199 - Loss Breakdown | D_diff=2.9707 | D_cycle=1.2455 | G_adv=1.5252 | G_cycle_adv=4.6942 | G_L1=0.2331 | G_cycle_L1=0.4869 | G_lumi=1.1333 | G_wavelet=0.2834 | G_innovative=0.2550
+2026-04-02 18:41:56,968 - Epoch 4 Done. Avg G Loss: 6.7899
+2026-04-02 18:41:56,969 - Loss Breakdown | D_diff=2.8939 | D_cycle=1.2960 | G_adv=1.4496 | G_cycle_adv=4.7361 | G_L1=0.2236 | G_cycle_L1=0.4944 | G_lumi=1.0889 | G_wavelet=0.2734 | G_innovative=0.2451
+2026-04-02 18:49:55,639 - Epoch 5 Done. Avg G Loss: 6.1994
+2026-04-02 18:49:55,640 - Loss Breakdown | D_diff=2.8648 | D_cycle=1.6618 | G_adv=1.4467 | G_cycle_adv=4.1454 | G_L1=0.2182 | G_cycle_L1=0.5188 | G_lumi=1.0609 | G_wavelet=0.2669 | G_innovative=0.2389
+2026-04-02 18:59:31,429 - Start Training on Rank 0
+2026-04-02 18:59:36,853 - train data size:470
+2026-04-02 18:59:36,854 - val data size:15
+2026-04-02 18:59:42,726 - => loaded checkpoint (epoch 1)
+2026-04-02 19:03:27,102 - Start Training on Rank 0
+2026-04-02 19:03:32,971 - train data size:470
+2026-04-02 19:03:32,971 - val data size:15
+2026-04-02 19:03:36,086 - => loaded checkpoint (epoch 1)
+2026-04-02 19:11:46,530 - Epoch 1 Done. Avg G Loss: 6.7267
+2026-04-02 19:11:46,530 - Loss Breakdown | D_diff=3.0621 | D_cycle=1.3587 | G_adv=1.5653 | G_cycle_adv=4.4855 | G_L1=0.2707 | G_cycle_L1=0.4841 | G_lumi=1.3299 | G_wavelet=0.3258 | G_innovative=0.2986
+2026-04-02 19:20:02,157 - Epoch 2 Done. Avg G Loss: 7.0411
+2026-04-02 19:20:02,158 - Loss Breakdown | D_diff=2.9405 | D_cycle=1.2471 | G_adv=1.4923 | G_cycle_adv=4.8877 | G_L1=0.2504 | G_cycle_L1=0.5201 | G_lumi=1.2276 | G_wavelet=0.3029 | G_innovative=0.2758
+2026-04-02 19:27:28,905 - Start Training on Rank 0
+2026-04-02 19:27:33,560 - train data size:470
+2026-04-02 19:27:33,560 - val data size:15
+2026-04-02 19:35:42,855 - Epoch 0 Done. Avg G Loss: 6.4581
+2026-04-02 19:35:42,855 - Loss Breakdown | D_diff=6.6542 | D_cycle=2.0014 | G_adv=2.7291 | G_cycle_adv=2.9524 | G_L1=0.3297 | G_cycle_L1=0.5019 | G_lumi=1.6133 | G_wavelet=0.3819 | G_innovative=0.3608
+2026-04-02 19:44:00,751 - Epoch 1 Done. Avg G Loss: 6.9170
+2026-04-02 19:44:00,751 - Loss Breakdown | D_diff=3.0562 | D_cycle=1.3313 | G_adv=1.5659 | G_cycle_adv=4.6618 | G_L1=0.2707 | G_cycle_L1=0.5119 | G_lumi=1.3269 | G_wavelet=0.3263 | G_innovative=0.2980
+2026-04-02 19:52:06,405 - Epoch 2 Done. Avg G Loss: 7.0399
+2026-04-02 19:52:06,405 - Loss Breakdown | D_diff=2.9597 | D_cycle=1.2633 | G_adv=1.4747 | G_cycle_adv=4.9059 | G_L1=0.2536 | G_cycle_L1=0.5059 | G_lumi=1.2447 | G_wavelet=0.3065 | G_innovative=0.2796
+2026-04-02 20:00:13,386 - Epoch 3 Done. Avg G Loss: 6.7281
+2026-04-02 20:00:13,386 - Loss Breakdown | D_diff=2.9161 | D_cycle=1.3920 | G_adv=1.4598 | G_cycle_adv=4.6512 | G_L1=0.2328 | G_cycle_L1=0.4913 | G_lumi=1.1333 | G_wavelet=0.2837 | G_innovative=0.2550
+2026-04-02 20:08:19,581 - Epoch 4 Done. Avg G Loss: 5.6784
+2026-04-02 20:08:19,581 - Loss Breakdown | D_diff=2.8957 | D_cycle=1.8955 | G_adv=1.4499 | G_cycle_adv=3.6373 | G_L1=0.2218 | G_cycle_L1=0.4748 | G_lumi=1.0789 | G_wavelet=0.2713 | G_innovative=0.2429
+2026-04-02 20:16:26,429 - Epoch 5 Done. Avg G Loss: 5.2597
+2026-04-02 20:16:26,430 - Loss Breakdown | D_diff=2.8759 | D_cycle=2.0023 | G_adv=1.4456 | G_cycle_adv=3.2310 | G_L1=0.2148 | G_cycle_L1=0.4820 | G_lumi=1.0417 | G_wavelet=0.2631 | G_innovative=0.2346
+2026-04-02 20:24:32,323 - Epoch 6 Done. Avg G Loss: 5.1975
+2026-04-02 20:24:32,323 - Loss Breakdown | D_diff=2.8825 | D_cycle=1.9823 | G_adv=1.4519 | G_cycle_adv=3.1782 | G_L1=0.2084 | G_cycle_L1=0.4716 | G_lumi=1.0096 | G_wavelet=0.2550 | G_innovative=0.2274
+2026-04-02 20:32:38,324 - Epoch 7 Done. Avg G Loss: 5.1941
+2026-04-02 20:32:38,324 - Loss Breakdown | D_diff=2.9294 | D_cycle=1.9534 | G_adv=1.4390 | G_cycle_adv=3.1756 | G_L1=0.2055 | G_cycle_L1=0.5057 | G_lumi=0.9943 | G_wavelet=0.2504 | G_innovative=0.2239
+2026-04-02 20:40:43,354 - Epoch 8 Done. Avg G Loss: 5.1617
+2026-04-02 20:40:43,355 - Loss Breakdown | D_diff=2.8367 | D_cycle=1.9538 | G_adv=1.4266 | G_cycle_adv=3.1757 | G_L1=0.2003 | G_cycle_L1=0.4832 | G_lumi=0.9661 | G_wavelet=0.2443 | G_innovative=0.2177
+2026-04-02 20:48:48,050 - Epoch 9 Done. Avg G Loss: 5.1340
+2026-04-02 20:48:48,051 - Loss Breakdown | D_diff=2.8263 | D_cycle=1.9670 | G_adv=1.4248 | G_cycle_adv=3.1640 | G_L1=0.1918 | G_cycle_L1=0.4831 | G_lumi=0.9209 | G_wavelet=0.2347 | G_innovative=0.2076
+2026-04-02 20:56:53,975 - Epoch 10 Done. Avg G Loss: 5.0832
+2026-04-02 20:56:53,975 - Loss Breakdown | D_diff=2.8287 | D_cycle=1.9785 | G_adv=1.4137 | G_cycle_adv=3.1261 | G_L1=0.1964 | G_cycle_L1=0.4634 | G_lumi=0.9476 | G_wavelet=0.2391 | G_innovative=0.2134
+2026-04-02 21:00:37,811 - Start Training on Rank 0
+2026-04-02 21:00:44,011 - train data size:470
+2026-04-02 21:00:44,011 - val data size:15
+2026-04-02 21:00:47,347 - => loaded checkpoint (epoch 11)
+2026-04-02 21:09:03,757 - Epoch 11 Done. Avg G Loss: 5.0416
+2026-04-02 21:09:03,757 - Loss Breakdown | D_diff=2.8121 | D_cycle=2.0779 | G_adv=1.4105 | G_cycle_adv=3.0854 | G_L1=0.1933 | G_cycle_L1=0.4784 | G_lumi=0.9313 | G_wavelet=0.2360 | G_innovative=0.2099
+2026-04-02 21:17:23,019 - Epoch 12 Done. Avg G Loss: 5.2578
+2026-04-02 21:17:23,019 - Loss Breakdown | D_diff=2.8222 | D_cycle=1.9282 | G_adv=1.4164 | G_cycle_adv=3.2919 | G_L1=0.1897 | G_cycle_L1=0.4986 | G_lumi=0.9121 | G_wavelet=0.2304 | G_innovative=0.2055
+2026-04-02 21:25:46,092 - Epoch 13 Done. Avg G Loss: 5.3094
+2026-04-02 21:25:46,093 - Loss Breakdown | D_diff=2.8284 | D_cycle=1.9026 | G_adv=1.4151 | G_cycle_adv=3.3337 | G_L1=0.1912 | G_cycle_L1=0.5152 | G_lumi=0.9207 | G_wavelet=0.2321 | G_innovative=0.2073
+2026-04-02 21:34:06,475 - Epoch 14 Done. Avg G Loss: 5.3047
+2026-04-02 21:34:06,475 - Loss Breakdown | D_diff=2.8320 | D_cycle=1.9011 | G_adv=1.4121 | G_cycle_adv=3.3567 | G_L1=0.1870 | G_cycle_L1=0.4791 | G_lumi=0.8999 | G_wavelet=0.2278 | G_innovative=0.2028
+2026-04-02 21:42:29,299 - Epoch 15 Done. Avg G Loss: 5.4366
+2026-04-02 21:42:29,299 - Loss Breakdown | D_diff=2.8430 | D_cycle=1.8688 | G_adv=1.4208 | G_cycle_adv=3.4828 | G_L1=0.1824 | G_cycle_L1=0.4906 | G_lumi=0.8703 | G_wavelet=0.2232 | G_innovative=0.1964
+2026-04-02 21:50:48,652 - Epoch 16 Done. Avg G Loss: 5.4855
+2026-04-02 21:50:48,652 - Loss Breakdown | D_diff=2.8429 | D_cycle=1.8509 | G_adv=1.4080 | G_cycle_adv=3.5366 | G_L1=0.1852 | G_cycle_L1=0.4954 | G_lumi=0.8903 | G_wavelet=0.2261 | G_innovative=0.2007
+2026-04-02 21:59:13,411 - Epoch 17 Done. Avg G Loss: 5.4010
+2026-04-02 21:59:13,412 - Loss Breakdown | D_diff=2.8238 | D_cycle=1.8751 | G_adv=1.4267 | G_cycle_adv=3.4574 | G_L1=0.1758 | G_cycle_L1=0.4787 | G_lumi=0.8404 | G_wavelet=0.2157 | G_innovative=0.1897
+2026-04-02 22:07:34,666 - Epoch 18 Done. Avg G Loss: 5.5247
+2026-04-02 22:07:34,666 - Loss Breakdown | D_diff=2.8168 | D_cycle=1.8226 | G_adv=1.4078 | G_cycle_adv=3.6046 | G_L1=0.1709 | G_cycle_L1=0.4854 | G_lumi=0.8154 | G_wavelet=0.2101 | G_innovative=0.1841
+2026-04-02 22:15:55,814 - Epoch 19 Done. Avg G Loss: 5.6774
+2026-04-02 22:15:55,815 - Loss Breakdown | D_diff=2.8393 | D_cycle=1.7980 | G_adv=1.4145 | G_cycle_adv=3.7366 | G_L1=0.1758 | G_cycle_L1=0.4955 | G_lumi=0.8457 | G_wavelet=0.2151 | G_innovative=0.1907
+2026-04-02 22:24:18,431 - Epoch 20 Done. Avg G Loss: 5.7392
+2026-04-02 22:24:18,432 - Loss Breakdown | D_diff=2.8063 | D_cycle=1.7767 | G_adv=1.4112 | G_cycle_adv=3.8219 | G_L1=0.1718 | G_cycle_L1=0.4697 | G_lumi=0.8207 | G_wavelet=0.2118 | G_innovative=0.1853
+2026-04-02 22:32:49,768 - Epoch 21 Done. Avg G Loss: 6.0235
+2026-04-02 22:32:49,768 - Loss Breakdown | D_diff=2.8709 | D_cycle=1.7440 | G_adv=1.4926 | G_cycle_adv=4.0200 | G_L1=0.1722 | G_cycle_L1=0.4780 | G_lumi=0.8220 | G_wavelet=0.2131 | G_innovative=0.1857
+2026-04-02 22:41:11,265 - Epoch 22 Done. Avg G Loss: 5.9625
+2026-04-02 22:41:11,265 - Loss Breakdown | D_diff=2.8061 | D_cycle=1.7415 | G_adv=1.4037 | G_cycle_adv=4.0545 | G_L1=0.1704 | G_cycle_L1=0.4702 | G_lumi=0.8145 | G_wavelet=0.2109 | G_innovative=0.1840
+2026-04-02 22:49:31,131 - Epoch 23 Done. Avg G Loss: 6.0710
+2026-04-02 22:49:31,131 - Loss Breakdown | D_diff=2.8602 | D_cycle=1.7495 | G_adv=1.4615 | G_cycle_adv=4.1005 | G_L1=0.1697 | G_cycle_L1=0.4809 | G_lumi=0.8125 | G_wavelet=0.2116 | G_innovative=0.1837
+2026-04-02 22:57:51,223 - Epoch 24 Done. Avg G Loss: 6.0403
+2026-04-02 22:57:51,223 - Loss Breakdown | D_diff=2.8028 | D_cycle=1.7432 | G_adv=1.4118 | G_cycle_adv=4.1242 | G_L1=0.1688 | G_cycle_L1=0.4736 | G_lumi=0.8100 | G_wavelet=0.2108 | G_innovative=0.1831
+2026-04-02 23:06:12,453 - Epoch 25 Done. Avg G Loss: 6.1771
+2026-04-02 23:06:12,453 - Loss Breakdown | D_diff=2.7964 | D_cycle=1.6980 | G_adv=1.3966 | G_cycle_adv=4.2793 | G_L1=0.1659 | G_cycle_L1=0.4770 | G_lumi=0.7947 | G_wavelet=0.2082 | G_innovative=0.1798
+2026-04-02 23:14:33,014 - Epoch 26 Done. Avg G Loss: 6.2803
+2026-04-02 23:14:33,014 - Loss Breakdown | D_diff=2.7952 | D_cycle=1.6624 | G_adv=1.4008 | G_cycle_adv=4.3754 | G_L1=0.1696 | G_cycle_L1=0.4711 | G_lumi=0.8128 | G_wavelet=0.2122 | G_innovative=0.1838
+2026-04-02 23:22:53,442 - Epoch 27 Done. Avg G Loss: 6.3308
+2026-04-02 23:22:53,442 - Loss Breakdown | D_diff=2.7944 | D_cycle=1.6847 | G_adv=1.3984 | G_cycle_adv=4.4324 | G_L1=0.1640 | G_cycle_L1=0.4823 | G_lumi=0.7818 | G_wavelet=0.2058 | G_innovative=0.1769
+2026-04-02 23:31:14,685 - Epoch 28 Done. Avg G Loss: 6.5500
+2026-04-02 23:31:14,685 - Loss Breakdown | D_diff=2.8406 | D_cycle=1.6608 | G_adv=1.3939 | G_cycle_adv=4.6590 | G_L1=0.1652 | G_cycle_L1=0.4701 | G_lumi=0.7935 | G_wavelet=0.2074 | G_innovative=0.1794
+2026-04-02 23:39:35,892 - Epoch 29 Done. Avg G Loss: 6.4561
+2026-04-02 23:39:35,892 - Loss Breakdown | D_diff=2.8875 | D_cycle=1.6806 | G_adv=1.4011 | G_cycle_adv=4.5680 | G_L1=0.1598 | G_cycle_L1=0.4693 | G_lumi=0.7612 | G_wavelet=0.2017 | G_innovative=0.1724
+2026-04-02 23:47:58,210 - Epoch 30 Done. Avg G Loss: 6.5346
+2026-04-02 23:47:58,210 - Loss Breakdown | D_diff=2.8051 | D_cycle=1.6308 | G_adv=1.4108 | G_cycle_adv=4.6336 | G_L1=0.1609 | G_cycle_L1=0.4724 | G_lumi=0.7666 | G_wavelet=0.2023 | G_innovative=0.1736
+2026-04-02 23:56:29,051 - Epoch 31 Done. Avg G Loss: 6.8824
+2026-04-02 23:56:29,052 - Loss Breakdown | D_diff=2.8024 | D_cycle=1.5904 | G_adv=1.4071 | G_cycle_adv=4.9922 | G_L1=0.1572 | G_cycle_L1=0.4690 | G_lumi=0.7502 | G_wavelet=0.1992 | G_innovative=0.1700
+2026-04-03 00:04:50,273 - Epoch 32 Done. Avg G Loss: 6.8593
+2026-04-03 00:04:50,274 - Loss Breakdown | D_diff=2.8089 | D_cycle=1.5993 | G_adv=1.4013 | G_cycle_adv=4.9601 | G_L1=0.1602 | G_cycle_L1=0.4900 | G_lumi=0.7629 | G_wavelet=0.2021 | G_innovative=0.1728
+2026-04-03 00:13:13,960 - Epoch 33 Done. Avg G Loss: 7.0893
+2026-04-03 00:13:13,960 - Loss Breakdown | D_diff=2.7953 | D_cycle=1.6098 | G_adv=1.3995 | G_cycle_adv=5.1801 | G_L1=0.1598 | G_cycle_L1=0.5133 | G_lumi=0.7643 | G_wavelet=0.2017 | G_innovative=0.1730
+2026-04-03 00:21:42,425 - Epoch 34 Done. Avg G Loss: 7.0445
+2026-04-03 00:21:42,425 - Loss Breakdown | D_diff=2.7964 | D_cycle=1.5694 | G_adv=1.4054 | G_cycle_adv=5.1401 | G_L1=0.1615 | G_cycle_L1=0.4870 | G_lumi=0.7715 | G_wavelet=0.2041 | G_innovative=0.1747
+2026-04-03 00:30:10,102 - Epoch 35 Done. Avg G Loss: 6.9203
+2026-04-03 00:30:10,102 - Loss Breakdown | D_diff=2.7995 | D_cycle=1.6082 | G_adv=1.3983 | G_cycle_adv=5.0365 | G_L1=0.1549 | G_cycle_L1=0.4812 | G_lumi=0.7392 | G_wavelet=0.1972 | G_innovative=0.1676
+2026-04-03 00:38:39,200 - Epoch 36 Done. Avg G Loss: 6.7427
+2026-04-03 00:38:39,200 - Loss Breakdown | D_diff=2.7992 | D_cycle=1.6472 | G_adv=1.4066 | G_cycle_adv=4.8580 | G_L1=0.1552 | G_cycle_L1=0.4651 | G_lumi=0.7407 | G_wavelet=0.1974 | G_innovative=0.1679
+2026-04-03 00:47:08,492 - Epoch 37 Done. Avg G Loss: 7.0261
+2026-04-03 00:47:08,493 - Loss Breakdown | D_diff=2.7924 | D_cycle=1.5944 | G_adv=1.4006 | G_cycle_adv=5.1368 | G_L1=0.1552 | G_cycle_L1=0.4877 | G_lumi=0.7374 | G_wavelet=0.1971 | G_innovative=0.1672
+2026-04-03 00:55:37,849 - Epoch 38 Done. Avg G Loss: 7.4170
+2026-04-03 00:55:37,849 - Loss Breakdown | D_diff=2.8092 | D_cycle=1.5496 | G_adv=1.4050 | G_cycle_adv=5.5082 | G_L1=0.1584 | G_cycle_L1=0.5057 | G_lumi=0.7588 | G_wavelet=0.1996 | G_innovative=0.1717
+2026-04-03 01:04:07,682 - Epoch 39 Done. Avg G Loss: 7.1284
+2026-04-03 01:04:07,683 - Loss Breakdown | D_diff=2.7920 | D_cycle=1.5624 | G_adv=1.4006 | G_cycle_adv=5.2455 | G_L1=0.1529 | G_cycle_L1=0.4802 | G_lumi=0.7314 | G_wavelet=0.1948 | G_innovative=0.1658
+2026-04-03 01:12:38,763 - Epoch 40 Done. Avg G Loss: 7.4541
+2026-04-03 01:12:38,763 - Loss Breakdown | D_diff=2.7876 | D_cycle=1.5244 | G_adv=1.4008 | G_cycle_adv=5.5524 | G_L1=0.1585 | G_cycle_L1=0.5004 | G_lumi=0.7571 | G_wavelet=0.2006 | G_innovative=0.1715
+2026-04-03 01:21:18,195 - Epoch 41 Done. Avg G Loss: 7.0502
+2026-04-03 01:21:18,195 - Loss Breakdown | D_diff=2.7943 | D_cycle=1.6319 | G_adv=1.3946 | G_cycle_adv=5.1850 | G_L1=0.1507 | G_cycle_L1=0.4635 | G_lumi=0.7209 | G_wavelet=0.1928 | G_innovative=0.1635
+2026-04-03 01:29:47,530 - Epoch 42 Done. Avg G Loss: 7.3920
+2026-04-03 01:29:47,530 - Loss Breakdown | D_diff=2.7919 | D_cycle=1.5908 | G_adv=1.4027 | G_cycle_adv=5.5153 | G_L1=0.1520 | G_cycle_L1=0.4667 | G_lumi=0.7261 | G_wavelet=0.1939 | G_innovative=0.1646
+2026-04-03 01:38:17,545 - Epoch 43 Done. Avg G Loss: 7.7297
+2026-04-03 01:38:17,545 - Loss Breakdown | D_diff=2.7910 | D_cycle=1.5469 | G_adv=1.3988 | G_cycle_adv=5.8476 | G_L1=0.1526 | G_cycle_L1=0.4833 | G_lumi=0.7286 | G_wavelet=0.1950 | G_innovative=0.1652
+2026-04-03 01:46:49,074 - Epoch 44 Done. Avg G Loss: 7.3913
+2026-04-03 01:46:49,075 - Loss Breakdown | D_diff=2.8068 | D_cycle=1.5549 | G_adv=1.3965 | G_cycle_adv=5.5173 | G_L1=0.1505 | G_cycle_L1=0.4780 | G_lumi=0.7196 | G_wavelet=0.1925 | G_innovative=0.1632
+2026-04-03 01:55:21,153 - Epoch 45 Done. Avg G Loss: 7.9148
+2026-04-03 01:55:21,153 - Loss Breakdown | D_diff=2.8206 | D_cycle=1.5418 | G_adv=1.4245 | G_cycle_adv=6.0044 | G_L1=0.1535 | G_cycle_L1=0.4869 | G_lumi=0.7308 | G_wavelet=0.1958 | G_innovative=0.1657
+2026-04-03 02:03:46,335 - Epoch 46 Done. Avg G Loss: 7.9828
+2026-04-03 02:03:46,336 - Loss Breakdown | D_diff=2.8050 | D_cycle=1.5245 | G_adv=1.4031 | G_cycle_adv=6.0983 | G_L1=0.1528 | G_cycle_L1=0.4804 | G_lumi=0.7273 | G_wavelet=0.1937 | G_innovative=0.1648
+2026-04-03 02:12:15,659 - Epoch 47 Done. Avg G Loss: 7.7626
+2026-04-03 02:12:15,660 - Loss Breakdown | D_diff=2.7931 | D_cycle=1.5223 | G_adv=1.4008 | G_cycle_adv=5.8626 | G_L1=0.1528 | G_cycle_L1=0.5151 | G_lumi=0.7281 | G_wavelet=0.1955 | G_innovative=0.1652
+2026-04-03 02:20:42,855 - Epoch 48 Done. Avg G Loss: 7.6300
+2026-04-03 02:20:42,856 - Loss Breakdown | D_diff=2.8144 | D_cycle=1.5545 | G_adv=1.4133 | G_cycle_adv=5.7385 | G_L1=0.1478 | G_cycle_L1=0.4891 | G_lumi=0.7036 | G_wavelet=0.1896 | G_innovative=0.1597
+2026-04-03 02:29:11,231 - Epoch 49 Done. Avg G Loss: 7.8850
+2026-04-03 02:29:11,232 - Loss Breakdown | D_diff=2.7895 | D_cycle=1.5354 | G_adv=1.3966 | G_cycle_adv=5.9920 | G_L1=0.1509 | G_cycle_L1=0.5146 | G_lumi=0.7216 | G_wavelet=0.1925 | G_innovative=0.1636
+2026-04-03 02:37:35,210 - Epoch 50 Done. Avg G Loss: 7.8865
+2026-04-03 02:37:35,210 - Loss Breakdown | D_diff=2.7936 | D_cycle=1.4928 | G_adv=1.4006 | G_cycle_adv=6.0143 | G_L1=0.1444 | G_cycle_L1=0.4872 | G_lumi=0.6857 | G_wavelet=0.1865 | G_innovative=0.1558
+2026-04-03 02:46:07,582 - Epoch 51 Done. Avg G Loss: 7.7014
+2026-04-03 02:46:07,583 - Loss Breakdown | D_diff=2.7982 | D_cycle=1.5378 | G_adv=1.3941 | G_cycle_adv=5.8365 | G_L1=0.1481 | G_cycle_L1=0.4734 | G_lumi=0.7051 | G_wavelet=0.1897 | G_innovative=0.1600
+2026-04-03 02:54:30,492 - Epoch 52 Done. Avg G Loss: 8.0391
+2026-04-03 02:54:30,492 - Loss Breakdown | D_diff=2.7912 | D_cycle=1.4967 | G_adv=1.3979 | G_cycle_adv=6.1668 | G_L1=0.1478 | G_cycle_L1=0.4813 | G_lumi=0.7049 | G_wavelet=0.1891 | G_innovative=0.1599
+2026-04-03 03:02:53,158 - Epoch 53 Done. Avg G Loss: 10.4674
+2026-04-03 03:02:53,158 - Loss Breakdown | D_diff=2.7961 | D_cycle=1.3811 | G_adv=1.4011 | G_cycle_adv=8.5692 | G_L1=0.1558 | G_cycle_L1=0.5015 | G_lumi=0.7428 | G_wavelet=0.1992 | G_innovative=0.1685
+2026-04-03 03:11:15,935 - Epoch 54 Done. Avg G Loss: 8.8854
+2026-04-03 03:11:15,935 - Loss Breakdown | D_diff=2.8022 | D_cycle=1.4727 | G_adv=1.4088 | G_cycle_adv=7.0007 | G_L1=0.1538 | G_cycle_L1=0.4646 | G_lumi=0.7358 | G_wavelet=0.1963 | G_innovative=0.1668
+2026-04-03 03:19:39,115 - Epoch 55 Done. Avg G Loss: 10.1352
+2026-04-03 03:19:39,116 - Loss Breakdown | D_diff=2.7900 | D_cycle=1.3278 | G_adv=1.3944 | G_cycle_adv=8.2161 | G_L1=0.1502 | G_cycle_L1=0.5748 | G_lumi=0.7150 | G_wavelet=0.1923 | G_innovative=0.1622
+2026-04-03 03:28:02,191 - Epoch 56 Done. Avg G Loss: 10.8746
+2026-04-03 03:28:02,192 - Loss Breakdown | D_diff=2.7911 | D_cycle=1.3338 | G_adv=1.4019 | G_cycle_adv=8.9636 | G_L1=0.1459 | G_cycle_L1=0.5571 | G_lumi=0.6946 | G_wavelet=0.1880 | G_innovative=0.1577
+2026-04-03 03:36:24,772 - Epoch 57 Done. Avg G Loss: 10.1996
+2026-04-03 03:36:24,773 - Loss Breakdown | D_diff=2.7931 | D_cycle=1.3213 | G_adv=1.4008 | G_cycle_adv=8.2907 | G_L1=0.1521 | G_cycle_L1=0.5344 | G_lumi=0.7270 | G_wavelet=0.1944 | G_innovative=0.1648
+2026-04-03 03:44:48,003 - Epoch 58 Done. Avg G Loss: 9.0737
+2026-04-03 03:44:48,004 - Loss Breakdown | D_diff=2.8061 | D_cycle=1.3736 | G_adv=1.3949 | G_cycle_adv=7.1907 | G_L1=0.1480 | G_cycle_L1=0.5084 | G_lumi=0.7050 | G_wavelet=0.1901 | G_innovative=0.1600
+2026-04-03 03:53:11,158 - Epoch 59 Done. Avg G Loss: 8.0864
+2026-04-03 03:53:11,158 - Loss Breakdown | D_diff=2.7976 | D_cycle=1.4721 | G_adv=1.4024 | G_cycle_adv=6.2148 | G_L1=0.1441 | G_cycle_L1=0.4832 | G_lumi=0.6851 | G_wavelet=0.1857 | G_innovative=0.1556
+2026-04-03 04:01:35,238 - Epoch 60 Done. Avg G Loss: 8.2811
+2026-04-03 04:01:35,238 - Loss Breakdown | D_diff=2.7868 | D_cycle=1.4440 | G_adv=1.3970 | G_cycle_adv=6.4185 | G_L1=0.1431 | G_cycle_L1=0.4798 | G_lumi=0.6790 | G_wavelet=0.1839 | G_innovative=0.1542
+2026-04-03 04:10:07,540 - Epoch 61 Done. Avg G Loss: 9.0078
+2026-04-03 04:10:07,541 - Loss Breakdown | D_diff=2.8335 | D_cycle=1.4703 | G_adv=1.3974 | G_cycle_adv=7.1397 | G_L1=0.1447 | G_cycle_L1=0.4842 | G_lumi=0.6879 | G_wavelet=0.1866 | G_innovative=0.1562
+2026-04-03 04:18:30,526 - Epoch 62 Done. Avg G Loss: 8.9107
+2026-04-03 04:18:30,526 - Loss Breakdown | D_diff=2.7881 | D_cycle=1.4286 | G_adv=1.3949 | G_cycle_adv=7.0490 | G_L1=0.1426 | G_cycle_L1=0.4839 | G_lumi=0.6755 | G_wavelet=0.1840 | G_innovative=0.1535
+2026-04-03 04:26:48,780 - Epoch 63 Done. Avg G Loss: 9.4582
+2026-04-03 04:26:48,781 - Loss Breakdown | D_diff=2.7909 | D_cycle=1.4284 | G_adv=1.3942 | G_cycle_adv=7.5673 | G_L1=0.1433 | G_cycle_L1=0.5408 | G_lumi=0.6810 | G_wavelet=0.1851 | G_innovative=0.1547
+2026-04-03 04:35:03,157 - Epoch 64 Done. Avg G Loss: 10.5717
+2026-04-03 04:35:03,157 - Loss Breakdown | D_diff=2.7927 | D_cycle=1.3667 | G_adv=1.3935 | G_cycle_adv=8.6763 | G_L1=0.1426 | G_cycle_L1=0.5530 | G_lumi=0.6783 | G_wavelet=0.1845 | G_innovative=0.1541
+2026-04-03 04:43:20,763 - Epoch 65 Done. Avg G Loss: 8.8787
+2026-04-03 04:43:20,763 - Loss Breakdown | D_diff=2.7889 | D_cycle=1.4599 | G_adv=1.3965 | G_cycle_adv=7.0293 | G_L1=0.1383 | G_cycle_L1=0.4688 | G_lumi=0.6568 | G_wavelet=0.1795 | G_innovative=0.1493
+2026-04-03 04:51:42,254 - Epoch 66 Done. Avg G Loss: 8.8741
+2026-04-03 04:51:42,254 - Loss Breakdown | D_diff=2.8008 | D_cycle=1.4320 | G_adv=1.3981 | G_cycle_adv=7.0141 | G_L1=0.1416 | G_cycle_L1=0.4771 | G_lumi=0.6715 | G_wavelet=0.1828 | G_innovative=0.1526
+2026-04-03 05:00:02,754 - Epoch 67 Done. Avg G Loss: 8.9064
+2026-04-03 05:00:02,754 - Loss Breakdown | D_diff=2.7870 | D_cycle=1.4548 | G_adv=1.4019 | G_cycle_adv=7.0319 | G_L1=0.1400 | G_cycle_L1=0.5032 | G_lumi=0.6644 | G_wavelet=0.1815 | G_innovative=0.1510
+2026-04-03 05:08:23,377 - Epoch 68 Done. Avg G Loss: 9.1738
+2026-04-03 05:08:23,378 - Loss Breakdown | D_diff=2.7890 | D_cycle=1.4003 | G_adv=1.3940 | G_cycle_adv=7.3053 | G_L1=0.1433 | G_cycle_L1=0.4965 | G_lumi=0.6811 | G_wavelet=0.1842 | G_innovative=0.1546
+2026-04-03 05:16:45,783 - Epoch 69 Done. Avg G Loss: 8.8939
+2026-04-03 05:16:45,783 - Loss Breakdown | D_diff=2.7933 | D_cycle=1.4659 | G_adv=1.4010 | G_cycle_adv=7.0207 | G_L1=0.1390 | G_cycle_L1=0.5059 | G_lumi=0.6588 | G_wavelet=0.1794 | G_innovative=0.1497
+2026-04-03 05:25:09,416 - Epoch 70 Done. Avg G Loss: 8.9298
+2026-04-03 05:25:09,416 - Loss Breakdown | D_diff=2.7866 | D_cycle=1.4379 | G_adv=1.3966 | G_cycle_adv=7.0718 | G_L1=0.1388 | G_cycle_L1=0.4841 | G_lumi=0.6600 | G_wavelet=0.1803 | G_innovative=0.1500
+2026-04-03 05:33:42,068 - Epoch 71 Done. Avg G Loss: 9.3519
+2026-04-03 05:33:42,068 - Loss Breakdown | D_diff=2.7895 | D_cycle=1.3968 | G_adv=1.4060 | G_cycle_adv=7.4712 | G_L1=0.1387 | G_cycle_L1=0.5120 | G_lumi=0.6568 | G_wavelet=0.1800 | G_innovative=0.1494
+2026-04-03 05:42:05,593 - Epoch 72 Done. Avg G Loss: 9.8994
+2026-04-03 05:42:05,593 - Loss Breakdown | D_diff=2.7928 | D_cycle=1.3735 | G_adv=1.4006 | G_cycle_adv=8.0306 | G_L1=0.1401 | G_cycle_L1=0.4942 | G_lumi=0.6645 | G_wavelet=0.1809 | G_innovative=0.1510
+2026-04-03 05:50:28,786 - Epoch 73 Done. Avg G Loss: 9.1885
+2026-04-03 05:50:28,786 - Loss Breakdown | D_diff=2.7876 | D_cycle=1.4230 | G_adv=1.3971 | G_cycle_adv=7.3364 | G_L1=0.1349 | G_cycle_L1=0.4838 | G_lumi=0.6397 | G_wavelet=0.1759 | G_innovative=0.1455
+2026-04-03 05:58:52,492 - Epoch 74 Done. Avg G Loss: 8.8749
+2026-04-03 05:58:52,492 - Loss Breakdown | D_diff=2.7900 | D_cycle=1.4082 | G_adv=1.3959 | G_cycle_adv=7.0389 | G_L1=0.1382 | G_cycle_L1=0.4437 | G_lumi=0.6566 | G_wavelet=0.1785 | G_innovative=0.1492
+2026-04-03 06:07:23,797 - Epoch 75 Done. Avg G Loss: 9.4171
+2026-04-03 06:07:23,798 - Loss Breakdown | D_diff=2.7887 | D_cycle=1.3985 | G_adv=1.3979 | G_cycle_adv=7.5571 | G_L1=0.1391 | G_cycle_L1=0.4841 | G_lumi=0.6618 | G_wavelet=0.1806 | G_innovative=0.1504
+2026-04-03 06:16:13,179 - Epoch 76 Done. Avg G Loss: 8.4649
+2026-04-03 06:16:13,179 - Loss Breakdown | D_diff=2.7995 | D_cycle=1.4532 | G_adv=1.4010 | G_cycle_adv=6.5932 | G_L1=0.1366 | G_cycle_L1=0.5101 | G_lumi=0.6487 | G_wavelet=0.1772 | G_innovative=0.1475
+2026-04-03 06:26:23,511 - Epoch 77 Done. Avg G Loss: 9.5310
+2026-04-03 06:26:23,511 - Loss Breakdown | D_diff=2.7931 | D_cycle=1.3241 | G_adv=1.3971 | G_cycle_adv=7.6764 | G_L1=0.1364 | G_cycle_L1=0.4833 | G_lumi=0.6491 | G_wavelet=0.1779 | G_innovative=0.1476
+2026-04-03 06:35:59,209 - Epoch 78 Done. Avg G Loss: 9.8869
+2026-04-03 06:35:59,209 - Loss Breakdown | D_diff=2.8001 | D_cycle=1.3065 | G_adv=1.4034 | G_cycle_adv=8.0180 | G_L1=0.1382 | G_cycle_L1=0.4944 | G_lumi=0.6568 | G_wavelet=0.1788 | G_innovative=0.1492
+2026-04-03 06:45:35,532 - Epoch 79 Done. Avg G Loss: 8.9680
+2026-04-03 06:45:35,545 - Loss Breakdown | D_diff=2.7989 | D_cycle=1.3948 | G_adv=1.3998 | G_cycle_adv=7.1103 | G_L1=0.1354 | G_cycle_L1=0.4880 | G_lumi=0.6434 | G_wavelet=0.1760 | G_innovative=0.1463
+2026-04-03 06:55:17,279 - Epoch 80 Done. Avg G Loss: 9.2059
+2026-04-03 06:55:17,279 - Loss Breakdown | D_diff=2.7899 | D_cycle=1.3281 | G_adv=1.4066 | G_cycle_adv=7.3483 | G_L1=0.1358 | G_cycle_L1=0.4734 | G_lumi=0.6434 | G_wavelet=0.1767 | G_innovative=0.1464
+2026-04-03 07:05:24,866 - Epoch 81 Done. Avg G Loss: 9.1228
+2026-04-03 07:05:24,866 - Loss Breakdown | D_diff=2.8108 | D_cycle=1.3193 | G_adv=1.4406 | G_cycle_adv=7.2298 | G_L1=0.1343 | G_cycle_L1=0.4817 | G_lumi=0.6347 | G_wavelet=0.1749 | G_innovative=0.1444
+2026-04-03 07:15:26,890 - Epoch 82 Done. Avg G Loss: 9.4355
+2026-04-03 07:15:26,892 - Loss Breakdown | D_diff=2.7904 | D_cycle=1.2456 | G_adv=1.4034 | G_cycle_adv=7.6004 | G_L1=0.1337 | G_cycle_L1=0.4415 | G_lumi=0.6334 | G_wavelet=0.1748 | G_innovative=0.1442
+2026-04-03 07:25:26,881 - Epoch 83 Done. Avg G Loss: 10.2975
+2026-04-03 07:25:26,882 - Loss Breakdown | D_diff=2.7835 | D_cycle=1.1589 | G_adv=1.4146 | G_cycle_adv=8.3684 | G_L1=0.1377 | G_cycle_L1=0.5940 | G_lumi=0.6533 | G_wavelet=0.1797 | G_innovative=0.1486
+2026-04-03 07:35:30,889 - Epoch 84 Done. Avg G Loss: 9.3185
+2026-04-03 07:35:30,890 - Loss Breakdown | D_diff=2.7985 | D_cycle=1.2424 | G_adv=1.4041 | G_cycle_adv=7.4293 | G_L1=0.1375 | G_cycle_L1=0.5372 | G_lumi=0.6494 | G_wavelet=0.1786 | G_innovative=0.1477
+2026-04-03 07:45:20,815 - Epoch 85 Done. Avg G Loss: 9.9566
+2026-04-03 07:45:20,816 - Loss Breakdown | D_diff=2.8056 | D_cycle=1.1588 | G_adv=1.4217 | G_cycle_adv=8.0757 | G_L1=0.1365 | G_cycle_L1=0.4872 | G_lumi=0.6483 | G_wavelet=0.1777 | G_innovative=0.1474
+2026-04-03 07:55:10,831 - Epoch 86 Done. Avg G Loss: 9.2427
+2026-04-03 07:55:10,832 - Loss Breakdown | D_diff=2.7956 | D_cycle=1.2020 | G_adv=1.4132 | G_cycle_adv=7.3693 | G_L1=0.1351 | G_cycle_L1=0.4949 | G_lumi=0.6385 | G_wavelet=0.1754 | G_innovative=0.1452
+2026-04-03 08:05:05,012 - Epoch 87 Done. Avg G Loss: 9.6702
+2026-04-03 08:05:05,012 - Loss Breakdown | D_diff=2.7917 | D_cycle=1.1313 | G_adv=1.4054 | G_cycle_adv=7.7990 | G_L1=0.1335 | G_cycle_L1=0.5103 | G_lumi=0.6321 | G_wavelet=0.1745 | G_innovative=0.1439
+2026-04-03 08:14:54,557 - Epoch 88 Done. Avg G Loss: 9.2549
+2026-04-03 08:14:54,557 - Loss Breakdown | D_diff=2.7917 | D_cycle=1.1686 | G_adv=1.4174 | G_cycle_adv=7.3962 | G_L1=0.1313 | G_cycle_L1=0.4685 | G_lumi=0.6211 | G_wavelet=0.1715 | G_innovative=0.1414
+2026-04-03 08:24:47,275 - Epoch 89 Done. Avg G Loss: 10.1939
+2026-04-03 08:24:47,276 - Loss Breakdown | D_diff=2.8108 | D_cycle=1.0706 | G_adv=1.4102 | G_cycle_adv=8.3165 | G_L1=0.1343 | G_cycle_L1=0.5105 | G_lumi=0.6362 | G_wavelet=0.1756 | G_innovative=0.1448
+2026-04-03 08:34:55,138 - Epoch 90 Done. Avg G Loss: 10.0466
+2026-04-03 08:34:55,138 - Loss Breakdown | D_diff=2.8028 | D_cycle=1.0043 | G_adv=1.4106 | G_cycle_adv=8.1899 | G_L1=0.1325 | G_cycle_L1=0.4737 | G_lumi=0.6292 | G_wavelet=0.1731 | G_innovative=0.1431
+2026-04-03 08:45:05,559 - Epoch 91 Done. Avg G Loss: 9.9432
+2026-04-03 08:45:05,559 - Loss Breakdown | D_diff=2.7902 | D_cycle=0.9536 | G_adv=1.4128 | G_cycle_adv=8.0745 | G_L1=0.1330 | G_cycle_L1=0.4918 | G_lumi=0.6304 | G_wavelet=0.1740 | G_innovative=0.1435
+2026-04-03 08:55:08,986 - Epoch 92 Done. Avg G Loss: 10.5758
+2026-04-03 08:55:08,986 - Loss Breakdown | D_diff=2.7960 | D_cycle=0.8293 | G_adv=1.4048 | G_cycle_adv=8.7199 | G_L1=0.1320 | G_cycle_L1=0.4869 | G_lumi=0.6217 | G_wavelet=0.1728 | G_innovative=0.1416
+2026-04-03 09:05:05,831 - Epoch 93 Done. Avg G Loss: 11.8317
+2026-04-03 09:05:05,831 - Loss Breakdown | D_diff=2.7929 | D_cycle=0.6976 | G_adv=1.4140 | G_cycle_adv=9.9912 | G_L1=0.1302 | G_cycle_L1=0.4430 | G_lumi=0.6140 | G_wavelet=0.1709 | G_innovative=0.1399
+2026-04-03 09:15:03,145 - Epoch 94 Done. Avg G Loss: 10.4634
+2026-04-03 09:15:03,146 - Loss Breakdown | D_diff=2.7801 | D_cycle=0.7375 | G_adv=1.4087 | G_cycle_adv=8.6183 | G_L1=0.1289 | G_cycle_L1=0.4670 | G_lumi=0.6075 | G_wavelet=0.1697 | G_innovative=0.1385
+2026-04-03 09:25:02,495 - Epoch 95 Done. Avg G Loss: 10.5352
+2026-04-03 09:25:02,495 - Loss Breakdown | D_diff=2.8227 | D_cycle=0.6840 | G_adv=1.4054 | G_cycle_adv=8.7035 | G_L1=0.1287 | G_cycle_L1=0.4466 | G_lumi=0.6089 | G_wavelet=0.1693 | G_innovative=0.1387
+2026-04-03 09:35:07,680 - Epoch 96 Done. Avg G Loss: 10.9816
+2026-04-03 09:35:07,681 - Loss Breakdown | D_diff=2.7981 | D_cycle=0.6296 | G_adv=1.4082 | G_cycle_adv=9.1110 | G_L1=0.1313 | G_cycle_L1=0.5112 | G_lumi=0.6194 | G_wavelet=0.1724 | G_innovative=0.1411
+2026-04-03 09:45:18,266 - Epoch 97 Done. Avg G Loss: 11.9341
+2026-04-03 09:45:18,266 - Loss Breakdown | D_diff=2.7877 | D_cycle=0.5665 | G_adv=1.4123 | G_cycle_adv=10.0806 | G_L1=0.1263 | G_cycle_L1=0.4843 | G_lumi=0.5957 | G_wavelet=0.1666 | G_innovative=0.1358
+2026-04-03 09:55:32,207 - Epoch 98 Done. Avg G Loss: 11.6726
+2026-04-03 09:55:32,208 - Loss Breakdown | D_diff=2.7836 | D_cycle=0.5874 | G_adv=1.4126 | G_cycle_adv=9.8286 | G_L1=0.1277 | G_cycle_L1=0.4604 | G_lumi=0.6021 | G_wavelet=0.1688 | G_innovative=0.1373
+2026-04-03 10:05:45,509 - Epoch 99 Done. Avg G Loss: 11.8140
+2026-04-03 10:05:45,509 - Loss Breakdown | D_diff=2.7841 | D_cycle=0.5600 | G_adv=1.4103 | G_cycle_adv=9.9653 | G_L1=0.1259 | G_cycle_L1=0.4799 | G_lumi=0.5941 | G_wavelet=0.1669 | G_innovative=0.1355
+2026-04-03 10:15:56,787 - Epoch 100 Done. Avg G Loss: 11.8373
+2026-04-03 10:15:56,787 - Loss Breakdown | D_diff=2.7764 | D_cycle=0.5545 | G_adv=1.4102 | G_cycle_adv=9.9863 | G_L1=0.1271 | G_cycle_L1=0.4804 | G_lumi=0.6013 | G_wavelet=0.1678 | G_innovative=0.1370
+2026-04-03 10:26:16,994 - Epoch 101 Done. Avg G Loss: 11.5999
+2026-04-03 10:26:16,995 - Loss Breakdown | D_diff=2.7989 | D_cycle=0.6097 | G_adv=1.4056 | G_cycle_adv=9.7761 | G_L1=0.1256 | G_cycle_L1=0.4406 | G_lumi=0.5921 | G_wavelet=0.1662 | G_innovative=0.1350
+2026-04-03 10:36:22,737 - Epoch 102 Done. Avg G Loss: 11.2933
+2026-04-03 10:36:22,737 - Loss Breakdown | D_diff=2.7781 | D_cycle=0.5970 | G_adv=1.4008 | G_cycle_adv=9.4706 | G_L1=0.1251 | G_cycle_L1=0.4503 | G_lumi=0.5883 | G_wavelet=0.1652 | G_innovative=0.1342
+2026-04-03 10:46:26,331 - Epoch 103 Done. Avg G Loss: 11.6371
+2026-04-03 10:46:26,331 - Loss Breakdown | D_diff=2.7771 | D_cycle=0.5691 | G_adv=1.4148 | G_cycle_adv=9.7726 | G_L1=0.1235 | G_cycle_L1=0.5098 | G_lumi=0.5825 | G_wavelet=0.1647 | G_innovative=0.1330
+2026-04-03 10:56:29,817 - Epoch 104 Done. Avg G Loss: 12.6389
+2026-04-03 10:56:29,817 - Loss Breakdown | D_diff=2.7804 | D_cycle=0.5578 | G_adv=1.4015 | G_cycle_adv=10.8128 | G_L1=0.1234 | G_cycle_L1=0.4598 | G_lumi=0.5826 | G_wavelet=0.1648 | G_innovative=0.1330
+2026-04-03 11:06:37,060 - Epoch 105 Done. Avg G Loss: 12.0049
+2026-04-03 11:06:37,060 - Loss Breakdown | D_diff=2.7833 | D_cycle=0.5916 | G_adv=1.4054 | G_cycle_adv=10.1392 | G_L1=0.1246 | G_cycle_L1=0.5279 | G_lumi=0.5882 | G_wavelet=0.1648 | G_innovative=0.1341
+2026-04-03 11:16:43,422 - Epoch 106 Done. Avg G Loss: 11.0240
+2026-04-03 11:16:43,422 - Loss Breakdown | D_diff=2.7856 | D_cycle=0.6434 | G_adv=1.4107 | G_cycle_adv=9.1941 | G_L1=0.1230 | G_cycle_L1=0.4502 | G_lumi=0.5811 | G_wavelet=0.1642 | G_innovative=0.1326
+2026-04-03 11:26:48,980 - Epoch 107 Done. Avg G Loss: 11.4602
+2026-04-03 11:26:48,980 - Loss Breakdown | D_diff=2.7844 | D_cycle=0.6450 | G_adv=1.4080 | G_cycle_adv=9.6251 | G_L1=0.1228 | G_cycle_L1=0.4673 | G_lumi=0.5783 | G_wavelet=0.1634 | G_innovative=0.1320
+2026-04-03 11:37:16,336 - Epoch 108 Done. Avg G Loss: 11.7369
+2026-04-03 11:37:16,336 - Loss Breakdown | D_diff=2.7854 | D_cycle=0.6312 | G_adv=1.4102 | G_cycle_adv=9.8796 | G_L1=0.1239 | G_cycle_L1=0.5039 | G_lumi=0.5833 | G_wavelet=0.1648 | G_innovative=0.1331
+2026-04-03 11:47:47,681 - Epoch 109 Done. Avg G Loss: 12.2732
+2026-04-03 11:47:47,682 - Loss Breakdown | D_diff=2.7758 | D_cycle=0.5846 | G_adv=1.3936 | G_cycle_adv=10.4248 | G_L1=0.1233 | G_cycle_L1=0.5206 | G_lumi=0.5814 | G_wavelet=0.1652 | G_innovative=0.1328
+2026-04-03 11:58:21,647 - Epoch 110 Done. Avg G Loss: 12.0280
+2026-04-03 11:58:21,647 - Loss Breakdown | D_diff=2.7865 | D_cycle=0.6095 | G_adv=1.4015 | G_cycle_adv=10.1919 | G_L1=0.1219 | G_cycle_L1=0.4847 | G_lumi=0.5752 | G_wavelet=0.1633 | G_innovative=0.1314
+2026-04-03 12:08:59,521 - Epoch 111 Done. Avg G Loss: 11.8341
+2026-04-03 12:08:59,521 - Loss Breakdown | D_diff=2.7906 | D_cycle=0.6147 | G_adv=1.4053 | G_cycle_adv=9.9901 | G_L1=0.1230 | G_cycle_L1=0.4895 | G_lumi=0.5796 | G_wavelet=0.1649 | G_innovative=0.1324
+2026-04-03 12:19:08,406 - Epoch 112 Done. Avg G Loss: 10.9508
+2026-04-03 12:19:08,406 - Loss Breakdown | D_diff=2.7799 | D_cycle=0.6829 | G_adv=1.4103 | G_cycle_adv=9.1203 | G_L1=0.1183 | G_cycle_L1=0.4676 | G_lumi=0.5566 | G_wavelet=0.1594 | G_innovative=0.1273
+2026-04-03 12:29:08,940 - Epoch 113 Done. Avg G Loss: 11.0773
+2026-04-03 12:29:08,940 - Loss Breakdown | D_diff=2.7787 | D_cycle=0.6324 | G_adv=1.3993 | G_cycle_adv=9.2356 | G_L1=0.1209 | G_cycle_L1=0.5040 | G_lumi=0.5683 | G_wavelet=0.1626 | G_innovative=0.1299
+2026-04-03 12:39:09,615 - Epoch 114 Done. Avg G Loss: 11.7872
+2026-04-03 12:39:09,615 - Loss Breakdown | D_diff=2.7997 | D_cycle=0.5823 | G_adv=1.4017 | G_cycle_adv=9.9539 | G_L1=0.1195 | G_cycle_L1=0.4856 | G_lumi=0.5647 | G_wavelet=0.1613 | G_innovative=0.1291
+2026-04-03 12:49:33,586 - Epoch 115 Done. Avg G Loss: 11.0131
+2026-04-03 12:49:33,586 - Loss Breakdown | D_diff=2.7799 | D_cycle=0.6650 | G_adv=1.4008 | G_cycle_adv=9.1955 | G_L1=0.1189 | G_cycle_L1=0.4584 | G_lumi=0.5611 | G_wavelet=0.1601 | G_innovative=0.1282
+2026-04-03 12:59:59,417 - Epoch 116 Done. Avg G Loss: 11.4879
+2026-04-03 12:59:59,417 - Loss Breakdown | D_diff=2.7831 | D_cycle=0.6282 | G_adv=1.4026 | G_cycle_adv=9.6595 | G_L1=0.1172 | G_cycle_L1=0.4818 | G_lumi=0.5523 | G_wavelet=0.1583 | G_innovative=0.1263
+2026-04-03 13:10:24,396 - Epoch 117 Done. Avg G Loss: 11.6519
+2026-04-03 13:10:24,396 - Loss Breakdown | D_diff=2.7766 | D_cycle=0.6290 | G_adv=1.4033 | G_cycle_adv=9.8320 | G_L1=0.1179 | G_cycle_L1=0.4610 | G_lumi=0.5564 | G_wavelet=0.1589 | G_innovative=0.1272
+2026-04-03 13:20:55,057 - Epoch 118 Done. Avg G Loss: 11.2659
+2026-04-03 13:20:55,057 - Loss Breakdown | D_diff=2.7750 | D_cycle=0.6826 | G_adv=1.4049 | G_cycle_adv=9.4541 | G_L1=0.1178 | G_cycle_L1=0.4423 | G_lumi=0.5552 | G_wavelet=0.1588 | G_innovative=0.1269
+2026-04-03 13:31:39,046 - Epoch 119 Done. Avg G Loss: 10.6718
+2026-04-03 13:31:39,046 - Loss Breakdown | D_diff=2.7858 | D_cycle=0.7247 | G_adv=1.4032 | G_cycle_adv=8.8526 | G_L1=0.1141 | G_cycle_L1=0.4720 | G_lumi=0.5372 | G_wavelet=0.1553 | G_innovative=0.1230
+2026-04-03 13:42:36,314 - Epoch 120 Done. Avg G Loss: 10.4645
+2026-04-03 13:42:36,314 - Loss Breakdown | D_diff=2.7792 | D_cycle=0.7102 | G_adv=1.3997 | G_cycle_adv=8.6267 | G_L1=0.1170 | G_cycle_L1=0.5077 | G_lumi=0.5500 | G_wavelet=0.1583 | G_innovative=0.1258
+2026-04-03 13:53:44,135 - Epoch 121 Done. Avg G Loss: 10.3312
+2026-04-03 13:53:44,136 - Loss Breakdown | D_diff=2.7771 | D_cycle=0.7378 | G_adv=1.3979 | G_cycle_adv=8.5303 | G_L1=0.1154 | G_cycle_L1=0.4416 | G_lumi=0.5440 | G_wavelet=0.1567 | G_innovative=0.1245
+2026-04-03 14:04:35,930 - Epoch 122 Done. Avg G Loss: 10.5108
+2026-04-03 14:04:35,930 - Loss Breakdown | D_diff=2.7777 | D_cycle=0.7475 | G_adv=1.4033 | G_cycle_adv=8.7036 | G_L1=0.1148 | G_cycle_L1=0.4451 | G_lumi=0.5414 | G_wavelet=0.1560 | G_innovative=0.1239
+2026-04-03 14:15:31,847 - Epoch 123 Done. Avg G Loss: 11.5580
+2026-04-03 14:15:31,847 - Loss Breakdown | D_diff=2.7847 | D_cycle=0.6742 | G_adv=1.4051 | G_cycle_adv=9.7107 | G_L1=0.1139 | G_cycle_L1=0.5246 | G_lumi=0.5371 | G_wavelet=0.1554 | G_innovative=0.1230
+2026-04-03 14:26:14,303 - Epoch 124 Done. Avg G Loss: 11.4020
+2026-04-03 14:26:14,303 - Loss Breakdown | D_diff=2.7739 | D_cycle=0.7071 | G_adv=1.3993 | G_cycle_adv=9.5601 | G_L1=0.1139 | G_cycle_L1=0.5255 | G_lumi=0.5371 | G_wavelet=0.1549 | G_innovative=0.1229
+2026-04-03 14:36:57,086 - Epoch 125 Done. Avg G Loss: 10.8961
+2026-04-03 14:36:57,087 - Loss Breakdown | D_diff=2.7818 | D_cycle=0.7396 | G_adv=1.3960 | G_cycle_adv=9.0855 | G_L1=0.1140 | G_cycle_L1=0.4694 | G_lumi=0.5372 | G_wavelet=0.1547 | G_innovative=0.1229
+2026-04-03 14:47:38,921 - Epoch 126 Done. Avg G Loss: 10.2461
+2026-04-03 14:47:38,921 - Loss Breakdown | D_diff=2.8118 | D_cycle=0.7668 | G_adv=1.3970 | G_cycle_adv=8.4363 | G_L1=0.1123 | G_cycle_L1=0.4709 | G_lumi=0.5290 | G_wavelet=0.1541 | G_innovative=0.1212
+2026-04-03 14:58:22,206 - Epoch 127 Done. Avg G Loss: 10.3003
+2026-04-03 14:58:22,206 - Loss Breakdown | D_diff=2.7878 | D_cycle=0.7813 | G_adv=1.3979 | G_cycle_adv=8.4997 | G_L1=0.1131 | G_cycle_L1=0.4482 | G_lumi=0.5327 | G_wavelet=0.1541 | G_innovative=0.1219

@@ -161,7 +161,7 @@ class NCSNpp(nn.Module):
   def __init__(self, config):
     super().__init__()
     self.config = config
-    self.use_bottleneck_mscbam = getattr(config, 'use_bottleneck_mscbam', True)
+    self.mscbam_decoder_resolutions = _to_int_set(getattr(config, 'mscbam_decoder_resolutions', [64]))
     self.not_use_tanh = config.not_use_tanh # 输出层是否使用 Tanh
     self.act = act = nn.SiLU() # 【关键】使用 SiLU (Swish) 作为全局激活函数
     self.z_emb_dim = z_emb_dim = config.z_emb_dim # 风格/条件 z 向量的维度 (例如 256)
@@ -330,12 +330,8 @@ class NCSNpp(nn.Module):
     # --- 5. 构建 U-Net 瓶颈 (Bottleneck) ---
     in_ch = hs_c[-1] # 获取 U-Net 最底层的通道数
     modules.append(ResnetBlock(in_ch=in_ch))
-    if self.use_bottleneck_mscbam:
-      modules.append(MS_CBAMpp_v2(in_ch, skip_rescale=False))
     modules.append(AttnBlock(channels=in_ch)) # 在最底层应用注意力
     modules.append(ResnetBlock(in_ch=in_ch))
-    if self.use_bottleneck_mscbam:
-      modules.append(MS_CBAMpp_v2(in_ch, skip_rescale=False))
 
     pyramid_ch = 0
     # --- 6. 构建 U-Net 解码器 (Decoder / Upsampling) ---
@@ -351,6 +347,9 @@ class NCSNpp(nn.Module):
       # --- 添加注意力块 ---
       if all_resolutions[i_level] in attn_resolutions:
         modules.append(AttnBlock(channels=in_ch))
+
+      if all_resolutions[i_level] in self.mscbam_decoder_resolutions:
+        modules.append(MS_CBAMpp_v2(in_ch, skip_rescale=False))
 
       # (处理“渐进式输出”，这是一种多尺度输出技术)
       if progressive != 'none':
@@ -494,12 +493,8 @@ class NCSNpp(nn.Module):
     # --- 3. 瓶颈 (Bottleneck) ---
     h = hs[-1] # U-Net 最底层的特征
     h = modules[m_idx](h, temb, zemb); m_idx += 1 # ResBlock
-    if self.use_bottleneck_mscbam:
-      h = modules[m_idx](h); m_idx += 1 # MS_CBAMpp_v2
     h = modules[m_idx](h); m_idx += 1 # AttnBlock
     h = modules[m_idx](h, temb, zemb); m_idx += 1 # ResBlock
-    if self.use_bottleneck_mscbam:
-      h = modules[m_idx](h); m_idx += 1 # MS_CBAMpp_v2
 
     pyramid = None
 
@@ -511,6 +506,10 @@ class NCSNpp(nn.Module):
         m_idx += 1
 
       if h.shape[-1] in self.attn_resolutions:
+        h = modules[m_idx](h)
+        m_idx += 1
+
+      if h.shape[-1] in self.mscbam_decoder_resolutions:
         h = modules[m_idx](h)
         m_idx += 1
 

@@ -658,34 +658,37 @@ def train_syndiff(rank, gpu, args):
             avg_g_wavelet_loss = epoch_g_wavelet_loss / len(data_loader)
             avg_g_innovative_loss = epoch_g_innovative_loss / len(data_loader)
             avg_d_cycle_loss = epoch_d_cycle_loss / len(data_loader)
-            # tracker.update 会自动画图保存到 experiments 文件夹
-            tracker.update(epoch, avg_g_loss)
-            tracker.update_named(epoch, {
-                'g_total': avg_g_loss,
-                'd_diffusive': avg_d_loss,
-                'd_cycle': avg_d_cycle_loss,
-                'g_adv': avg_g_adv_loss,
-                'g_cycle_adv': avg_g_cycle_adv_loss,
-                'g_l1': avg_g_l1_loss,
-                'g_cycle_l1': avg_g_cycle_loss,
-                'g_lumi': avg_g_lumi_loss,
-                'g_wavelet': avg_g_wavelet_loss,
-                'g_innovative': avg_g_innovative_loss,
-            })
-            np.savez(
-                os.path.join(exp_path, 'loss_metrics.npz'),
-                epochs=np.array(tracker.epochs),
-                g_total=np.array(tracker.named_train_losses['g_total']),
-                d_diffusive=np.array(tracker.named_train_losses['d_diffusive']),
-                d_cycle=np.array(tracker.named_train_losses['d_cycle']),
-                g_adv=np.array(tracker.named_train_losses['g_adv']),
-                g_cycle_adv=np.array(tracker.named_train_losses['g_cycle_adv']),
-                g_l1=np.array(tracker.named_train_losses['g_l1']),
-                g_cycle_l1=np.array(tracker.named_train_losses['g_cycle_l1']),
-                g_lumi=np.array(tracker.named_train_losses['g_lumi']),
-                g_wavelet=np.array(tracker.named_train_losses['g_wavelet']),
-                g_innovative=np.array(tracker.named_train_losses['g_innovative']),
-            )
+            tracker.epochs.append(epoch)
+            tracker.train_losses.append(avg_g_loss)
+            tracker.named_train_losses['g_total'].append(avg_g_loss)
+            tracker.named_train_losses['d_diffusive'].append(avg_d_loss)
+            tracker.named_train_losses['d_cycle'].append(avg_d_cycle_loss)
+            tracker.named_train_losses['g_adv'].append(avg_g_adv_loss)
+            tracker.named_train_losses['g_cycle_adv'].append(avg_g_cycle_adv_loss)
+            tracker.named_train_losses['g_l1'].append(avg_g_l1_loss)
+            tracker.named_train_losses['g_cycle_l1'].append(avg_g_cycle_loss)
+            tracker.named_train_losses['g_lumi'].append(avg_g_lumi_loss)
+            tracker.named_train_losses['g_wavelet'].append(avg_g_wavelet_loss)
+            tracker.named_train_losses['g_innovative'].append(avg_g_innovative_loss)
+
+            if epoch % args.plot_every == 0:
+                tracker.plot()
+                tracker.plot_named()
+            if epoch % args.metrics_every == 0:
+                np.savez(
+                    os.path.join(exp_path, 'loss_metrics.npz'),
+                    epochs=np.array(tracker.epochs),
+                    g_total=np.array(tracker.named_train_losses['g_total']),
+                    d_diffusive=np.array(tracker.named_train_losses['d_diffusive']),
+                    d_cycle=np.array(tracker.named_train_losses['d_cycle']),
+                    g_adv=np.array(tracker.named_train_losses['g_adv']),
+                    g_cycle_adv=np.array(tracker.named_train_losses['g_cycle_adv']),
+                    g_l1=np.array(tracker.named_train_losses['g_l1']),
+                    g_cycle_l1=np.array(tracker.named_train_losses['g_cycle_l1']),
+                    g_lumi=np.array(tracker.named_train_losses['g_lumi']),
+                    g_wavelet=np.array(tracker.named_train_losses['g_wavelet']),
+                    g_innovative=np.array(tracker.named_train_losses['g_innovative']),
+                )
             
             # 日志记录
             logger.info(f"Epoch {epoch} Done. Avg G Loss: {avg_g_loss:.4f}")
@@ -704,57 +707,48 @@ def train_syndiff(rank, gpu, args):
                 else:
                     torchvision.utils.save_image(tensor, path, normalize=True)
 
-            if epoch % 10 == 0:
+            if epoch % args.viz_every == 0:
                 save_rgb(x1_pos_sample, os.path.join(exp_path, 'xpos1_epoch_{}.png'.format(epoch)))
                 save_rgb(x2_pos_sample, os.path.join(exp_path, 'xpos2_epoch_{}.png'.format(epoch)))
-            
-            # 2. 生成并保存 Domain 2 -> Domain 1 的样本
-            # 拼接噪声和源域数据
-            x1_t = torch.cat((torch.randn_like(real_data1), real_data2), axis=1)
-            fake_sample1 = sample_from_model(pos_coeff, gen_diffusive_1, args.num_timesteps, x1_t, T, args)
-            
-            # 【核心修改点】拼接展示时只用RGB切片
-            vis_real2 = real_data2[:, :3, :, :]
-            vis_fake1 = fake_sample1[:, :3, :, :]
-            fake_sample1_vis = torch.cat((vis_real2, vis_fake1), axis=-1)
-            torchvision.utils.save_image(fake_sample1_vis, os.path.join(exp_path, 'sample1_discrete_epoch_{}.png'.format(epoch)), normalize=True)
-            
-            # 生成粗糙预测
-            pred1 = gen_non_diffusive_2to1(real_data2)
-            
-            # 生成扩散精修结果
-            x2_t = torch.cat((torch.randn_like(real_data2), pred1), axis=1)
-            fake_sample2_tilda = gen_diffusive_2(x2_t , t2, latent_z2)   
-            
-            # 【核心修改点】复杂对比图的RGB切片
-            vis_pred1 = pred1[:, :3, :, :]
-            vis_cycle1 = gen_non_diffusive_1to2(pred1)[:, :3, :, :]
-            vis_fake2_tilda = fake_sample2_tilda[:, :3, :, :]
-            
-            # 拼接：真实图 | 粗糙预测 | 循环重建 | 扩散精修
-            pred1_vis = torch.cat((vis_real2, vis_pred1, vis_cycle1, vis_fake2_tilda), axis=-1)
-            torchvision.utils.save_image(pred1_vis, os.path.join(exp_path, 'sample1_translated_epoch_{}.png'.format(epoch)), normalize=True)
 
-            # 3. 生成并保存 Domain 1 -> Domain 2 的样本 (同上)
-            x2_t = torch.cat((torch.randn_like(real_data2), real_data1), axis=1)
-            fake_sample2 = sample_from_model(pos_coeff, gen_diffusive_2, args.num_timesteps, x2_t, T, args)
-            
-            vis_real1 = real_data1[:, :3, :, :]
-            vis_fake2 = fake_sample2[:, :3, :, :]
-            fake_sample2_vis = torch.cat((vis_real1, vis_fake2), axis=-1)
-            torchvision.utils.save_image(fake_sample2_vis, os.path.join(exp_path, 'sample2_discrete_epoch_{}.png'.format(epoch)), normalize=True)
-            
-            pred2 = gen_non_diffusive_1to2(real_data1)
-            
-            x1_t = torch.cat((torch.randn_like(real_data1), pred2), axis=1)
-            fake_sample1_tilda = gen_diffusive_1(x1_t , t1, latent_z1)   
-            
-            vis_pred2 = pred2[:, :3, :, :]
-            vis_cycle2 = gen_non_diffusive_2to1(pred2)[:, :3, :, :]
-            vis_fake1_tilda = fake_sample1_tilda[:, :3, :, :]
-            
-            pred2_vis = torch.cat((vis_real1, vis_pred2, vis_cycle2, vis_fake1_tilda), axis=-1)
-            torchvision.utils.save_image(pred2_vis, os.path.join(exp_path, 'sample2_translated_epoch_{}.png'.format(epoch)), normalize=True)
+            if epoch % args.viz_every == 0:
+                # 2. 生成并保存 Domain 2 -> Domain 1 的样本
+                x1_t = torch.cat((torch.randn_like(real_data1), real_data2), axis=1)
+                fake_sample1 = sample_from_model(pos_coeff, gen_diffusive_1, args.num_timesteps, x1_t, T, args)
+
+                vis_real2 = real_data2[:, :3, :, :]
+                vis_fake1 = fake_sample1[:, :3, :, :]
+                fake_sample1_vis = torch.cat((vis_real2, vis_fake1), axis=-1)
+                torchvision.utils.save_image(fake_sample1_vis, os.path.join(exp_path, 'sample1_discrete_epoch_{}.png'.format(epoch)), normalize=True)
+
+                pred1 = gen_non_diffusive_2to1(real_data2)
+                x2_t = torch.cat((torch.randn_like(real_data2), pred1), axis=1)
+                fake_sample2_tilda = gen_diffusive_2(x2_t , t2, latent_z2)
+
+                vis_pred1 = pred1[:, :3, :, :]
+                vis_cycle1 = gen_non_diffusive_1to2(pred1)[:, :3, :, :]
+                vis_fake2_tilda = fake_sample2_tilda[:, :3, :, :]
+                pred1_vis = torch.cat((vis_real2, vis_pred1, vis_cycle1, vis_fake2_tilda), axis=-1)
+                torchvision.utils.save_image(pred1_vis, os.path.join(exp_path, 'sample1_translated_epoch_{}.png'.format(epoch)), normalize=True)
+
+                # 3. 生成并保存 Domain 1 -> Domain 2 的样本
+                x2_t = torch.cat((torch.randn_like(real_data2), real_data1), axis=1)
+                fake_sample2 = sample_from_model(pos_coeff, gen_diffusive_2, args.num_timesteps, x2_t, T, args)
+
+                vis_real1 = real_data1[:, :3, :, :]
+                vis_fake2 = fake_sample2[:, :3, :, :]
+                fake_sample2_vis = torch.cat((vis_real1, vis_fake2), axis=-1)
+                torchvision.utils.save_image(fake_sample2_vis, os.path.join(exp_path, 'sample2_discrete_epoch_{}.png'.format(epoch)), normalize=True)
+
+                pred2 = gen_non_diffusive_1to2(real_data1)
+                x1_t = torch.cat((torch.randn_like(real_data1), pred2), axis=1)
+                fake_sample1_tilda = gen_diffusive_1(x1_t , t1, latent_z1)
+
+                vis_pred2 = pred2[:, :3, :, :]
+                vis_cycle2 = gen_non_diffusive_2to1(pred2)[:, :3, :, :]
+                vis_fake1_tilda = fake_sample1_tilda[:, :3, :, :]
+                pred2_vis = torch.cat((vis_real1, vis_pred2, vis_cycle2, vis_fake1_tilda), axis=-1)
+                torchvision.utils.save_image(pred2_vis, os.path.join(exp_path, 'sample2_translated_epoch_{}.png'.format(epoch)), normalize=True)
             
             # 4. 保存模型内容 (Checkpoint)
             if args.save_content:
@@ -795,61 +789,59 @@ def train_syndiff(rank, gpu, args):
                     optimizer_gen_non_diffusive_1to2.swap_parameters_with_ema(store_params_in_ema=True)
                     optimizer_gen_non_diffusive_2to1.swap_parameters_with_ema(store_params_in_ema=True)
 
-        # 5. 验证集循环 (Validation Loop)
-        # 5. 验证集循环 (Validation Loop)
-        # -----------------------------------------------------------------
-        # 方向 1: Domain 1 -> Domain 2
-        for iteration, (x_val , y_val) in enumerate(data_loader_val): 
-            real_data = x_val.to(device, non_blocking=True)
-            source_data = y_val.to(device, non_blocking=True)
-            
-            # 【修复】强制切片验证集
-            if real_data.shape[1] > 3: real_data = real_data[:, :3, :, :]
-            if source_data.shape[1] > 3: source_data = source_data[:, :3, :, :]
-            
-            x1_t = torch.cat((torch.randn_like(real_data), source_data), axis=1)
-            fake_sample1 = sample_from_model(pos_coeff, gen_diffusive_1, args.num_timesteps, x1_t, T, args)            
-            
-            fake_rgb = fake_sample1[:, :3, :, :]
-            real_rgb = real_data[:, :3, :, :]
-            
-            fake_rgb = to_range_0_1(fake_rgb) ; fake_rgb = fake_rgb/fake_rgb.mean()
-            real_rgb = to_range_0_1(real_rgb) ; real_rgb = real_rgb/real_rgb.mean()
+        if epoch % args.val_every == 0:
+            # 5. 验证集循环 (Validation Loop)
+            # -----------------------------------------------------------------
+            # 方向 1: Domain 1 -> Domain 2
+            for iteration, (x_val , y_val) in enumerate(data_loader_val):
+                real_data = x_val.to(device, non_blocking=True)
+                source_data = y_val.to(device, non_blocking=True)
 
-            fake_rgb = fake_rgb.cpu().numpy()
-            real_rgb = real_rgb.cpu().numpy()
-            
-            val_l1_loss[0, epoch, iteration] = abs(fake_rgb - real_rgb).mean()
-            val_psnr_values[0, epoch, iteration] = psnr(real_rgb, fake_rgb, data_range=real_rgb.max())
+                if real_data.shape[1] > 3: real_data = real_data[:, :3, :, :]
+                if source_data.shape[1] > 3: source_data = source_data[:, :3, :, :]
 
-        # 方向 2: Domain 2 -> Domain 1
-        for iteration, (y_val , x_val) in enumerate(data_loader_val): 
-            real_data = x_val.to(device, non_blocking=True)
-            source_data = y_val.to(device, non_blocking=True)
-            
-            # 【修复】强制切片验证集
-            if real_data.shape[1] > 3: real_data = real_data[:, :3, :, :]
-            if source_data.shape[1] > 3: source_data = source_data[:, :3, :, :]
-            
-            x2_t = torch.cat((torch.randn_like(real_data), source_data), axis=1)
-            fake_sample2 = sample_from_model(pos_coeff, gen_diffusive_2, args.num_timesteps, x2_t, T, args)
+                x1_t = torch.cat((torch.randn_like(real_data), source_data), axis=1)
+                fake_sample1 = sample_from_model(pos_coeff, gen_diffusive_1, args.num_timesteps, x1_t, T, args)
 
-            fake_rgb = fake_sample2[:, :3, :, :]
-            real_rgb = real_data[:, :3, :, :]
-            
-            fake_rgb = to_range_0_1(fake_rgb) ; fake_rgb = fake_rgb/fake_rgb.mean()
-            real_rgb = to_range_0_1(real_rgb) ; real_rgb = real_rgb/real_rgb.mean()
-            
-            fake_rgb = fake_rgb.cpu().numpy()
-            real_rgb = real_rgb.cpu().numpy()
-            
-            val_l1_loss[1, epoch, iteration] = abs(fake_rgb - real_rgb).mean()
-            val_psnr_values[1, epoch, iteration] = psnr(real_rgb, fake_rgb, data_range=real_rgb.max())
+                fake_rgb = fake_sample1[:, :3, :, :]
+                real_rgb = real_data[:, :3, :, :]
 
-        print(f"Epoch {epoch} PSNR (1->2): {np.nanmean(val_psnr_values[0, epoch, :])}")
-        print(f"Epoch {epoch} PSNR (2->1): {np.nanmean(val_psnr_values[1, epoch, :])}")
-        np.save('{}/val_l1_loss.npy'.format(exp_path), val_l1_loss)
-        np.save('{}/val_psnr_values.npy'.format(exp_path), val_psnr_values)              
+                fake_rgb = to_range_0_1(fake_rgb) ; fake_rgb = fake_rgb/fake_rgb.mean()
+                real_rgb = to_range_0_1(real_rgb) ; real_rgb = real_rgb/real_rgb.mean()
+
+                fake_rgb = fake_rgb.cpu().numpy()
+                real_rgb = real_rgb.cpu().numpy()
+
+                val_l1_loss[0, epoch, iteration] = abs(fake_rgb - real_rgb).mean()
+                val_psnr_values[0, epoch, iteration] = psnr(real_rgb, fake_rgb, data_range=real_rgb.max())
+
+            # 方向 2: Domain 2 -> Domain 1
+            for iteration, (y_val , x_val) in enumerate(data_loader_val):
+                real_data = x_val.to(device, non_blocking=True)
+                source_data = y_val.to(device, non_blocking=True)
+
+                if real_data.shape[1] > 3: real_data = real_data[:, :3, :, :]
+                if source_data.shape[1] > 3: source_data = source_data[:, :3, :, :]
+
+                x2_t = torch.cat((torch.randn_like(real_data), source_data), axis=1)
+                fake_sample2 = sample_from_model(pos_coeff, gen_diffusive_2, args.num_timesteps, x2_t, T, args)
+
+                fake_rgb = fake_sample2[:, :3, :, :]
+                real_rgb = real_data[:, :3, :, :]
+
+                fake_rgb = to_range_0_1(fake_rgb) ; fake_rgb = fake_rgb/fake_rgb.mean()
+                real_rgb = to_range_0_1(real_rgb) ; real_rgb = real_rgb/real_rgb.mean()
+
+                fake_rgb = fake_rgb.cpu().numpy()
+                real_rgb = real_rgb.cpu().numpy()
+
+                val_l1_loss[1, epoch, iteration] = abs(fake_rgb - real_rgb).mean()
+                val_psnr_values[1, epoch, iteration] = psnr(real_rgb, fake_rgb, data_range=real_rgb.max())
+
+            print(f"Epoch {epoch} PSNR (1->2): {np.nanmean(val_psnr_values[0, epoch, :])}")
+            print(f"Epoch {epoch} PSNR (2->1): {np.nanmean(val_psnr_values[1, epoch, :])}")
+            np.save('{}/val_l1_loss.npy'.format(exp_path), val_l1_loss)
+            np.save('{}/val_psnr_values.npy'.format(exp_path), val_psnr_values)
 
 
 
@@ -907,10 +899,8 @@ if __name__ == '__main__':
     parser.add_argument('--embedding_type', type=str, default='positional', choices=['positional', 'fourier'], help='type of time embedding')
     parser.add_argument('--fourier_scale', type=float, default=16., help='scale of fourier transform')
     parser.add_argument('--not_use_tanh', action='store_true',default=False)
-    parser.add_argument('--use_bottleneck_mscbam', action='store_true', default=True,
-                        help='enable MS_CBAMpp_v2 in the generator bottleneck')
-    parser.add_argument('--disable_bottleneck_mscbam', action='store_false', dest='use_bottleneck_mscbam',
-                        help='disable MS_CBAMpp_v2 in the generator bottleneck')
+    parser.add_argument('--mscbam_decoder_resolutions', nargs='+', type=int, default=[64],
+                        help='decoder resolutions where MS_CBAMpp_v2 is inserted')
     parser.add_argument('--exp', default='ixi_synth', help='name of experiment')
     parser.add_argument('--input_path', help='path to input data')
     parser.add_argument('--output_path', help='path to output saves')
@@ -933,6 +923,10 @@ if __name__ == '__main__':
     parser.add_argument('--save_content', action='store_true',default=False)
     parser.add_argument('--save_content_every', type=int, default=10, help='save content for resuming every x epochs')
     parser.add_argument('--save_ckpt_every', type=int, default=10, help='save ckpt every x epochs')
+    parser.add_argument('--viz_every', type=int, default=1, help='save sample visualizations every x epochs')
+    parser.add_argument('--val_every', type=int, default=10, help='run validation every x epochs')
+    parser.add_argument('--plot_every', type=int, default=10, help='update loss curves every x epochs')
+    parser.add_argument('--metrics_every', type=int, default=10, help='save loss metric npz every x epochs')
     parser.add_argument('--lambda_l1_loss', type=float, default=0.5, help='weightening of l1 loss part of diffusion ans cycle models')
     parser.add_argument('--lambda_lumi', type=float, default=0.2, help='weight for luminance-weighted reconstruction loss')
     parser.add_argument('--lambda_wavelet', type=float, default=0.1, help='weight for wavelet reconstruction loss')

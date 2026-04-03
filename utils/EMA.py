@@ -16,6 +16,8 @@ from torch.optim import Optimizer
 
 class EMA(Optimizer):
     def __init__(self, opt, ema_decay):
+        defaults = getattr(opt, 'defaults', {})
+        super().__init__(opt.param_groups, defaults)
         self.ema_decay = ema_decay
         self.apply_ema = self.ema_decay > 0.
         self.optimizer = opt
@@ -61,12 +63,16 @@ class EMA(Optimizer):
 
         return retval
 
+    def zero_grad(self, set_to_none: bool = True):
+        return self.optimizer.zero_grad(set_to_none=set_to_none)
+
+    def state_dict(self):
+        return self.optimizer.state_dict()
+
     def load_state_dict(self, state_dict):
-        super(EMA, self).load_state_dict(state_dict)
-        # load_state_dict loads the data to self.state and self.param_groups. We need to pass this data to
-        # the underlying optimizer too.
-        self.optimizer.state = self.state
-        self.optimizer.param_groups = self.param_groups
+        self.optimizer.load_state_dict(state_dict)
+        self.state = self.optimizer.state
+        self.param_groups = self.optimizer.param_groups
 
     def swap_parameters_with_ema(self, store_params_in_ema):
         """ This function swaps parameters with their ema values. It records original parameters in the ema
@@ -81,6 +87,8 @@ class EMA(Optimizer):
             for i, p in enumerate(group['params']):
                 if not p.requires_grad:
                     continue
+                if 'ema' not in self.optimizer.state[p]:
+                    self.optimizer.state[p]['ema'] = p.data.clone()
                 ema = self.optimizer.state[p]['ema']
                 if store_params_in_ema:
                     tmp = p.data.detach()
