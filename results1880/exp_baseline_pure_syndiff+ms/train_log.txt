@@ -288,3 +288,15 @@
 2026-04-03 14:47:38,921 - Loss Breakdown | D_diff=2.8118 | D_cycle=0.7668 | G_adv=1.3970 | G_cycle_adv=8.4363 | G_L1=0.1123 | G_cycle_L1=0.4709 | G_lumi=0.5290 | G_wavelet=0.1541 | G_innovative=0.1212
 2026-04-03 14:58:22,206 - Epoch 127 Done. Avg G Loss: 10.3003
 2026-04-03 14:58:22,206 - Loss Breakdown | D_diff=2.7878 | D_cycle=0.7813 | G_adv=1.3979 | G_cycle_adv=8.4997 | G_L1=0.1131 | G_cycle_L1=0.4482 | G_lumi=0.5327 | G_wavelet=0.1541 | G_innovative=0.1219
+2026-04-03 15:08:53,196 - Epoch 128 Done. Avg G Loss: 10.7074
+2026-04-03 15:08:53,196 - Loss Breakdown | D_diff=2.7897 | D_cycle=0.7700 | G_adv=1.4044 | G_cycle_adv=8.8961 | G_L1=0.1103 | G_cycle_L1=0.4652 | G_lumi=0.5201 | G_wavelet=0.1512 | G_innovative=0.1191
+2026-04-03 15:19:22,937 - Epoch 129 Done. Avg G Loss: 10.9747
+2026-04-03 15:19:22,938 - Loss Breakdown | D_diff=2.7761 | D_cycle=0.7578 | G_adv=1.3962 | G_cycle_adv=9.1887 | G_L1=0.1098 | G_cycle_L1=0.4325 | G_lumi=0.5178 | G_wavelet=0.1507 | G_innovative=0.1186
+2026-04-03 15:29:56,841 - Epoch 130 Done. Avg G Loss: 10.2935
+2026-04-03 15:29:56,841 - Loss Breakdown | D_diff=2.7784 | D_cycle=0.8203 | G_adv=1.4005 | G_cycle_adv=8.5046 | G_L1=0.1092 | G_cycle_L1=0.4314 | G_lumi=0.5155 | G_wavelet=0.1503 | G_innovative=0.1181
+2026-04-03 15:40:27,209 - Epoch 131 Done. Avg G Loss: 10.3662
+2026-04-03 15:40:27,210 - Loss Breakdown | D_diff=2.7803 | D_cycle=0.8099 | G_adv=1.3965 | G_cycle_adv=8.5347 | G_L1=0.1124 | G_cycle_L1=0.5153 | G_lumi=0.5291 | G_wavelet=0.1538 | G_innovative=0.1212
+2026-04-03 15:51:05,580 - Epoch 132 Done. Avg G Loss: 10.3092
+2026-04-03 15:51:05,580 - Loss Breakdown | D_diff=2.7846 | D_cycle=0.8136 | G_adv=1.3973 | G_cycle_adv=8.4990 | G_L1=0.1111 | G_cycle_L1=0.4751 | G_lumi=0.5226 | G_wavelet=0.1527 | G_innovative=0.1198
+2026-04-03 16:01:22,873 - Epoch 133 Done. Avg G Loss: 10.1072
+2026-04-03 16:01:22,873 - Loss Breakdown | D_diff=2.7872 | D_cycle=0.8264 | G_adv=1.4026 | G_cycle_adv=8.2707 | G_L1=0.1101 | G_cycle_L1=0.5201 | G_lumi=0.5184 | G_wavelet=0.1510 | G_innovative=0.1188

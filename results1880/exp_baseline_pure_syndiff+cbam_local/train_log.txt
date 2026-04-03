@@ -1,0 +1,12 @@
+2026-04-03 16:09:24,683 - Start Training on Rank 0
+2026-04-03 16:09:44,870 - train data size:470
+2026-04-03 16:09:44,870 - val data size:15
+2026-04-03 16:12:34,509 - Start Training on Rank 0
+2026-04-03 16:12:38,748 - train data size:470
+2026-04-03 16:12:38,748 - val data size:15
+2026-04-03 16:23:59,055 - Epoch 0 Done. Avg G Loss: 7.0399
+2026-04-03 16:23:59,055 - Loss Breakdown | D_diff=7.8505 | D_cycle=1.9805 | G_adv=4.8007 | G_cycle_adv=2.9582 | G_L1=0.3309 | G_cycle_L1=0.4649 | G_lumi=1.6192 | G_wavelet=0.3842 | G_innovative=0.3623
+2026-04-03 16:34:44,906 - Epoch 1 Done. Avg G Loss: 4.2134
+2026-04-03 16:34:44,907 - Loss Breakdown | D_diff=3.0786 | D_cycle=1.4988 | G_adv=1.5341 | G_cycle_adv=4.0605 | G_L1=0.2643 | G_cycle_L1=0.4523 | G_lumi=1.2942 | G_wavelet=0.3187 | G_innovative=0.2907
+2026-04-03 16:43:34,878 - Epoch 2 Done. Avg G Loss: 4.3009
+2026-04-03 16:43:34,879 - Loss Breakdown | D_diff=3.0004 | D_cycle=1.4179 | G_adv=1.5073 | G_cycle_adv=4.3336 | G_L1=0.2481 | G_cycle_L1=0.4595 | G_lumi=1.2149 | G_wavelet=0.3002 | G_innovative=0.2730

@@ -3,14 +3,14 @@
 # ================= 配置区域 =================
 # 1. 模型路径 (建议用 content.pth)
 # MODEL_PATH="/mnt/mydata/gww/sj/syndiff/SynDiff/results/exp_fundus_ffa_mask1/gen_diffusive_2_300.pth"
-  MODEL_PATH="/mnt/mydata/gww/sj/syndiff/SynDiff/results1880/exp_baseline_pure_syndiff+ms/gen_diffusive_2_120.pth"
+  MODEL_PATH="/mnt/mydata/gww/sj/syndiff/SynDiff/results1880/exp_baseline_pure_syndiff+ms/gen_diffusive_2_100.pth"
 
 
 # 2. 原始大图路径
-INPUT_IMG="/mnt/mydata/gww/sj/syndiff/SynDiff/test_set/fundus/28.jpg"
+INPUT_IMG="/mnt/mydata/gww/sj/syndiff/SynDiff/test_set/fundus/25.jpg"
 
 # 3. (可选) 真值大图路径，如果没有可以删掉这行或留空
-TARGET_IMG="/mnt/mydata/gww/sj/syndiff/SynDiff/test_set/ffa/28.jpg"
+TARGET_IMG="/mnt/mydata/gww/sj/syndiff/SynDiff/test_set/ffa/25.jpg"
 
 # 4. 输出目录
 OUTPUT_DIR="./final_exp_baseline_pure_syndiff+ms"
