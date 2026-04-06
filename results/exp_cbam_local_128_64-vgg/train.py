@@ -432,6 +432,8 @@ def train_syndiff(rank, gpu, args):
         focus_sharpness=args.lumi_focus_sharpness,
         device=device,
     ).to(device)
+    # 👇【必须在此处新增以下代码，挂载VGG】👇
+    criterion_vgg = VGG19PerceptualLoss(device=device).to(device)
 
     # 模型实例化
     gen_diffusive_1 = NCSNpp(args).to(device)
@@ -695,6 +697,7 @@ def train_syndiff(rank, gpu, args):
             errG_L1 = errG1_L1 + errG2_L1 
 
             # ✅【应用】创新 Loss
+            # ✅【应用】创新 Loss
             errG1_lumi = criterion_lumi(x1_0_predict_diff[:,0:C,:], real_data1)
             errG2_lumi = criterion_lumi(x2_0_predict_diff[:,0:C,:], real_data2)
             errG_lumi = errG1_lumi + errG2_lumi
@@ -703,7 +706,17 @@ def train_syndiff(rank, gpu, args):
             errG2_wavelet = criterion_wavelet(x2_0_predict_diff[:,0:C,:], real_data2)
             errG_wavelet = errG1_wavelet + errG2_wavelet
 
-            errG_innovative = args.lambda_lumi * errG_lumi + args.lambda_wavelet * errG_wavelet
+            # 👇【必须新增计算 VGG 的过程】👇
+            errG1_vgg = criterion_vgg(x1_0_predict_diff[:,0:C,:], real_data1)
+            errG2_vgg = criterion_vgg(x2_0_predict_diff[:,0:C,:], real_data2)
+            errG_vgg = errG1_vgg + errG2_vgg
+
+            # 👇【必须将 VGG 加入总的创新损失中】👇
+            errG_innovative = (
+                args.lambda_lumi * errG_lumi 
+                + args.lambda_wavelet * errG_wavelet 
+                + args.lambda_vgg * errG_vgg
+            )
 
             errG1_cycle = F.l1_loss(x1_0_predict_cycle, real_data1)
             errG2_cycle = F.l1_loss(x2_0_predict_cycle, real_data2)            
