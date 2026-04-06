@@ -66,15 +66,10 @@ class PixelNorm(nn.Module):
 
 class MS_CBAMpp(nn.Module):
     """
-    多尺度 CBAMpp：修复方差漂移漏洞版 (接口兼容修补)
+    多尺度 CBAMpp：更轻量，适合在多个高分辨率层做局部增强。
     """
-    # 【修正】将 skip_rescale=False 加回参数列表，以兼容 functools.partial 的传参
     def __init__(self, channels, reduction=16, spatial_scales=[3, 5, 7], skip_rescale=False):
         super().__init__()
-        
-        # 接收并存下参数（但基于严密的方差稳态逻辑，我们不会在 forward 中使用它）
-        self.skip_rescale = skip_rescale 
-        
         hidden = max(channels // reduction, 4)
 
         self.mlp = nn.Sequential(
@@ -95,8 +90,7 @@ class MS_CBAMpp(nn.Module):
             nn.init.constant_(conv.weight, 0.)
         nn.init.constant_(self.spatial_fuse.weight, 1.0 / len(spatial_scales))
 
-        # 引入零初始化门控，建立绝对恒等映射基准
-        self.gamma = nn.Parameter(torch.zeros(1))
+        self.skip_rescale = skip_rescale
 
     def forward(self, x):
         avg = torch.mean(x, dim=(2, 3), keepdim=True)
@@ -113,9 +107,7 @@ class MS_CBAMpp(nn.Module):
         sa = torch.sigmoid(self.spatial_fuse(multi_scale_feat))
         h = h * sa
 
-        # 初始化时 gamma=0，确保输出绝对等于 x
-        # 摒弃 (x+h)/sqrt(2) 的错误逻辑，严守恒等映射
-        return x + self.gamma * h
+        return (x + h) / np.sqrt(2.) if self.skip_rescale else (x + h)
 
 
 @utils.register_model(name='ncsnpp') # 【关键】将这个类注册到全局 _MODELS 字典中，名称为 'ncsnpp'
@@ -200,9 +192,6 @@ class NCSNpp(nn.Module):
       LocalAttnBlock = None
     else:
       raise ValueError(f'local_attn_type {local_attn_type} not supported')
-    self.has_local_attn = LocalAttnBlock is not None
-    if not self.has_local_attn:
-      self.local_attn_resolutions = set()
 
     # 创建一个 Upsample 的“预设”
     Upsample = functools.partial(layerspp.Upsample,
@@ -442,7 +431,7 @@ class NCSNpp(nn.Module):
         # 【关键】将 temb 和 zemb 注入残差块
         h = modules[m_idx](hs[-1], temb, zemb) 
         m_idx += 1
-        if self.has_local_attn and (h.shape[-1] in self.local_attn_resolutions):
+        if (len(self.local_attn_resolutions) > 0) and (h.shape[-1] in self.local_attn_resolutions):
           h = modules[m_idx](h)
           m_idx += 1
         if h.shape[-1] in self.attn_resolutions: # 如果需要，应用注意力
@@ -489,7 +478,7 @@ class NCSNpp(nn.Module):
         h = modules[m_idx](torch.cat([h, hs.pop()], dim=1), temb, zemb)
         m_idx += 1
 
-      if self.has_local_attn and (h.shape[-1] in self.local_attn_resolutions):
+      if (len(self.local_attn_resolutions) > 0) and (h.shape[-1] in self.local_attn_resolutions):
         h = modules[m_idx](h)
         m_idx += 1
 
@@ -551,10 +540,9 @@ class NCSNpp(nn.Module):
       h = modules[m_idx](h)
       m_idx += 1
 
-    assert m_idx == len(modules) 
+    assert m_idx == len(modules) # 确保所有模块都已使用
     
     if not self.not_use_tanh:
-      return torch.tanh(h) 
+      return torch.tanh(h) # 默认使用 Tanh 将输出缩放到 [-1, 1]
     else:
-      # 绝对不能直接 return h，必须加上刚性物理边界
-      return torch.clamp(h, min=-1.0, max=1.0)
+      return h
